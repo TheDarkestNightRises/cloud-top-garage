@@ -23,7 +23,7 @@ public class CarsController : ControllerBase
     {
         try
         {
-            var cars = _logic.GetAllCarsAsync();
+            var cars = await _logic.GetAllCarsAsync();
             var carsMapped = _mapper.Map<IEnumerable<CarReadDto>>(cars);
             return Ok(carsMapped);
         }

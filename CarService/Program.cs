@@ -1,3 +1,4 @@
+using Application.LogicContracts;
 using CarService.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,8 +12,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("CarsConn"));
+    //opt.UseSqlServer(builder.Configuration.GetConnectionString("CarsConn"));
+    opt.UseInMemoryDatabase("Cars");
 });
+builder.Services.AddScoped<ICarRepository, CarRepository>();
+builder.Services.AddScoped<ICarLogic, CarLogic>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 
