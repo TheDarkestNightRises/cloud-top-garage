@@ -1,7 +1,7 @@
 namespace Carservice.Profile;
 using AutoMapper;
-using Carservice.Dtos;
-using Carservice.Models;
+using CarService.Dtos;
+using CarService.Models;
 
 public class CarsProfile : Profile
 {

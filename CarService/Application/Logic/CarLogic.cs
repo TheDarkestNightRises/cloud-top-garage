@@ -1,6 +1,6 @@
 
 using Application.LogicContracts;
-using Carservice.Models;
+using CarService.Models;
 using CarService.Data;
 
 public class CarLogic : ICarLogic

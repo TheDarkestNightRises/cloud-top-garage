@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Carservice.Dtos;
+namespace CarService.Dtos;
 
 public class CarReadDto
 {

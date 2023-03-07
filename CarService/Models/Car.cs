@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Carservice.Models;
+namespace CarService.Models;
 
 public class Car
 {

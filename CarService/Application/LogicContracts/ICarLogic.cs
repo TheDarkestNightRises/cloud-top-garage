@@ -1,5 +1,5 @@
 
-using Carservice.Models;
+using CarService.Models;
 
 namespace Application.LogicContracts;
 

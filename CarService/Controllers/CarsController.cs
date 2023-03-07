@@ -1,6 +1,6 @@
 using Application.LogicContracts;
 using AutoMapper;
-using Carservice.Dtos;
+using CarService.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Carservice.Controllers;
@@ -17,7 +17,7 @@ public class CarsController : ControllerBase
         _mapper = mapper;
         _logic = logic;
     }
-    
+
     [HttpGet]
     public async Task<ActionResult<IEnumerable<CarReadDto>>> GetAllCarsAsync()
     {

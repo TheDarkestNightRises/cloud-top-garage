@@ -1,4 +1,4 @@
-using Carservice.Models;
+using CarService.Models;
 
 namespace CarService.Data;
 
