@@ -5,8 +5,6 @@ name: CarService.NET
 
 on:
   push:
-    paths:
-      - ./CarService
     branches: ["main"]
   pull_request:
     branches: ["main"]
