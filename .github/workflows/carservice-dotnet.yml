@@ -6,9 +6,12 @@ name: CarService.NET
 on:
   push:
     branches: ["main"]
+    paths:
+      - 'CarService/**'
   pull_request:
     branches: ["main"]
-
+    paths:
+      - 'CarService/**'
 jobs:
   build:
     runs-on: ubuntu-latest
