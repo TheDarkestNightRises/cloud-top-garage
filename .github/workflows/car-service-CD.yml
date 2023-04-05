@@ -33,7 +33,7 @@ jobs:
           context: ./CarService
           file: ./CarService/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/carservice:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/carservice:latest
 
 
 
