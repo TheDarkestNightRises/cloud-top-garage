@@ -31,7 +31,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./EnvironmentService
-          file: ./Environment/Dockerfile
+          file: ./EnvironmentService/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/environmentservice:latest
 
