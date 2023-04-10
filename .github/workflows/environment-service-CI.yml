@@ -1,0 +1,51 @@
+name: EnvironmentService.NET CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+    paths:
+      - 'EnvironmentService/**'
+  pull_request:
+    branches: ["main"]
+    paths:
+      - 'EnvironmentService/**'
+      
+jobs:
+  build:
+    defaults:
+      run:
+        working-directory: ./EnvironmentService
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-dotnet-${{ hashFiles('**/EnvironmentService.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-dotnet-
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+  
+  test:
+    needs: build
+    defaults:
+      run:
+        working-directory: ./EnvironmentService
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
