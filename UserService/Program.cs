@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using UserService.Data;
+using UserService.Logic;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,13 +11,40 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+if (builder.Environment.IsProduction())
+{
+    Console.WriteLine("--> Using SqlServer Db");
+    builder.Services.AddDbContext<AppDbContext>(opt =>
+        opt.UseSqlServer(builder.Configuration.GetConnectionString("UsersConn")));
+}
+else
+{
+    //Console.WriteLine("--> Using InMem Db");
+    //builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("InMem"));
+    Console.WriteLine("--> Using SqlServer Db locally");
+    builder.Services.AddDbContext<AppDbContext>(opt =>
+      opt.UseSqlServer(builder.Configuration.GetConnectionString("UsersConn")));
+}
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserLogic, UserLogic>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 var app = builder.Build();
+
+// Apply database migrations
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    dbContext.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 }
 
 app.UseHttpsRedirection();
@@ -21,5 +52,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
+PrepDb.PrepPopulation(app, app.Environment.IsProduction());
 app.Run();
