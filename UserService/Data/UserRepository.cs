@@ -1,21 +1,19 @@
-namespace UserService.Data
+namespace UserService.Data;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using UserService.Models;
+
+public class UserRepository : IUserRepository
 {
-    using System.Collections.Generic;
-    using Microsoft.EntityFrameworkCore;
-    using UserService.Models;
+    private readonly AppDbContext _context;
 
-    public class UserRepository : IUserRepository
+    public UserRepository(AppDbContext context)
     {
-        private readonly AppDbContext _context;
+        _context = context;
+    }
 
-        public UserRepository(AppDbContext context)
-        {
-            _context = context;
-        }
-
-        public async Task<IEnumerable<User>> GetAllUsersAsync()
-        {
-            return await _context.Users.ToListAsync();
-        }
+    public async Task<IEnumerable<User>> GetAllUsersAsync()
+    {
+        return await _context.Users.ToListAsync();
     }
 }

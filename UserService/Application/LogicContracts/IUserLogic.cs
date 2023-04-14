@@ -1,7 +1,7 @@
 using UserService.Models;
 
-namespace UserService.Data;
-public interface IUserRepository
+namespace UserService.Logic;
+public interface IUserLogic
 {
     Task<IEnumerable<User>> GetAllUsersAsync();
 }
