@@ -48,3 +48,16 @@ spec:
       protocol: TCP
       port: 1435
       targetPort: 1435
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: users-mssql-loadbalancer
+spec:
+  type: LoadBalancer
+  selector:
+    app: user-mssql
+  ports:
+    - protocol: TCP
+      port: 1435
+      targetPort: 1435
