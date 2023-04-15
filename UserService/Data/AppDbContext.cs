@@ -9,6 +9,11 @@ public class AppDbContext : DbContext
     {
     }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.HasDefaultSchema("userdb");
+    }
+
     public DbSet<User> Users { get; set; }
 
 }
