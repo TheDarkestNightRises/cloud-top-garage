@@ -34,6 +34,9 @@ spec:
         - name: car-mssqldb
           persistentVolumeClaim:
             claimName: car-mssql-claim
+        - name: car-mssql-initdb
+          configMap:
+            name: car-mssql-initdb-configmap
 ---
 apiVersion: v1
 kind: Service
