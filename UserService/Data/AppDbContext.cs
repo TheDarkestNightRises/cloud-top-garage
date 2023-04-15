@@ -9,6 +9,10 @@ public class AppDbContext : DbContext
     {
     }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+    }
+
     public DbSet<User> Users { get; set; }
 
 }
