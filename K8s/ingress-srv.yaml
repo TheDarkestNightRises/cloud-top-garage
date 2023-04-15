@@ -17,7 +17,7 @@ spec:
                 name: cars-clusterip-srv
                 port:
                   number: 80
-          - path: api/Users
+          - path: /Users
             pathType: Prefix
             backend:
               service:

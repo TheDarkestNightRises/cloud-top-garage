@@ -16,7 +16,7 @@ spec:
         - name: user-mssql
           image: mcr.microsoft.com/mssql/server:2017-latest
           ports:
-            - containerPort: 1435
+            - containerPort: 1433
           env:
             - name: MSSQL_PID
               value: "Express"
@@ -46,8 +46,8 @@ spec:
   ports:
     - name: user-mssql
       protocol: TCP
-      port: 1435
-      targetPort: 1435
+      port: 1433
+      targetPort: 1433
 ---
 apiVersion: v1
 kind: Service
@@ -59,5 +59,5 @@ spec:
     app: user-mssql
   ports:
     - protocol: TCP
-      port: 1435
-      targetPort: 1435
+      port: 1433
+      targetPort: 1433
