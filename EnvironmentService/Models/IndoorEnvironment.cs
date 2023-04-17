@@ -1,6 +1,6 @@
 namespace EnvironmentService.Models;
 
-public class Environment 
+public class IndoorEnvironment 
 {
  public int Id { get; set; }
  public string Name { get; set; }
