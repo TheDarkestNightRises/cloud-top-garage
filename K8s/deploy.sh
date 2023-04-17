@@ -12,6 +12,12 @@ kubectl apply -f user-mssql-initdb.yaml
 kubectl apply -f users-mssql-depl.yaml
 kubectl apply -f users-depl.yaml
 
+#Environment service
+kubectl apply -f environment-local-pvc.yaml 
+kubectl apply -f environment-mssql-initdb.yaml
+kubectl apply -f environments-mssql-depl.yaml
+kubectl apply -f environments-depl.yaml
+
 
 # Dont forget to kubectl create secret generic car-mssql --from-literal=SA_PASSWORD="Pa55w0rd!"
 

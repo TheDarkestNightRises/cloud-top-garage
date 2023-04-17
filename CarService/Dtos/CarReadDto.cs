@@ -4,7 +4,6 @@ namespace CarService.Dtos;
 
 public class CarReadDto
 {
-    [Required]
     public int Id { get; set; }
 
     [Required]

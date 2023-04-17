@@ -5,7 +5,7 @@ metadata:
 data:
   init.sql: |
     USE master;
-    GOk
+    GO
     IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'carsdb')
     BEGIN
         CREATE DATABASE carsdb;

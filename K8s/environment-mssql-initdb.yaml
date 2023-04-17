@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: environment-mssql-initdb
+data:
+  init.sql: |
+    USE master;
+    GO
+    IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'environmentsdb')
+    BEGIN
+        CREATE DATABASE environmentsdb;
+    END

@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: environment-depl
+  name: environments-depl
 spec:
   replicas: 1
   selector:
@@ -28,13 +28,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: environment-clusterip-srv
+  name: environments-clusterip-srv
 spec:
   type: ClusterIP
-  selector: 
+  selector:
     app: environmentservice
   ports:
-  - name: environmentservice
-    protocol: TCP
-    port: 80
-    targetPort: 80
+    - name: environmentservice
+      protocol: TCP
+      port: 80
+      targetPort: 80

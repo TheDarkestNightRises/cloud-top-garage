@@ -1,3 +1,8 @@
+using EnvironmentService.Application.Logic;
+using EnvironmentService.Application.LogicContracts;
+using EnvironmentService.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,6 +12,25 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+if (builder.Environment.IsProduction())
+{
+    Console.WriteLine("--> Using SqlServer Db");
+    builder.Services.AddDbContext<AppDbContext>(opt =>
+        opt.UseSqlServer(builder.Configuration.GetConnectionString("EnvironmentsConn")));
+}
+else
+{
+    // Console.WriteLine("--> Using InMem Db");
+    // builder.Services.AddDbContext<AppDbContext>(opt =>
+    //      opt.UseInMemoryDatabase("InMem"));
+    Console.WriteLine("--> Using SqlServer Db");
+    builder.Services.AddDbContext<AppDbContext>(opt =>
+        opt.UseSqlServer(builder.Configuration.GetConnectionString("EnvironmentsConn")));
+}
+
+builder.Services.AddScoped<IIndoorEnvironmentRepository, IndoorEnvironmentRepository>();
+builder.Services.AddScoped<IIndoorEnvironmentLogic, IndoorEnvironmentLogic>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -21,5 +45,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
+PrepDb.PrepPopulation(app, app.Environment.IsProduction());
 app.Run();
