@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: environments-mssql-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: environment-mssql
+  template:
+    metadata:
+      labels:
+        app: environment-mssql
+    spec:
+      containers:
+        - name: environment-mssql
+          image: mcr.microsoft.com/mssql/server:2017-latest
+          ports:
+            - containerPort: 1433
+          env:
+            - name: MSSQL_PID
+              value: "Express"
+            - name: ACCEPT_EULA
+              value: "Y"
+            - name: SA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: environment-mssql
+                  key: SA_PASSWORD
+          volumeMounts:
+            - mountPath: /var/opt/mssql/data
+              name: environment-mssqldb
+      volumes:
+        - name: environment-mssqldb
+          persistentVolumeClaim:
+            claimName: environment-mssql-claim
+        - name: environment-mssql-initdb
+          configMap:
+            name: environment-mssql-initdb
+---
+
