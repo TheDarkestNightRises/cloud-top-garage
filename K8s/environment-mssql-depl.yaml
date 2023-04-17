@@ -38,4 +38,18 @@ spec:
           configMap:
             name: environment-mssql-initdb
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: environments-mssql-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: environment-mssql
+  ports:
+    - name: environment-mssql
+      protocol: TCP
+      port: 1433
+      targetPort: 1433
+---
 
