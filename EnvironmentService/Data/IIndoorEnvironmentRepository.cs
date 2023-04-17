@@ -2,7 +2,7 @@ using EnvironmentService.Models;
 
 namespace EnvironmentService.Data;
 
-public interface IndoorEnvironmentRepository
+public interface IIndoorEnvironmentRepository
 {
-     Task<IEnumerable<IndoorEnvironment>> GetAllCarsAsync();
+     Task<IEnumerable<IndoorEnvironment>> GetAllIndoorEnvironmentsAsync();
 }

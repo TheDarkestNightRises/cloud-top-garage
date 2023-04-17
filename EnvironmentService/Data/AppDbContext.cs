@@ -10,5 +10,5 @@ public class AppDbContext : DbContext
 
     }
 
-    public DbSet<IndoorEnvironment> Environments { get; set; }
+    public DbSet<IndoorEnvironment> IndoorEnvironments { get; set; }
 }
