@@ -33,14 +33,24 @@ public static class PrepDb
 
         if (!context.Cars.Any())
         {
-            Console.WriteLine("--> Seeding Data...");
+            var garages = new List<Garage>
+            {
+             new Garage { Id = 1 },
+             new Garage { Id = 2 },
+             new Garage { Id = 3 }
+            };
 
-            context.Cars.AddRange(
-                new Car() { Name = "Buggatii", Description = "Microsoft" },
-                new Car() { Name = "Ferrari", Description = "Microsoft" },
-                new Car() { Name = "Fiat", Description = "Cloud Native Computing Foundation" }
-            );
+            var cars = new List<Car>
+            {
+                new Car { Id = 1, Name = "Toyota Camry", Description = "Midsize sedan", Garage = garages[0] },
+                new Car { Id = 2, Name = "Honda Civic", Description = "Compact car", Garage = garages[0] },
+                new Car { Id = 3, Name = "Ford F-150", Description = "Full-size pickup truck", Garage = garages[1] },
+                new Car { Id = 4, Name = "Tesla Model 3", Description = "Electric sedan", Garage = garages[2] },
+                new Car { Id = 5, Name = "Chevrolet Corvette", Description = "Sports car", Garage = garages[2] }
+            };
 
+            context.Garages.AddRange(garages);
+            context.Cars.AddRange(cars);
             context.SaveChanges();
         }
         else

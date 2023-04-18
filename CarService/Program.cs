@@ -19,6 +19,9 @@ if (builder.Environment.IsProduction())
 }
 else
 {
+    // Console.WriteLine("--> Using SqlServer Db");
+    // builder.Services.AddDbContext<AppDbContext>(opt =>
+    //     opt.UseSqlServer(builder.Configuration.GetConnectionString("CarsConn")));
     Console.WriteLine("--> Using InMem Db");
     builder.Services.AddDbContext<AppDbContext>(opt =>
          opt.UseInMemoryDatabase("InMem"));

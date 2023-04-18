@@ -19,21 +19,21 @@ public class CarsController : ControllerBase
         _logic = logic;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<CarReadDto>>> GetAllCarsAsync()
-    {
-        try
-        {
-            var cars = await _logic.GetAllCarsAsync();
-            var carsMapped = _mapper.Map<IEnumerable<CarReadDto>>(cars);
-            return Ok(carsMapped);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
-        }
-    }
+    // [HttpGet]
+    // public async Task<ActionResult<IEnumerable<CarReadDto>>> GetAllCarsAsync()
+    // {
+    //     try
+    //     {
+    //         var cars = await _logic.GetAllCarsAsync();
+    //         var carsMapped = _mapper.Map<IEnumerable<CarReadDto>>(cars);
+    //         return Ok(carsMapped);
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         Console.WriteLine(e);
+    //         return StatusCode(500, e.Message);
+    //     }
+    // }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<CarReadDto>>> GetAllCarsAsync([FromQuery] CarQueryDto carQueryDto)

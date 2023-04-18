@@ -14,4 +14,10 @@ public class Car
     public string Description { get; set; }
 
     public Garage Garage { get; set; }
+
+    public override string ToString()
+    {
+        string garageId = Garage != null ? Garage.Id.ToString() : "null";
+        return $"Car [Id={Id}, Name={Name}, Description={Description}, GarageId={garageId}]";
+    }
 }
