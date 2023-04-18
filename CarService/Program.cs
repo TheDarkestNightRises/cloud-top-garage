@@ -19,9 +19,12 @@ if (builder.Environment.IsProduction())
 }
 else
 {
-    Console.WriteLine("--> Using InMem Db");
+    Console.WriteLine("--> Using SqlServer Db");
     builder.Services.AddDbContext<AppDbContext>(opt =>
-         opt.UseInMemoryDatabase("InMem"));
+        opt.UseSqlServer(builder.Configuration.GetConnectionString("CarsConn")));
+    // Console.WriteLine("--> Using InMem Db");
+    // builder.Services.AddDbContext<AppDbContext>(opt =>
+    //      opt.UseInMemoryDatabase("InMem"));
 }
 
 builder.Services.AddScoped<ICarRepository, CarRepository>();
