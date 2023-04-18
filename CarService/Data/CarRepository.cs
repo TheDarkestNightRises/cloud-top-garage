@@ -36,4 +36,9 @@ public class CarRepository : ICarRepository
     {
         throw new NotImplementedException();
     }
+
+    public async Task<IEnumerable<Car>> GetAllCarsAsync(CarQuery carQuery)
+    {
+        throw new NotImplementedException();
+    }
 }
