@@ -33,4 +33,21 @@ public class CarsController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<CarReadDto>>> GetAllCarsAsync([FromQuery] CarQueryDto carQueryDto)
+    {
+        try
+        {
+            var carQuery = _mapper.Map<CarQueryDto>(carQueryDto);
+            var cars = await _logic.GetAllCarsAsync(carQuery);
+            var carsMapped = _mapper.Map<IEnumerable<CarReadDto>>(cars);
+            return Ok(carsMapped);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }
