@@ -12,4 +12,6 @@ public class Car
 
     [Required]
     public string Description { get; set; }
+
+    public Garage Garage { get; set; }
 }
