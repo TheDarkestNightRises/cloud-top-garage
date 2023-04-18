@@ -22,8 +22,12 @@ public class UserRepository : IUserRepository
         return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
     }
 
-    public Task<User> UpdateUserPasswordAsync(User updatedUser)
+    public async Task<User> UpdateUserPasswordAsync(User userToUpdate)
     {
-        throw new NotImplementedException();
+        _context.Users.Update(userToUpdate);
+        await _context.SaveChangesAsync();
+        return userToUpdate;
+
     }
+
 }

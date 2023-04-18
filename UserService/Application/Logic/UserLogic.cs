@@ -25,9 +25,9 @@ public class UserLogic : IUserLogic
         {
            throw new Exception($"There is no user with this email: {userUpdateDto.Email} ");
         }
-        userFound.Password = userUpdateDto.Password;
-        User updatedUser = userFound;
-        await _userRepository.UpdateUserPasswordAsync(updatedUser);
-        return updatedUser;
+        User userToUpdate = userFound;
+        userToUpdate.Password = userUpdateDto.Password;
+        await _userRepository.UpdateUserPasswordAsync(userToUpdate);
+        return userToUpdate;
     }
 }
