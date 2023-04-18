@@ -5,5 +5,5 @@ public interface IUserRepository
 {
     Task<IEnumerable<User>> GetAllUsersAsync();
     Task<User?> GetUserByEmailAsync(string email);
-    Task<User> UpdateUserAsync(User updatedUser);
+    Task<User> UpdateUserPasswordAsync(User updatedUser);
 }

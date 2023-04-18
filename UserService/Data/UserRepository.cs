@@ -22,7 +22,7 @@ public class UserRepository : IUserRepository
         throw new NotImplementedException();
     }
 
-    public Task<User> UpdateUserAsync(User updatedUser)
+    public Task<User> UpdateUserPasswordAsync(User updatedUser)
     {
         throw new NotImplementedException();
     }

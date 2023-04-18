@@ -27,7 +27,7 @@ public class UserLogic : IUserLogic
         }
         userFound.Password = userUpdateDto.Password;
         User updatedUser = userFound;
-        await _userRepository.UpdateUserAsync(updatedUser);
+        await _userRepository.UpdateUserPasswordAsync(updatedUser);
         return updatedUser;
     }
 }
