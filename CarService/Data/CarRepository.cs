@@ -39,16 +39,16 @@ public class CarRepository : ICarRepository
 
     public async Task<IEnumerable<Car>> GetAllCarsAsync(CarQuery carQuery)
     {
-        var query = _context.Cars.Include(c => c.Garage).AsQueryable();
+        var query = _context.Cars.AsQueryable();
 
-        if (carQuery.GarageId != 0)
+        if (!(carQuery.GarageId is null))
         {
             query = query.Where(c => c.Garage.Id == carQuery.GarageId);
         }
 
         if (!string.IsNullOrEmpty(carQuery.CarName))
         {
-            query = query.Where(c => c.Name.Contains(carQuery.CarName));
+            query = query.Where(c => c.Name.Contains(carQuery.CarName, StringComparison.OrdinalIgnoreCase));
         }
 
         return await query.ToListAsync();
