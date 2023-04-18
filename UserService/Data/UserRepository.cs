@@ -17,9 +17,9 @@ public class UserRepository : IUserRepository
         return await _context.Users.ToListAsync();
     }
 
-    public Task<User?> GetUserByEmailAsync(string email)
+    public async Task<User?> GetUserByEmailAsync(string email)
     {
-        throw new NotImplementedException();
+        return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
     }
 
     public Task<User> UpdateUserPasswordAsync(User updatedUser)
