@@ -24,7 +24,7 @@ public class CarRepository : ICarRepository
 
     public async Task<IEnumerable<Car>> GetAllCarsAsync()
     {
-        return await _context.Cars.ToListAsync();
+        return await _context.Cars.Include(c => c.Garage).ToListAsync();
     }
 
     public Task<Car> GetCarAsync(int id)
