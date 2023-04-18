@@ -14,6 +14,10 @@ public class CarLogic : ICarLogic
     public async Task<IEnumerable<Car>> GetAllCarsAsync()
     {
         return await _repository.GetAllCarsAsync();
+    }
 
+    public async Task<IEnumerable<Car>> GetAllCarsAsync(CarQuery carQuery)
+    {
+        return await _repository.GetAllCarsAsync(carQuery);
     }
 }
