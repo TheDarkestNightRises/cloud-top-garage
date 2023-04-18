@@ -39,6 +39,13 @@ public class CarRepository : ICarRepository
 
     public async Task<IEnumerable<Car>> GetAllCarsAsync(CarQuery carQuery)
     {
-        throw new NotImplementedException();
+        var query = _context.Cars.AsQueryable();
+
+        if (carQuery.GarageId != 0)
+        {
+            query = query.Where(c => c.Garage.Id == carQuery.GarageId);
+        }
+
+        return await query.ToListAsync();
     }
 }
