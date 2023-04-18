@@ -23,6 +23,7 @@ public class CarLogic : ICarLogic
 
     public async Task<IEnumerable<Car>> GetAllCarsAsync(CarQuery carQuery)
     {
+        if (carQuery.GarageId is null && carQuery.CarName is null) return await _repository.GetAllCarsAsync();
         return await _repository.GetAllCarsAsync(carQuery);
     }
 }
