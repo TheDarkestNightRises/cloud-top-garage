@@ -6,4 +6,6 @@ namespace Application.LogicContracts;
 public interface ICarLogic
 {
     public Task<IEnumerable<Car>> GetAllCarsAsync();
+
+    public Task<IEnumerable<Car>> GetAllCarsAsync(CarQuery carQuery);
 }
