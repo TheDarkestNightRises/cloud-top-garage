@@ -1,6 +1,7 @@
 using Application.LogicContracts;
 using AutoMapper;
 using CarService.Dtos;
+using CarService.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Carservice.Controllers;
@@ -39,8 +40,14 @@ public class CarsController : ControllerBase
     {
         try
         {
-            var carQuery = _mapper.Map<CarQueryDto>(carQueryDto);
+            var carQuery = _mapper.Map<CarQuery>(carQueryDto);
             var cars = await _logic.GetAllCarsAsync(carQuery);
+
+            if (cars == null || cars.Count() == 0)
+            {
+                return NotFound();
+            }
+
             var carsMapped = _mapper.Map<IEnumerable<CarReadDto>>(cars);
             return Ok(carsMapped);
         }
