@@ -1,14 +1,15 @@
 namespace CarService.Profile;
+
 using AutoMapper;
 using CarService.Dtos;
 using CarService.Models;
 
-public class CarsProfile : Profile
+
+public class CarQueryProfile : Profile
 {
-    public CarsProfile()
+    public CarQueryProfile()
     {
         //Source --> Target
-        CreateMap<Car, CarReadDto>();
-        CreateMap<CarReadDto, Car>();
+        CreateMap<CarQueryDto, CarQuery>();
     }
 }
