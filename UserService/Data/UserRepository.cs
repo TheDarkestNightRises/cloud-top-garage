@@ -16,4 +16,14 @@ public class UserRepository : IUserRepository
     {
         return await _context.Users.ToListAsync();
     }
+
+    public Task<User?> GetUserByEmailAsync(string email)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<User> UpdateUserAsync(User userFound)
+    {
+        throw new NotImplementedException();
+    }
 }
