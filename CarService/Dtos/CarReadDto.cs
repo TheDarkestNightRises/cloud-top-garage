@@ -11,4 +11,6 @@ public class CarReadDto
 
     [Required]
     public string Description { get; set; }
+
+    public GarageDto Garage { get; set; }
 }
