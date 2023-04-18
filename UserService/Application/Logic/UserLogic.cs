@@ -1,6 +1,7 @@
 namespace UserService.Logic;
 using System.Collections.Generic;
 using UserService.Data;
+using UserService.Dtos;
 using UserService.Models;
 
 public class UserLogic : IUserLogic
@@ -15,5 +16,10 @@ public class UserLogic : IUserLogic
     public async Task<IEnumerable<User>> GetAllUsersAsync()
     {
         return await _userRepository.GetAllUsersAsync();
+    }
+
+    public Task UpdateUserPassword(UserUpdateDto userUpdateDto)
+    {
+        throw new NotImplementedException();
     }
 }
