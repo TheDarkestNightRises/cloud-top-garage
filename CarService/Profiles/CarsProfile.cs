@@ -1,4 +1,4 @@
-namespace Carservice.Profile;
+namespace CarService.Profile;
 using AutoMapper;
 using CarService.Dtos;
 using CarService.Models;
