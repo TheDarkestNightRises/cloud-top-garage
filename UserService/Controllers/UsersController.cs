@@ -24,4 +24,19 @@ public class UsersController : ControllerBase
         var usersMapped = _mapper.Map<IEnumerable<UserReadDto>>(users);
         return Ok(usersMapped);
     }
+
+    [HttpPatch]
+    public async Task<ActionResult> UpdateUserPassword([FromBody] UserUpdateDto userUpdateDto)
+     {
+        try
+        {
+            await _userLogic.UpdateUserPassword(userUpdateDto);
+            return NoContent();
+        }
+        catch(Exception e)
+        {
+          Console.Write(e);
+          return StatusCode(500, e.Message);
+        }
+     }
 }

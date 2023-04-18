@@ -16,11 +16,12 @@ if (builder.Environment.IsProduction())
     Console.WriteLine("--> Using SqlServer Db");
     builder.Services.AddDbContext<AppDbContext>(opt =>
         opt.UseSqlServer(builder.Configuration.GetConnectionString("UsersConn")));
+        
 }
 else
 {
-    //Console.WriteLine("--> Using InMem Db");
-    //builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("InMem"));
+    // Console.WriteLine("--> Using InMem Db");
+    // builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("InMem"));
     Console.WriteLine("--> Using SqlServer Db locally");
     builder.Services.AddDbContext<AppDbContext>(opt =>
       opt.UseSqlServer(builder.Configuration.GetConnectionString("UsersConn")));
