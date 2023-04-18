@@ -19,35 +19,12 @@ public class CarsController : ControllerBase
         _logic = logic;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<CarReadDto>>> GetAllCarsAsync()
-    {
-        try
-        {
-            var cars = await _logic.GetAllCarsAsync();
-            var carsMapped = _mapper.Map<IEnumerable<CarReadDto>>(cars);
-            return Ok(carsMapped);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
-        }
-    }
-
     // [HttpGet]
-    // public async Task<ActionResult<IEnumerable<CarReadDto>>> GetAllCarsAsync([FromQuery] CarQueryDto carQueryDto)
+    // public async Task<ActionResult<IEnumerable<CarReadDto>>> GetAllCarsAsync()
     // {
     //     try
     //     {
-    //         var carQuery = _mapper.Map<CarQuery>(carQueryDto);
-    //         var cars = await _logic.GetAllCarsAsync(carQuery);
-
-    //         if (cars == null || cars.Count() == 0)
-    //         {
-    //             return NotFound();
-    //         }
-
+    //         var cars = await _logic.GetAllCarsAsync();
     //         var carsMapped = _mapper.Map<IEnumerable<CarReadDto>>(cars);
     //         return Ok(carsMapped);
     //     }
@@ -57,4 +34,27 @@ public class CarsController : ControllerBase
     //         return StatusCode(500, e.Message);
     //     }
     // }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<CarReadDto>>> GetAllCarsAsync([FromQuery] CarQueryDto carQueryDto)
+    {
+        try
+        {
+            var carQuery = _mapper.Map<CarQuery>(carQueryDto);
+            var cars = await _logic.GetAllCarsAsync(carQuery);
+
+            if (cars == null || cars.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            var carsMapped = _mapper.Map<IEnumerable<CarReadDto>>(cars);
+            return Ok(carsMapped);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }
