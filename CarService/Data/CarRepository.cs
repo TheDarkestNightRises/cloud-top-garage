@@ -46,6 +46,11 @@ public class CarRepository : ICarRepository
             query = query.Where(c => c.Garage.Id == carQuery.GarageId);
         }
 
+        if (!string.IsNullOrEmpty(carQuery.CarName))
+        {
+            query = query.Where(c => c.Name.Contains(carQuery.CarName));
+        }
+
         return await query.ToListAsync();
     }
 }
