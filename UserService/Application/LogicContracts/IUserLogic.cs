@@ -5,5 +5,5 @@ namespace UserService.Logic;
 public interface IUserLogic
 {
     Task<IEnumerable<User>> GetAllUsersAsync();
-    Task UpdateUserPassword(UserUpdateDto userUpdateDto);
+    Task<User> UpdateUserPassword(UserUpdateDto userUpdateDto);
 }
