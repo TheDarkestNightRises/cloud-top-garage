@@ -33,9 +33,10 @@ public class CarRepository : ICarRepository
         return await _context.Cars.Include(c => c.Garage).ToListAsync();
     }
 
-    public Task<Car> GetCarAsync(int id)
+    public async Task<Car> GetCarAsync(int id)
     {
-        throw new NotImplementedException();
+       var car = await _context.Cars.FindAsync(id);
+        return car;
     }
 
     public Task<Car> UpdateCarAsync(Car car)
