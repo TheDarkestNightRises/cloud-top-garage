@@ -17,9 +17,15 @@ public class CarRepository : ICarRepository
         throw new NotImplementedException();
     }
 
-    public Task<Car> DeleteCarAsync(int id)
+    public async Task<Car> DeleteCarAsync(int id)
     {
-        throw new NotImplementedException();
+        var carToDelete = await  _context.Cars.FindAsync(id);
+        if (carToDelete != null)
+        {
+            _context.Cars.Remove(carToDelete);
+            await _context.SaveChangesAsync();
+        }
+        return carToDelete;
     }
 
     public async Task<IEnumerable<Car>> GetAllCarsAsync()
