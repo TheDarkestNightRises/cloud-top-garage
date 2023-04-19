@@ -38,7 +38,7 @@ public class CarLogic : ICarLogic
         return await _repository.GetCarAsync(id);
     }
     
-    public async Task<IEnumerable<Car>> DeleteCarAsync(int id)
+    public async Task DeleteCarAsync(int id)
     {
         var car = await _repository.GetCarAsync(id);
         if(car is null) 
@@ -46,7 +46,6 @@ public class CarLogic : ICarLogic
              throw new Exception($"Car with id {id} not found");
         } 
         await _repository.DeleteCarAsync(id);
-        return car;
     }
     
 }
