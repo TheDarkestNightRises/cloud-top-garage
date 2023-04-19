@@ -77,9 +77,15 @@ public class CarsController : ControllerBase
 
             CarReadDto carReadDto = _mapper.Map<CarReadDto>(car);
             return Ok(carReadDto);
-     }       
-      
-    [HttpDelete ("{id}")]
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteCarAsync(int id)
     {
         try
