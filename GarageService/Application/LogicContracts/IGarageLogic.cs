@@ -1,6 +1,6 @@
 using GarageService.Models;
 
-namespace Application.LogicContracts;
+namespace GarageService.Application.LogicContracts;
 
 public interface IGarageLogic
 {
