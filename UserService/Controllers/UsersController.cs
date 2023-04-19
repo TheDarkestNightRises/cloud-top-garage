@@ -31,8 +31,8 @@ public class UsersController : ControllerBase
      {
         try
         {
-            var userToUpdate = _mapper.Map<User>(userUpdateDto);
-            await _userLogic.UpdateUser(userToUpdate);
+            var userUpdate = _mapper.Map<User>(userUpdateDto);
+            await _userLogic.UpdateUser(userUpdate);
             return NoContent();
         }
         catch(Exception e)

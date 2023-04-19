@@ -17,16 +17,16 @@ public class UserRepository : IUserRepository
         return await _context.Users.ToListAsync();
     }
 
-    public async Task<User?> GetUserByEmailAsync(string email)
+    public async Task<User?> GetUserByIdAsync(int id)
     {
-        return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
     }
 
-    public async Task<User> UpdateUserPasswordAsync(User userToUpdate)
+    public async Task<User> UpdateUserAsync(User updatedUser)
     {
-        _context.Users.Update(userToUpdate);
+        _context.Users.Update( updatedUser);
         await _context.SaveChangesAsync();
-        return userToUpdate;
+        return updatedUser;
 
     }
 
