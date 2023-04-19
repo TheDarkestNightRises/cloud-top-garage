@@ -19,21 +19,6 @@ public class CarsController : ControllerBase
         _logic = logic;
     }
 
-    // [HttpGet]
-    // public async Task<ActionResult<IEnumerable<CarReadDto>>> GetAllCarsAsync()
-    // {
-    //     try
-    //     {
-    //         var cars = await _logic.GetAllCarsAsync();
-    //         var carsMapped = _mapper.Map<IEnumerable<CarReadDto>>(cars);
-    //         return Ok(carsMapped);
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         Console.WriteLine(e);
-    //         return StatusCode(500, e.Message);
-    //     }
-    // }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<CarReadDto>>> GetAllCarsAsync([FromQuery] CarQueryDto carQueryDto)
@@ -92,6 +77,15 @@ public class CarsController : ControllerBase
 
             CarReadDto carReadDto = _mapper.Map<CarReadDto>(car);
             return Ok(carReadDto);
+     }       
+      
+    [HttpDelete ("{id}")]
+    public async Task<ActionResult> DeleteCarAsync(int id)
+    {
+        try
+        {
+            await _logic.DeleteCarAsync(id);
+            return NoContent();
         }
         catch (Exception e)
         {
