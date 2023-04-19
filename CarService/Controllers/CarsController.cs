@@ -78,4 +78,25 @@ public class CarsController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<CarReadDto>> GetCarById(int id)
+    {
+        try
+        {
+            Car car = await _logic.GetCarAsync(id);
+            if (car == null)
+            {
+                return NotFound();
+            }
+
+            CarReadDto carReadDto = _mapper.Map<CarReadDto>(car);
+            return Ok(carReadDto);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }
