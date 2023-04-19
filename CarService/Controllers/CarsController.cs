@@ -57,4 +57,25 @@ public class CarsController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+
+    [HttpPost]
+    public async Tast<ActionResult< 
+
+    //     [HttpPost]
+    // public async Task<ActionResult<CommentDto>> CreateAsync([FromBody] CommentCreationDto dto)
+    // {
+    //     try
+    //     {
+    //         Comment comment = dto.AsBaseFromCreation();
+    //         Comment created = await commentLogic.CreateAsync(comment);
+    //         CommentDto createdDto = created.AsDto();
+            
+    //         return Created($"/Comments/{created.Lecture.Url}", createdDto);
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         Console.WriteLine(e);
+    //         return StatusCode(500, e.Message);
+    //     }
+    // }
 }
