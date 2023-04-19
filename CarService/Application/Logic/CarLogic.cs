@@ -11,6 +11,12 @@ public class CarLogic : ICarLogic
     {
         _repository = carRepository;
     }
+
+    public Task<Car> CreateAsync(Car car)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<IEnumerable<Car>> GetAllCarsAsync()
     {
         var cars = await _repository.GetAllCarsAsync();
@@ -25,5 +31,17 @@ public class CarLogic : ICarLogic
     {
         if (carQuery.GarageId is null && carQuery.CarName is null) return await _repository.GetAllCarsAsync();
         return await _repository.GetAllCarsAsync(carQuery);
+    }
+
+    public async Task<IEnumerable<Car>> DeleteCarAsync(int id)
+    {
+        var car = await _repository.GetCarAsync(id);
+        if(car is null) 
+        {
+             throw new Exception($"Car with id {id} not found");
+        } 
+        await _repository.DeleteCarAsync(id);
+        var remainingCars = await _repository.GetAllCarsAsync();
+        return remainingCars;
     }
 }

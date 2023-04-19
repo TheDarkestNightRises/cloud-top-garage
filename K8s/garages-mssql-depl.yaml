@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: garages-mssql-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: garage-mssql
+  template:
+    metadata:
+      labels:
+        app: garage-mssql
+    spec:
+      containers:
+        - name: garage-mssql
+          image: mcr.microsoft.com/mssql/server:2017-latest
+          ports:
+            - containerPort: 1433
+          env:
+            - name: MSSQL_PID
+              value: "Express"
+            - name: ACCEPT_EULA
+              value: "Y"
+            - name: SA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: garage-mssql
+                  key: SA_PASSWORD
+          volumeMounts:
+            - mountPath: /var/opt/mssql/data
+              name: garage-mssqldb
+      volumes:
+        - name: garage-mssqldb
+          persistentVolumeClaim:
+            claimName: garage-mssql-claim
+        - name: garage-mssql-initdb
+          configMap:
+            name: garage-mssql-initdb-configmap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: garages-mssql-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: garage-mssql
+  ports:
+    - name: garage-mssql
+      protocol: TCP
+      port: 1433
+      targetPort: 1433
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: garages-mssql-loadbalancer
+spec:
+  type: LoadBalancer
+  selector:
+    app: garage-mssql
+  ports:
+    - protocol: TCP
+      port: 1433
+      targetPort: 1436

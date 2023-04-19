@@ -30,5 +30,15 @@ kubectl delete service environments-clusterip-srv
 kubectl delete service environments-mssql-clusterip-srv
 kubectl delete service environments-mssql-loadbalancer
 
+#------------Garage Service--------------
+# Deployments
+kubectl delete deployment garages-depl
+kubectl delete deployment garages-mssql-depl
+
+# Services
+kubectl delete service garages-clusterip-srv
+kubectl delete service garages-mssql-clusterip-srv
+kubectl delete service garages-mssql-loadbalancer
+
 #Ingress loadbalancer
 kubectl delete deployment ingress-nginx-controller -n ingress-nginx

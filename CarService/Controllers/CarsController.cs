@@ -43,6 +43,27 @@ public class CarsController : ControllerBase
         }
     }
 
+    [HttpPost]
+    public async Task<ActionResult<CarReadDto>> CreateCar([FromBody] CarRegisterDto carRegisterDto)
+    {
+        try
+        {
+            Car car = _mapper.Map<Car>(carRegisterDto);
+            Car created = await _logic.CreateAsync(car);
+            CarReadDto createdDto = _mapper.Map<CarReadDto>(created);
+            return Created($"/Cars/{created.Id}", createdDto);
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
     [HttpDelete ("{id}")]
     public async Task<ActionResult> DeleteCarAsync(int id)
     {
@@ -56,7 +77,6 @@ public class CarsController : ControllerBase
             Console.WriteLine(e);
             return StatusCode(500, e.Message);
         }
-
     }
-
+    
 }
