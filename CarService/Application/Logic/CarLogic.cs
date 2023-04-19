@@ -11,6 +11,12 @@ public class CarLogic : ICarLogic
     {
         _repository = carRepository;
     }
+
+    public Task<Car> CreateAsync(Car car)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<IEnumerable<Car>> GetAllCarsAsync()
     {
         var cars = await _repository.GetAllCarsAsync();

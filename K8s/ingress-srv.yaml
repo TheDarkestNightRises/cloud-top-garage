@@ -31,3 +31,10 @@ spec:
                 name: environments-clusterip-srv
                 port:
                   number: 80
+          - path: /Garages
+            pathType: Prefix
+            backend:
+              service:
+                name: garages-clusterip-srv
+                port:
+                  number: 80
