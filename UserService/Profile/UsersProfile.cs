@@ -10,6 +10,7 @@ namespace UserService.Profiles
         {
             // Source -> Target
             CreateMap<User, UserReadDto>();
+            CreateMap<UserUpdateDto,User>();
         }
     }
 }
