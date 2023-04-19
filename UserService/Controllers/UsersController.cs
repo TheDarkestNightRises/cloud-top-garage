@@ -27,12 +27,12 @@ public class UsersController : ControllerBase
     }
 
     [HttpPatch]
-    public async Task<ActionResult> UpdateUserPassword([FromBody] UserUpdateDto userUpdateDto)
+    public async Task<ActionResult> UpdateUser([FromBody] UserUpdateDto userUpdateDto)
      {
         try
         {
-            var userUpdate = _mapper.Map<User>(userUpdateDto);
-            await _userLogic.UpdateUser(userUpdate);
+            var userToUpdate = _mapper.Map<User>(userUpdateDto);
+            await _userLogic.UpdateUser(userToUpdate);
             return NoContent();
         }
         catch(Exception e)

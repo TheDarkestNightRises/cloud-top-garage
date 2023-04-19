@@ -22,11 +22,11 @@ public class UserRepository : IUserRepository
         return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
     }
 
-    public async Task<User> UpdateUserAsync(User updatedUser)
+    public async Task<User> UpdateUserAsync(User userFound)
     {
-        _context.Users.Update( updatedUser);
+        _context.Users.Update(userFound);
         await _context.SaveChangesAsync();
-        return updatedUser;
+        return userFound;
 
     }
 
