@@ -32,7 +32,7 @@ public class CarLogic : ICarLogic
         var car = await _repository.GetCarAsync(id);
         if(car is null) 
         {
-            return null;
+             throw new Exception($"Car with id {id} not found");
         } 
         await _repository.DeleteCarAsync(id);
         var remainingCars = await _repository.GetAllCarsAsync();
