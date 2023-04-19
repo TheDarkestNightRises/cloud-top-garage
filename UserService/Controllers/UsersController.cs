@@ -32,7 +32,7 @@ public class UsersController : ControllerBase
         try
         {
             var userToUpdate = _mapper.Map<User>(userUpdateDto);
-            await _userLogic.UpdateUserPassword(userToUpdate);
+            await _userLogic.UpdateUser(userToUpdate);
             return NoContent();
         }
         catch(Exception e)
