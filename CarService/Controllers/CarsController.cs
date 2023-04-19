@@ -59,23 +59,23 @@ public class CarsController : ControllerBase
     }
 
     [HttpPost]
-    public async Tast<ActionResult< 
-
-    //     [HttpPost]
-    // public async Task<ActionResult<CommentDto>> CreateAsync([FromBody] CommentCreationDto dto)
-    // {
-    //     try
-    //     {
-    //         Comment comment = dto.AsBaseFromCreation();
-    //         Comment created = await commentLogic.CreateAsync(comment);
-    //         CommentDto createdDto = created.AsDto();
-            
-    //         return Created($"/Comments/{created.Lecture.Url}", createdDto);
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         Console.WriteLine(e);
-    //         return StatusCode(500, e.Message);
-    //     }
-    // }
+    public async Task<ActionResult<CarReadDto>> CreateCar([FromBody] CarRegisterDto carRegisterDto)
+    {
+        try
+        {
+            Car car = _mapper.Map<Car>(carRegisterDto);
+            Car created = await _logic.CreateAsync(car);
+            CarReadDto createdDto = _mapper.Map<CarReadDto>(created);
+            return Created($"/Cars/{created.Id}", createdDto);
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }

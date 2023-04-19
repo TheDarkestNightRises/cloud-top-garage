@@ -16,34 +16,34 @@ if (builder.Environment.IsProduction())
     Console.WriteLine("--> Using SqlServer Db");
     builder.Services.AddDbContext<AppDbContext>(opt =>
         opt.UseSqlServer(builder.Configuration.GetConnectionString("CarsConn")));
-}
+
 else
-{
-    // Console.WriteLine("--> Using SqlServer Db");
-    // builder.Services.AddDbContext<AppDbContext>(opt =>
-    //     opt.UseSqlServer(builder.Configuration.GetConnectionString("CarsConn")));
-    Console.WriteLine("--> Using InMem Db");
-    builder.Services.AddDbContext<AppDbContext>(opt =>
-         opt.UseInMemoryDatabase("InMem"));
-}
+    {
+        // Console.WriteLine("--> Using SqlServer Db");
+        // builder.Services.AddDbContext<AppDbContext>(opt =>
+        //     opt.UseSqlServer(builder.Configuration.GetConnectionString("CarsConn")));
+        Console.WriteLine("--> Using InMem Db");
+        builder.Services.AddDbContext<AppDbContext>(opt =>
+             opt.UseInMemoryDatabase("InMem"));
+    }
 
-builder.Services.AddScoped<ICarRepository, CarRepository>();
-builder.Services.AddScoped<ICarLogic, CarLogic>();
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+    builder.Services.AddScoped<ICarRepository, CarRepository>();
+    builder.Services.AddScoped<ICarLogic, CarLogic>();
+    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-var app = builder.Build();
+    var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
 
-app.UseHttpsRedirection();
+    app.UseHttpsRedirection();
 
-app.UseAuthorization();
+    app.UseAuthorization();
 
-app.MapControllers();
-PrepDb.PrepPopulation(app, app.Environment.IsProduction());
-app.Run();
+    app.MapControllers();
+    PrepDb.PrepPopulation(app, app.Environment.IsProduction());
+    app.Run();
