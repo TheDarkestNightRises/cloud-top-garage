@@ -18,16 +18,16 @@ public class UserLogic : IUserLogic
         return await _userRepository.GetAllUsersAsync();
     }
 
-    public async Task<User> UpdateUserPassword(UserUpdateDto userUpdateDto)
+    public async Task<User> UpdateUser(User userToUpdate)
     {
-        User? userFound = await _userRepository.GetUserByEmailAsync(userUpdateDto.Email);
+        User? userFound = await _userRepository.GetUserByIdAsync(userToUpdate.Id);
         if(userFound == null) 
         {
-           throw new Exception($"There is no user with this email: {userUpdateDto.Email} ");
+           throw new Exception($"There is no user with the id: {userToUpdate.Id}");
         }
-        User userToUpdate = userFound;
-        userToUpdate.Password = userUpdateDto.Password;
-        await _userRepository.UpdateUserPasswordAsync(userToUpdate);
-        return userToUpdate;
+        userFound.Email = userToUpdate.Email;
+        userFound.Password = userToUpdate.Password;
+        await _userRepository.UpdateUserAsync(userFound);
+        return userFound;
     }
 }

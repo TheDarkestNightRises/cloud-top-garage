@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using UserService.Dtos;
 using UserService.Logic;
+using UserService.Models;
 
 namespace UserService.Controllers;
 [ApiController]
@@ -26,11 +27,12 @@ public class UsersController : ControllerBase
     }
 
     [HttpPatch]
-    public async Task<ActionResult> UpdateUserPassword([FromBody] UserUpdateDto userUpdateDto)
+    public async Task<ActionResult> UpdateUser([FromBody] UserUpdateDto userUpdateDto)
      {
         try
         {
-            await _userLogic.UpdateUserPassword(userUpdateDto);
+            var userToUpdate = _mapper.Map<User>(userUpdateDto);
+            await _userLogic.UpdateUser(userToUpdate);
             return NoContent();
         }
         catch(Exception e)

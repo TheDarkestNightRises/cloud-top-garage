@@ -4,6 +4,6 @@ namespace UserService.Data;
 public interface IUserRepository
 {
     Task<IEnumerable<User>> GetAllUsersAsync();
-    Task<User?> GetUserByEmailAsync(string email);
-    Task<User> UpdateUserPasswordAsync(User userToUpdate);
+    Task<User?> GetUserByIdAsync(int id);
+    Task<User> UpdateUserAsync(User userFound);
 }
