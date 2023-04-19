@@ -37,4 +37,18 @@ spec:
         - name: garage-mssql-initdb
           configMap:
             name: garage-mssql-initdb-configmap
-  
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: garages-mssql-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: garage-mssql
+  ports:
+    - name: garage-mssql
+      protocol: TCP
+      port: 1433
+      targetPort: 1433
+
