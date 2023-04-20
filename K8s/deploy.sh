@@ -28,5 +28,10 @@ kubectl apply -f garages-depl.yaml
 # Dont forget to kubectl create secret generic car-mssql --from-literal=SA_PASSWORD="Pa55w0rd!"
 
 #Ingress nginx
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.6.4/deploy/static/provider/cloud/deploy.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.7.0/deploy/static/provider/cloud/deploy.yaml
 kubectl apply -f ingress-srv.yaml
+
+# # Ocelot gateway
+# kubectl apply -f ocelot-config.yaml
+# kubectl apply -f ocelot-depl.yaml
+# kubectl apply -f ocelot-ingress.yaml

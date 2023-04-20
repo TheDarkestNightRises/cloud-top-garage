@@ -62,5 +62,5 @@ spec:
     app: environment-mssql
   ports:
     - protocol: TCP
-      port: 1469
-      targetPort: 1433
+      port: 1433
+      targetPort: 1469
