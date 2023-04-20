@@ -66,6 +66,16 @@ public class AuthController : ControllerBase
 
     private List<Claim> GenerateClaims(User user)
     {
-        throw new NotImplementedException();
+        var claims = new[]
+       {
+            new Claim(JwtRegisteredClaimNames.Sub, _config["Jwt:Subject"]),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Role, user.Role),
+            new Claim("DisplayName", user.Name),
+        };
+        return claims.ToList();
     }
+
 }
