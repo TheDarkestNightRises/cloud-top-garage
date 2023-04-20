@@ -1,7 +1,7 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/cars",
+      "DownstreamPathTemplate": "/Cars",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -9,11 +9,11 @@
           "Port": 5027
         }
       ],
-      "UpstreamPathTemplate": "/cars",
+      "UpstreamPathTemplate": "api/cars",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
     },
     {
-      "DownstreamPathTemplate": "/garages",
+      "DownstreamPathTemplate": "/Garages",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -21,11 +21,11 @@
           "Port": 5055
         }
       ],
-      "UpstreamPathTemplate": "/garages",
+      "UpstreamPathTemplate": "api/garages",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
     },
     {
-      "DownstreamPathTemplate": "/users",
+      "DownstreamPathTemplate": "/Users",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -33,11 +33,11 @@
           "Port": 5158
         }
       ],
-      "UpstreamPathTemplate": "/users",
+      "UpstreamPathTemplate": "api/users",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
     },
     {
-      "DownstreamPathTemplate": "/environments",
+      "DownstreamPathTemplate": "/Environments",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -45,7 +45,7 @@
           "Port": 5211
         }
       ],
-      "UpstreamPathTemplate": "/environments",
+      "UpstreamPathTemplate": "api/environments",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
     }
   ],
