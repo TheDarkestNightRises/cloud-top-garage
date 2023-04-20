@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ocelot-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ocelot
+  template:
+    metadata:
+      labels:
+        app: ocelot
+    spec:
+      containers:
+      - name: ocelot
+        image: ocelot-image:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Production"
+        volumeMounts:
+        - name: ocelot-config
+          mountPath: /app/config
+      volumes:
+      - name: ocelot-config
+        configMap:
+          name: ocelot-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ocelot-srv
+spec:
+  selector:
+    app: ocelot
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80

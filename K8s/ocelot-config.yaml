@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ocelot-config
+data:
+  ocelot.json: |
+    {
+      "Routes": [
+        {
+          "DownstreamPathTemplate": "/users",
+          "DownstreamScheme": "http",
+          "DownstreamHostAndPorts": [
+            {
+              "Host": "users-clusterip-srv",
+              "Port": 80
+            }
+          ],
+          "UpstreamPathTemplate": "/api/users",
+          "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+        },
+        {
+          "DownstreamPathTemplate": "/cars",
+          "DownstreamScheme": "http",
+          "DownstreamHostAndPorts": [
+            {
+              "Host": "cars-clusterip-srv",
+              "Port": 80
+            }
+          ],
+          "UpstreamPathTemplate": "/api/cars",
+          "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+        }
+      ],
+      "GlobalConfiguration": {
+        "BaseUrl": "/"
+      }
+    }
