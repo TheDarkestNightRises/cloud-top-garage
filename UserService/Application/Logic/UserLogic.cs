@@ -18,6 +18,11 @@ public class UserLogic : IUserLogic
         return await _userRepository.GetAllUsersAsync();
     }
 
+    public Task<User> LoginUserAsync(string email, string password)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<User> UpdateUser(User userToUpdate)
     {
         User? userFound = await _userRepository.GetUserByIdAsync(userToUpdate.Id);

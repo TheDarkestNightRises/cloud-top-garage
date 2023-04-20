@@ -56,7 +56,7 @@ public class AuthController : ControllerBase
             _config["Jwt:Audience"],
             claims,
             null,
-            DateTime.UtcNow.AddMinutes(60));
+            DateTime.UtcNow.AddMinutes(30));
 
         JwtSecurityToken token = new JwtSecurityToken(header, payload);
 
