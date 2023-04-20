@@ -19,7 +19,7 @@ public class CarRepository : ICarRepository
 
     public async Task<Car> DeleteCarAsync(int id)
     {
-        var carToDelete = await  _context.Cars.FindAsync(id);
+        var carToDelete = await _context.Cars.FindAsync(id);
         if (carToDelete != null)
         {
             _context.Cars.Remove(carToDelete);
@@ -30,12 +30,13 @@ public class CarRepository : ICarRepository
 
     public async Task<IEnumerable<Car>> GetAllCarsAsync()
     {
-        return await _context.Cars.Include(c => c.Garage).ToListAsync();
+        return await _context.Cars.Include(c => c.Garage)
+                                    .ToListAsync();
     }
 
     public async Task<Car> GetCarAsync(int id)
     {
-       var car = await _context.Cars.FindAsync(id);
+        var car = await _context.Cars.FindAsync(id);
         return car;
     }
 
@@ -59,5 +60,14 @@ public class CarRepository : ICarRepository
         }
 
         return await query.ToListAsync();
+    }
+
+    public async Task<Image> GetCarImageAsync(int id)
+    {
+        var car = await _context.Cars
+        .Include(c => c.Image)
+        .Where(c => c.Id == id)
+        .SingleOrDefaultAsync();
+        return car.Image;
     }
 }
