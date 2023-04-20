@@ -1,5 +1,7 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UserService.Dtos;
 using UserService.Logic;
 
 namespace UserService.Controllers;
@@ -16,4 +18,23 @@ public class AuthController : ControllerBase
         _userLogic = userLogic;
         _mapper = mapper;
     }
+
+
+    [AllowAnonymous]
+    [HttpPost]
+    public async Task<ActionResult> Login([FromBody] UserAuthDto userAuthDto)
+    {
+        try
+        {
+            var user = _userLogic.LoginUserAsync(userAuthDto.Email, userAuthDto.Password);
+            string token = GenerateJtw(user);
+            return Ok(token);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+
 }
