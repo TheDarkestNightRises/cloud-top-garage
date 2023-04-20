@@ -99,4 +99,25 @@ public class CarsController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+
+
+    [HttpGet, Route("/Cars/{id}/images")]
+    public async Task<IActionResult> GetCarImage(int id)
+    {
+        try
+        {
+            var carImage = await _logic.GetCarImageAsync(id);
+            if (carImage is not null)
+            {
+                return File(carImage.Data, "image/jpeg");
+            }
+
+            return NotFound();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }
