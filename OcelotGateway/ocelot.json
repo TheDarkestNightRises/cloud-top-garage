@@ -10,7 +10,43 @@
           }
         ],
         "UpstreamPathTemplate": "/api/cars",
-        "UpstreamHttpMethod": [ "Get" ]
+        "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+      },
+      {
+        "DownstreamPathTemplate": "/Garages",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "localhost",
+            "Port": 5055
+          }
+        ],
+        "UpstreamPathTemplate": "/api/garages",
+        "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+      },
+      {
+        "DownstreamPathTemplate": "/Users",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "localhost",
+            "Port": 5158
+          }
+        ],
+        "UpstreamPathTemplate": "/api/users",
+        "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+      },
+      {
+        "DownstreamPathTemplate": "/Environments",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "localhost",
+            "Port": 5211
+          }
+        ],
+        "UpstreamPathTemplate": "/api/environments",
+        "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
       }
     ],
     "GlobalConfiguration": {
