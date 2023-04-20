@@ -1,0 +1,55 @@
+{
+    "Routes": [
+      {
+        "DownstreamPathTemplate": "/cars",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "localhost",
+            "Port": 5027
+          }
+        ],
+        "UpstreamPathTemplate": "/cars",
+        "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+      },
+      {
+        "DownstreamPathTemplate": "/garages",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "localhost",
+            "Port": 5055
+          }
+        ],
+        "UpstreamPathTemplate": "/garages",
+        "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+      },
+      {
+        "DownstreamPathTemplate": "/users",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "localhost",
+            "Port": 5158
+          }
+        ],
+        "UpstreamPathTemplate": "/users",
+        "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+      },
+      {
+        "DownstreamPathTemplate": "/environments",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "localhost",
+            "Port": 5211
+          }
+        ],
+        "UpstreamPathTemplate": "/environments",
+        "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+      }
+    ],
+    "GlobalConfiguration": {
+      "BaseUrl": "http://localhost:5000"
+    }
+  }
