@@ -13,6 +13,7 @@ public class Car
     [Required]
     public string Description { get; set; }
 
+    public Image Image { get; set; }
     public Garage Garage { get; set; }
 
     public override string ToString()
