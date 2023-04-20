@@ -19,10 +19,11 @@ public class AuthController : ControllerBase
     private readonly IMapper _mapper;
     private readonly IConfiguration _config;
 
-    public AuthController(IUserLogic userLogic, IMapper mapper)
+    public AuthController(IUserLogic userLogic, IMapper mapper, IConfiguration config)
     {
         _userLogic = userLogic;
         _mapper = mapper;
+        _config = config;
     }
 
 

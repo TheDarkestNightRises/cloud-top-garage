@@ -26,7 +26,7 @@ public class UserLogic : IUserLogic
         {
             throw new Exception("Email doesn't exist!");
         }
-        if (userFound.Password.Equals(password))
+        if (!userFound.Password.Equals(password))
         {
             throw new Exception("Wrong password!");
         }

@@ -37,8 +37,8 @@ public static class PrepDb
             Console.WriteLine("--> Seeding Data...");
 
             context.Users.AddRange(
-                new User { Name = "John Doe", Email = "johndoe@email.com", Password = "123" },
-                new User { Name = "Jane Smith", Email = "janesmith@email.com", Password = "1234" }
+                new User { Name = "John Doe", Email = "johndoe@email.com", Password = "123", Role = "User" },
+                new User { Name = "Jane Smith", Email = "janesmith@email.com", Password = "1234", Role = "User" }
             );
 
             context.SaveChanges();
