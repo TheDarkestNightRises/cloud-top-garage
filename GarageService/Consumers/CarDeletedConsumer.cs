@@ -12,8 +12,8 @@ public class CarDeletedConsumer : IConsumer<CarDeleted>
     {
         _garageLogic = garageLogic;
     }
-    public Task Consume(ConsumeContext<CarDeleted> context)
+    public async Task Consume(ConsumeContext<CarDeleted> context)
     {
-        throw new NotImplementedException();
+        await _garageLogic.DeleteCarAsync(context.Message.Id);
     }
 }
