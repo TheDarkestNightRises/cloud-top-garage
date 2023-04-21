@@ -8,6 +8,5 @@ public interface IUserLogic
     Task<IEnumerable<User>> GetAllUsersAsync();
     Task<User> LoginUserAsync(string email, string password);
     Task<User> UpdateUser(User userToUpdate);
-    Task<User> CreateUser(UserCreateDto userCreateDto);
-
+    
 }

@@ -12,11 +12,11 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
-    public async Task CreateUser(User user)
+    public async Task<User> CreateUserAsync(User user)
     {
-       _context.Users.Add(user); // Add the user to the database context 
-       await _context.SaveChangesAsync(); // Save the changes to the database
-
+        await _context.Users.AddAsync(user); // Add the user to the database
+        await _context.SaveChangesAsync(); // Save the changes to the database
+        return user;
     }
 
     public async Task<IEnumerable<User>> GetAllUsersAsync()
@@ -24,7 +24,7 @@ public class UserRepository : IUserRepository
         return await _context.Users.ToListAsync();
     }
 
-    public async Task<User?> getUserByEmail(string email)
+    public async Task<User?> GetUserByEmail(string email)
     {
         return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
     }
@@ -41,5 +41,4 @@ public class UserRepository : IUserRepository
         return userFound;
 
     }
-
 }
