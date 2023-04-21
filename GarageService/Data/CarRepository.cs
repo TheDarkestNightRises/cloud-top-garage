@@ -12,13 +12,15 @@ public class CarRepository : ICarRepository
         _context = context;
     }
 
-    public Task DeleteCarAsync(int id)
+    public async Task DeleteCarAsync(int id)
     {
-        throw new NotImplementedException();
+        var car = await _context.Cars.FindAsync(id);
+        _context.Cars.Remove(car);
+        await _context.SaveChangesAsync();
     }
 
-    public Task<Car> GetCarByIdAsync(int carId)
+    public async Task<Car?> GetCarByIdAsync(int carId)
     {
-        throw new NotImplementedException();
+        return await _context.Cars.FindAsync(carId);
     }
 }
