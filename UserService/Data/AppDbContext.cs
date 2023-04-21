@@ -13,6 +13,7 @@ public class AppDbContext : DbContext
     {
         modelBuilder.Entity<User>()
         .Property(u => u.Name)
+        .HasMaxLength(15)
         .IsRequired();
 
         modelBuilder.Entity<User>()
