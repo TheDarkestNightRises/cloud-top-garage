@@ -1,4 +1,6 @@
+using System.Reflection;
 using System.Text;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -7,8 +9,26 @@ using UserService.Data;
 using UserService.Logic;
 
 
+//Setup Mass Transit with RabbitMQ
 
 var builder = WebApplication.CreateBuilder(args);
+
+//Setting up MassTransit
+var configuration = builder.Configuration;
+var rabbitMqConfig = configuration.GetSection("RabbitMQ");
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumers(Assembly.GetEntryAssembly());
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host($"{rabbitMqConfig["Host"]}", $"/", h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
+        cfg.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter("CarService", false));
+    });
+});
 
 // Add services to the container.
 
