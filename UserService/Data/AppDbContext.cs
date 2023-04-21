@@ -11,8 +11,23 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<User>()
+        .Property(u => u.Name)
+        .IsRequired();
+
+        modelBuilder.Entity<User>()
+        .Property(u => u.Email)
+        .HasMaxLength(30)
+        .IsRequired();
+
+        modelBuilder.Entity<User>()
+        .Property(u => u.Password)
+        .HasMaxLength(15)
+        .IsRequired();
+
     }
 
     public DbSet<User> Users { get; set; }
+
 
 }
