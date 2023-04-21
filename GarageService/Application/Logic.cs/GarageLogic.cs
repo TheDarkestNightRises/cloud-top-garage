@@ -11,6 +11,12 @@ public class GarageLogic : IGarageLogic
     {
         _repository = garageRepository;
     }
+
+    public Task DeleteCarAsync(int id)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<IEnumerable<Garage>> GetAllGaragesAsync()
     {
         var garages = await _repository.GetAllGaragesAsync();
