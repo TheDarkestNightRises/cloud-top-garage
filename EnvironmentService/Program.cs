@@ -20,12 +20,12 @@ if (builder.Environment.IsProduction())
 }
 else
 {
-    Console.WriteLine("--> Using InMem Db");
-    builder.Services.AddDbContext<AppDbContext>(opt =>
-         opt.UseInMemoryDatabase("InMem"));
-    // Console.WriteLine("--> Using SqlServer Db");
+    // Console.WriteLine("--> Using InMem Db");
     // builder.Services.AddDbContext<AppDbContext>(opt =>
-    //     opt.UseSqlServer(builder.Configuration.GetConnectionString("EnvironmentsConn")));
+    //      opt.UseInMemoryDatabase("InMem"));
+    Console.WriteLine("--> Using SqlServer Db");
+    builder.Services.AddDbContext<AppDbContext>(opt =>
+        opt.UseSqlServer(builder.Configuration.GetConnectionString("EnvironmentsConn")));
 }
 
 builder.Services.AddScoped<IIndoorEnvironmentRepository, IndoorEnvironmentRepository>();
