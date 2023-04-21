@@ -1,6 +1,8 @@
+using System.Reflection;
 using EnvironmentService.Application.Logic;
 using EnvironmentService.Application.LogicContracts;
 using EnvironmentService.Data;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
