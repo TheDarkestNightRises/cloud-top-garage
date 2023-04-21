@@ -15,13 +15,15 @@ public class UserLogic : IUserLogic
 
     public async Task<User> CreateUser(User user)
     {
-        var userFound = await  _userRepository.GetUserByEmail(user.Email);
+        var userFound = await _userRepository.GetUserByEmail(user.Email);
         if (userFound != null)
         {
             throw new Exception("Email already exists!");
         }
+        user.Role = "User";
         return await _userRepository.CreateUserAsync(user);
     }
+
 
     public async Task<IEnumerable<User>> GetAllUsersAsync()
     {
