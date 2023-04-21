@@ -1,0 +1,14 @@
+
+using GarageService.Application.LogicContracts;
+using GarageService.Models;
+using GarageService.Data;
+
+public class CarLogic : ICarLogic
+{
+    private readonly ICarRepository _repository;
+
+    public CarLogic(ICarRepository carRepository)
+    {
+        _repository = carRepository;
+    }
+}
