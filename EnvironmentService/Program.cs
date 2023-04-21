@@ -5,6 +5,23 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Setup Mass Transit with RabbitMQ
+var configuration = builder.Configuration;
+var rabbitMqConfig = configuration.GetSection("RabbitMQ");
+
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumers(Assembly.GetEntryAssembly());
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host($"{rabbitMqConfig["Host"]}", $"/", h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
+        cfg.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter("CarService", false));
+    });
+});
 // Add services to the container.
 
 builder.Services.AddControllers();
