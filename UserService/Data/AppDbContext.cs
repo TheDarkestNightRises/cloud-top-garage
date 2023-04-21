@@ -18,13 +18,17 @@ public class AppDbContext : DbContext
 
         modelBuilder.Entity<User>()
         .Property(u => u.Email)
-        .HasMaxLength(30)
+        .HasMaxLength(20)
         .IsRequired();
 
         modelBuilder.Entity<User>()
         .Property(u => u.Password)
         .HasMaxLength(15)
-        .IsRequired();
+        .IsRequired(); 
+
+        modelBuilder.Entity<User>()
+        .Property(u => u.Role)
+        .IsRequired(); 
 
     }
 
