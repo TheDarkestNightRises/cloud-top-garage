@@ -2,14 +2,18 @@
 using Application.LogicContracts;
 using CarService.Models;
 using CarService.Data;
+using MassTransit;
+using Contracts;
 
 public class CarLogic : ICarLogic
 {
     private readonly ICarRepository _repository;
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public CarLogic(ICarRepository carRepository)
+    public CarLogic(ICarRepository carRepository, IPublishEndpoint publishEndpoint)
     {
         _repository = carRepository;
+        _publishEndpoint = publishEndpoint;
     }
 
     public Task<Car> CreateAsync(Car car)
@@ -48,6 +52,7 @@ public class CarLogic : ICarLogic
         {
             throw new Exception($"Car with id {id} not found");
         }
+        await _publishEndpoint.Publish(new CarDeleted(id));
         await _repository.DeleteCarAsync(id);
     }
 

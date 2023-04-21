@@ -42,8 +42,10 @@ else
     builder.Services.AddDbContext<AppDbContext>(opt =>
          opt.UseInMemoryDatabase("InMem"));
 }
+builder.Services.AddScoped<ICarRepository, CarRepository>();
 builder.Services.AddScoped<IGarageRepository, GarageRepository>();
 builder.Services.AddScoped<IGarageLogic, GarageLogic>();
+builder.Services.AddScoped<ICarLogic, CarLogic>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();
 

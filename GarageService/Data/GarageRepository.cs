@@ -14,7 +14,7 @@ public class GarageRepository : IGarageRepository
 
     public async Task<IEnumerable<Garage>> GetAllGaragesAsync()
     {
-        return await _context.Garages.ToListAsync();
+        return await _context.Garages.Include(g => g.Cars).ToListAsync();
     }
 
 }

@@ -11,6 +11,7 @@ public class GarageLogic : IGarageLogic
     {
         _repository = garageRepository;
     }
+
     public async Task<IEnumerable<Garage>> GetAllGaragesAsync()
     {
         var garages = await _repository.GetAllGaragesAsync();
