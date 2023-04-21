@@ -12,13 +12,13 @@ public class CarLogic : ICarLogic
         _repository = carRepository;
     }
 
-    public Task DeleteCarAsync(int id)
+    public async Task DeleteCarAsync(int id)
     {
-        throw new NotImplementedException();
+        await _repository.DeleteCarAsync(id);
     }
 
-    public Task<Car> GetCarByIdAsync(int carId)
+    public async Task<Car> GetCarByIdAsync(int carId)
     {
-        throw new NotImplementedException();
+        return await _repository.GetCarByIdAsync(carId);
     }
 }
