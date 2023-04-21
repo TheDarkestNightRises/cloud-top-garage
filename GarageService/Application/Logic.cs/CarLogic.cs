@@ -11,4 +11,14 @@ public class CarLogic : ICarLogic
     {
         _repository = carRepository;
     }
+
+    public Task DeleteCarAsync(int id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Car> GetCarByIdAsync(int carId)
+    {
+        throw new NotImplementedException();
+    }
 }
