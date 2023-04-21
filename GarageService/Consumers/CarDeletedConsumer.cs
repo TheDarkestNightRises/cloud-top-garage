@@ -6,14 +6,22 @@ namespace GarageService.Consumers;
 
 public class CarDeletedConsumer : IConsumer<CarDeleted>
 {
-    private readonly IGarageLogic _garageLogic;
+    private readonly ICarLogic _carLogic;
 
-    public CarDeletedConsumer(IGarageLogic garageLogic)
+    public CarDeletedConsumer(ICarLogic carLogic)
     {
-        _garageLogic = garageLogic;
+        _carLogic = carLogic;
     }
     public async Task Consume(ConsumeContext<CarDeleted> context)
     {
-        await _garageLogic.DeleteCarAsync(context.Message.Id);
+        var carId = context.Message.Id;
+        var car = _carLogic.GetCarByIdAsync(carId);
+
+        if (car == null)
+        {
+            Console.WriteLine($"Car with id {carId} not found");
+            return;
+        }
+        await _carLogic.DeleteCarAsync(carId);
     }
 }
