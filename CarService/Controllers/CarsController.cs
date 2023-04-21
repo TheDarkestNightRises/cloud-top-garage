@@ -2,6 +2,8 @@ using Application.LogicContracts;
 using AutoMapper;
 using CarService.Dtos;
 using CarService.Models;
+using Contracts;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Carservice.Controllers;
@@ -13,10 +15,13 @@ public class CarsController : ControllerBase
     private readonly IMapper _mapper;
     private readonly ICarLogic _logic;
 
-    public CarsController(IMapper mapper, ICarLogic logic)
+    private readonly IPublishEndpoint _publishEndpoint;
+
+    public CarsController(IMapper mapper, ICarLogic logic, IPublishEndpoint publishEndpoint)
     {
         _mapper = mapper;
         _logic = logic;
+        _publishEndpoint = publishEndpoint;
     }
 
 
@@ -34,6 +39,9 @@ public class CarsController : ControllerBase
             }
 
             var carsMapped = _mapper.Map<IEnumerable<CarReadDto>>(cars);
+
+            await _publishEndpoint.Publish(new HelloEvent("Hello"));
+
             return Ok(carsMapped);
         }
         catch (Exception e)

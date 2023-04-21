@@ -1,12 +1,35 @@
+using System.Reflection;
 using Application.LogicContracts;
 using CarService.Data;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
+// Add services to the container.
 builder.Services.AddControllers();
+
+//Setup Mass Transit with RabbitMQ
+var configuration = builder.Configuration;
+var rabbitMqConfig = configuration.GetSection("RabbitMQ");
+
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumers(Assembly.GetEntryAssembly());
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host($"{rabbitMqConfig["Host"]}", $"/", h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
+        cfg.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter("CarService", false));
+    });
+});
+
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
