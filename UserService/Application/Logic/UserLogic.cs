@@ -13,6 +13,7 @@ public class UserLogic : IUserLogic
         _userRepository = userRepository;
     }
 
+
     public async Task<IEnumerable<User>> GetAllUsersAsync()
     {
         return await _userRepository.GetAllUsersAsync();
@@ -45,5 +46,20 @@ public class UserLogic : IUserLogic
         userFound.Password = userToUpdate.Password;
         await _userRepository.UpdateUserAsync(userFound);
         return userFound;
+    }
+
+    public async Task CreateUser(User user)
+    {
+        await _userRepository.CreateUser(user);
+    }
+
+    Task<User> IUserLogic.CreateUser(User user)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<User> CreateUser(UserCreateDto userCreateDto)
+    {
+        throw new NotImplementedException();
     }
 }
