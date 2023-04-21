@@ -28,17 +28,33 @@ public class UsersController : ControllerBase
 
     [HttpPatch]
     public async Task<ActionResult> UpdateUser([FromBody] UserUpdateDto userUpdateDto)
-     {
+    {
         try
         {
             var userToUpdate = _mapper.Map<User>(userUpdateDto);
             await _userLogic.UpdateUser(userToUpdate);
             return NoContent();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-          Console.Write(e);
-          return StatusCode(500, e.Message);
+            Console.Write(e);
+            return StatusCode(500, e.Message);
         }
-     }
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> CreateUser([FromBody] UserCreateDto userCreateDto)
+    {
+        try
+        {
+            var user = _mapper.Map<User>(userCreateDto);
+            await _userLogic.CreateUser(user);
+            return NoContent();
+        }
+        catch (Exception e)
+        {
+            Console.Write(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }
