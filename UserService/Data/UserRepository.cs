@@ -12,6 +12,13 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
+    public async Task CreateUser(User user)
+    {
+       _context.Users.Add(user); // Add the user to the database context 
+       await _context.SaveChangesAsync(); // Save the changes to the database
+
+    }
+
     public async Task<IEnumerable<User>> GetAllUsersAsync()
     {
         return await _context.Users.ToListAsync();
