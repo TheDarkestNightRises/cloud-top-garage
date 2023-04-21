@@ -13,6 +13,15 @@ public class UserLogic : IUserLogic
         _userRepository = userRepository;
     }
 
+    public async Task<User> CreateUser(User user)
+    {
+        var userFound = await  _userRepository.GetUserByEmail(user.Email);
+        if (userFound != null)
+        {
+            throw new Exception("Email already exists!");
+        }
+        return await _userRepository.CreateUserAsync(user);
+    }
 
     public async Task<IEnumerable<User>> GetAllUsersAsync()
     {
@@ -21,7 +30,7 @@ public class UserLogic : IUserLogic
 
     public async Task<User> LoginUserAsync(string email, string password)
     {
-        User? userFound = await _userRepository.getUserByEmail(email);
+        User? userFound = await _userRepository.GetUserByEmail(email);
 
         if (userFound == null)
         {
@@ -46,20 +55,5 @@ public class UserLogic : IUserLogic
         userFound.Password = userToUpdate.Password;
         await _userRepository.UpdateUserAsync(userFound);
         return userFound;
-    }
-
-    public async Task CreateUser(User user)
-    {
-        await _userRepository.CreateUser(user);
-    }
-
-    Task<User> IUserLogic.CreateUser(User user)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<User> CreateUser(UserCreateDto userCreateDto)
-    {
-        throw new NotImplementedException();
     }
 }

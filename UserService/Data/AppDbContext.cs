@@ -15,6 +15,7 @@ public class AppDbContext : DbContext
         .Property(u => u.Name)
         .HasMaxLength(15)
         .IsRequired();
+        
 
         modelBuilder.Entity<User>()
         .Property(u => u.Email)
@@ -24,12 +25,7 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<User>()
         .Property(u => u.Password)
         .HasMaxLength(15)
-        .IsRequired(); 
-
-        modelBuilder.Entity<User>()
-        .Property(u => u.Role)
-        .IsRequired(); 
-
+        .IsRequired();  
     }
 
     public DbSet<User> Users { get; set; }

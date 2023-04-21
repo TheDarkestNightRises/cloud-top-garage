@@ -48,8 +48,9 @@ public class UsersController : ControllerBase
         try
         {
             var user = _mapper.Map<User>(userCreateDto);
-            await _userLogic.CreateUser(user);
-            return NoContent();
+            var userCreated = await _userLogic.CreateUser(user);
+            UserReadDto userReadDto = _mapper.Map<UserReadDto>(userCreated);
+            return Created($"/users/{userReadDto.Id}", userReadDto);
         }
         catch (Exception e)
         {
