@@ -14,14 +14,14 @@ public class CarDeletedConsumer : IConsumer<CarDeleted>
     }
     public async Task Consume(ConsumeContext<CarDeleted> context)
     {
-        var carId = context.Message.Id;
-        var car = _carLogic.GetCarByIdAsync(carId);
-
-        if (car == null)
+        try
         {
-            Console.WriteLine($"Car with id {carId} not found");
-            return;
+            var carId = context.Message.Id;
+            await _carLogic.DeleteCarAsync(carId);
         }
-        await _carLogic.DeleteCarAsync(carId);
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
     }
 }
