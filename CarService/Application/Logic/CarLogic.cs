@@ -3,6 +3,7 @@ using Application.LogicContracts;
 using CarService.Models;
 using CarService.Data;
 using MassTransit;
+using Contracts;
 
 public class CarLogic : ICarLogic
 {
@@ -51,6 +52,7 @@ public class CarLogic : ICarLogic
         {
             throw new Exception($"Car with id {id} not found");
         }
+        await _publishEndpoint.Publish(new CarDeleted(id));
         await _repository.DeleteCarAsync(id);
     }
 
