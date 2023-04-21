@@ -1,9 +1,26 @@
+using System.Reflection;
 using GarageService.Application.LogicContracts;
 using GarageService.Data;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var configuration = builder.Configuration;
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumers(Assembly.GetEntryAssembly());
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        var rabbitMqConfig = configuration.GetSection("RabbitMQ");
+        cfg.Host($"{rabbitMqConfig["Host"]}", $"/", h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
+        cfg.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter("GarageService", false));
+    });
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
