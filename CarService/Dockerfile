@@ -15,4 +15,5 @@ RUN dotnet publish "CarService.csproj" -c Release -o /app/publish /p:UseAppHost=
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY ["Images/car.png", "/app/Images/"]
 ENTRYPOINT ["dotnet", "CarService.dll"]
