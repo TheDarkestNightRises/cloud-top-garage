@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CarService.Models;
 
@@ -14,6 +15,7 @@ public class Car
     public string Description { get; set; }
 
     public Image Image { get; set; }
+
     public Garage Garage { get; set; }
 
     public override string ToString()

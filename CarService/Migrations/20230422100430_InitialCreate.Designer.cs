@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarService.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230422094215_InitialCreate")]
+    [Migration("20230422100430_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
