@@ -21,4 +21,14 @@ public class GarageLogic : IGarageLogic
         }
         return garages;
     }
+    public async Task<IEnumerable<Garage>> GetAllGaragesAsync(GarageQuery garageQuery)
+    {
+        
+        var garages = await _repository.GetAllGaragesAsync(garageQuery);
+        foreach (Garage garage in garages)
+        {
+            Console.WriteLine(garage.ToString());
+        }
+        return garages;
+    }
 }
