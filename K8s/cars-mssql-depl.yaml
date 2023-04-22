@@ -30,13 +30,16 @@ spec:
           volumeMounts:
             - mountPath: /var/opt/mssql/data
               name: car-mssqldb
+            - mountPath: /docker-entrypoint-initdb.d
+              name: car-mssql-initdb
+              readOnly: true
       volumes:
         - name: car-mssqldb
           persistentVolumeClaim:
             claimName: car-mssql-claim
         - name: car-mssql-initdb
           configMap:
-            name: car-mssql-initdb-configmap
+            name: car-mssql-initdb
 ---
 apiVersion: v1
 kind: Service
