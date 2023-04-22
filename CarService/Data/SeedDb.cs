@@ -37,30 +37,29 @@ public static class PrepDb
         if (!context.Cars.Any())
         {
             var images = new List<Image>
+        {
+            new Image
             {
-                new Image
-                {
-                    Id = 1,
-                    Name = "image1",
-                    Data = GetImageData("car.png")
-                }
-            };
+                Name = "image1",
+                Data = GetImageData("car.png")
+            }
+        };
 
             var garages = new List<Garage>
-            {
-                new Garage { Id = 1 },
-                new Garage { Id = 2 },
-                new Garage { Id = 3 }
-            };
+        {
+            new Garage(),
+            new Garage(),
+            new Garage()
+        };
 
             var cars = new List<Car>
-            {
-               new Car { Id = 1, Name = "Toyota Camry", Description = "Midsize sedan", Garage = garages[0], Image = images[0] },
-               new Car { Id = 2, Name = "Honda Civic", Description = "Compact car", Garage = garages[0], Image = images[0] },
-               new Car { Id = 3, Name = "Ford F-150", Description = "Full-size pickup truck", Garage = garages[1], Image = images[0] },
-               new Car { Id = 4, Name = "Tesla Model 3", Description = "Electric sedan", Garage = garages[2], Image = images[0] },
-               new Car { Id = 5, Name = "Chevrolet Corvette", Description = "Sports car", Garage = garages[2], Image = images[0] }
-            };
+        {
+            new Car { Name = "Toyota Camry", Description = "Midsize sedan", Garage = garages[0], Image = images[0] },
+            new Car { Name = "Honda Civic", Description = "Compact car", Garage = garages[0], Image = images[0] },
+            new Car { Name = "Ford F-150", Description = "Full-size pickup truck", Garage = garages[1], Image = images[0] },
+            new Car { Name = "Tesla Model 3", Description = "Electric sedan", Garage = garages[2], Image = images[0] },
+            new Car { Name = "Chevrolet Corvette", Description = "Sports car", Garage = garages[2], Image = images[0] }
+        };
 
             context.Images.AddRange(images);
             context.Garages.AddRange(garages);
@@ -71,6 +70,7 @@ public static class PrepDb
         {
             Console.WriteLine("--> We already have data");
         }
+
     }
 
     public static byte[] GetImageData(string fileName)
