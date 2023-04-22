@@ -31,4 +31,8 @@ public class GarageLogic : IGarageLogic
         }
         return garages;
     }
+    public async Task<Garage> GetGarageAsync(int id)
+    {
+        return await _repository.GetGarageAsync(id);
+    }
 }
