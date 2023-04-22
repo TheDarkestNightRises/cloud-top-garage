@@ -6,17 +6,17 @@ cd CarService
 cd ..
 
 # Destroy Garage
-cd Garage
+cd GarageService
 ./destroy-garage.sh
 cd ..
 
 # Destroy User
-cd User
+cd UserService
 ./destroy-user.sh
 cd ..
 
 # Destroy Environment
-cd Environment
+cd EnvironmentService
 ./destroy-environment.sh
 cd ..
 

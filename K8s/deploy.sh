@@ -11,17 +11,17 @@ cd CarService
 cd ..
 
 # Deploy Garage
-cd Garage
+cd GarageService
 ./deploy-garage.sh
 cd ..
 
 # Deploy User
-cd User
+cd UserService
 ./deploy-user.sh
 cd ..
 
 # Deploy Environment
-cd Environment
+cd EnvironmentService
 ./deploy-environment.sh
 cd ..
 
