@@ -9,5 +9,7 @@ public class GarageReadDto
     [Required]
     public string Name { get; set; }
 
+    public UserReadDto Owner { get; set; }
+
     public IEnumerable<CarReadDto> Cars { get; set; }
 }
