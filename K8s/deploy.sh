@@ -3,8 +3,6 @@
 #RabbitMq
 kubectl apply -f rabbitmq-depl.yaml 
 
-#!/bin/bash
-
 # Deploy CarService
 cd CarService
 ./deploy-car.sh
