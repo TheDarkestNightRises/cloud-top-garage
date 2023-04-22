@@ -31,6 +31,9 @@ public static class PrepDb
             }
         }
 
+        string currentDirectory = Directory.GetCurrentDirectory();
+        Console.WriteLine($"--> Creating new images in {currentDirectory}");
+
         if (!context.Cars.Any())
         {
             var images = new List<Image>
@@ -39,7 +42,7 @@ public static class PrepDb
                 {
                     Id = 1,
                     Name = "image1",
-                    Data = FileExtensions.GetImageData("car.png")
+                    Data = GetImageData("car.png")
                 }
             };
 
@@ -68,5 +71,11 @@ public static class PrepDb
         {
             Console.WriteLine("--> We already have data");
         }
+    }
+
+    public static byte[] GetImageData(string fileName)
+    {
+        var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", "car.png");
+        return File.ReadAllBytes(imagePath);
     }
 }
