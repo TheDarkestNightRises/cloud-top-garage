@@ -1,6 +1,10 @@
 #!/bin/bash
 
+#RabbitMq
+kubectl apply -f rabbitmq-depl.yaml 
+
 #Car Service
+kubectl apply -f car-mssql.yaml
 kubectl apply -f car-local-pvc.yaml
 kubectl apply -f car-mssql-initdb.yaml
 kubectl apply -f cars-mssql-depl.yaml
