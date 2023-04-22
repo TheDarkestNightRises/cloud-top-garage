@@ -25,6 +25,7 @@ cd ..
 
 
 #Ingress nginx
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.7.0/deploy/static/provider/cloud/deploy.yaml
+helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
+#If Applying the Custom Ingress doesnt work try: kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
 kubectl apply -f ingress-srv.yaml
 
