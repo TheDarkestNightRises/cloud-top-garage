@@ -36,7 +36,7 @@ public class GaragesController : ControllerBase
     // }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<CarReadDto>>> GetAllGaragesAsync([FromQuery] GarageQueryDto garageQueryDto)
+    public async Task<ActionResult<IEnumerable<GarageReadDto>>> GetAllGaragesAsync([FromQuery] GarageQueryDto garageQueryDto)
     {
         try
         {
@@ -51,6 +51,26 @@ public class GaragesController : ControllerBase
             var garagesMapped = _mapper.Map<IEnumerable<GarageReadDto>>(garages);
 
             return Ok(garagesMapped);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    [HttpGet("{id}")]
+    public async Task<ActionResult<GarageReadDto>> GetGarageById(int id)
+    {
+        try
+        {
+            var garage = await _logic.GetGarageAsync(id);
+            if (garage == null)
+            {
+                return NotFound();
+            }
+
+            var garageReadDto = _mapper.Map<GarageReadDto>(garage);
+            return Ok(garageReadDto);
         }
         catch (Exception e)
         {

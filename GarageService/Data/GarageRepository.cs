@@ -31,7 +31,7 @@ public class GarageRepository : IGarageRepository
 
     public async Task<Garage> GetGarageAsync(int id)
     {
-        var garage = await _context.Garages.Include(g => g.Cars).Include(g => g.Owner).Where(g => g.Id == id).FirstAsync();
+        var garage = await _context.Garages.Include(g => g.Cars).Include(g => g.Owner).Where(g => g.Id == id).FirstOrDefaultAsync();
         return garage;
     }
 
