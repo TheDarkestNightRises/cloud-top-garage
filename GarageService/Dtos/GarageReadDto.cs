@@ -9,6 +9,10 @@ public class GarageReadDto
     [Required]
     public string Name { get; set; }
 
+    [Required]
+    public uint Capacity { get; set; }
+
+    [Required]
     public UserReadDto Owner { get; set; }
 
     public IEnumerable<CarReadDto> Cars { get; set; }
