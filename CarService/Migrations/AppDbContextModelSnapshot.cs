@@ -36,6 +36,9 @@ namespace CarService.Migrations
                     b.Property<int>("GarageId")
                         .HasColumnType("int");
 
+                    b.Property<int>("ImageId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -43,6 +46,8 @@ namespace CarService.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("GarageId");
+
+                    b.HasIndex("ImageId");
 
                     b.ToTable("Cars");
                 });
@@ -60,6 +65,27 @@ namespace CarService.Migrations
                     b.ToTable("Garages");
                 });
 
+            modelBuilder.Entity("CarService.Models.Image", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<byte[]>("Data")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Images");
+                });
+
             modelBuilder.Entity("CarService.Models.Car", b =>
                 {
                     b.HasOne("CarService.Models.Garage", "Garage")
@@ -68,7 +94,15 @@ namespace CarService.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("CarService.Models.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Garage");
+
+                    b.Navigation("Image");
                 });
 #pragma warning restore 612, 618
         }
