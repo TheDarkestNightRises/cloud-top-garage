@@ -29,4 +29,10 @@ public class GarageRepository : IGarageRepository
         return await query.ToListAsync();
     }
 
+    public async Task<Garage> GetGarageAsync(int id)
+    {
+        var garage = await _context.Garages.Include(g => g.Cars).Include(g => g.Owner).Where(g => g.Id == id).FirstAsync();
+        return garage;
+    }
+
 }
