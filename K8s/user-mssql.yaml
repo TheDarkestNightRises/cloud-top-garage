@@ -1,0 +1,8 @@
+#Is not a good practice to store secrets in a file(we do it for convenience)
+apiVersion: v1
+kind: Secret
+metadata:
+  name: user-mssql
+type: Opaque
+data:
+  SA_PASSWORD: UGE1NXcwcmQh
