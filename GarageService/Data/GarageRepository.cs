@@ -17,4 +17,16 @@ public class GarageRepository : IGarageRepository
         return await _context.Garages.Include(g => g.Cars).ToListAsync();
     }
 
+    public async Task<IEnumerable<Garage>> GetAllGaragesAsync(GarageQuery garageQuery)
+    {
+        var query = _context.Garages.AsQueryable();
+
+        if (!(garageQuery.UserId is null))
+        {
+            query = query.Where(g => g.Owner.Id == garageQuery.UserId);
+        }
+
+        return await query.ToListAsync();
+    }
+
 }
