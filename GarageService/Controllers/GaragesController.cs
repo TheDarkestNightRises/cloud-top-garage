@@ -19,13 +19,37 @@ public class GaragesController : ControllerBase
         _logic = logic;
     }
 
+    // [HttpGet]
+    // public async Task<ActionResult<IEnumerable<GarageReadDto>>> GetAllCarsAsync()
+    // {
+    //     try
+    //     {
+    //         var garages = await _logic.GetAllGaragesAsync();
+    //         var garagesMapped = _mapper.Map<IEnumerable<GarageReadDto>>(garages);
+    //         return Ok(garagesMapped);
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         Console.WriteLine(e);
+    //         return StatusCode(500, e.Message);
+    //     }
+    // }
+
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<GarageReadDto>>> GetAllCarsAsync()
+    public async Task<ActionResult<IEnumerable<CarReadDto>>> GetAllGaragesAsync([FromQuery] GarageQueryDto garageQueryDto)
     {
         try
         {
-            var garages = await _logic.GetAllGaragesAsync();
+            var garageQuery = _mapper.Map<GarageQuery>(garageQueryDto);
+            var garages = await _logic.GetAllGaragesAsync(garageQuery);
+
+            if (garages == null || garages.Count() == 0)
+            {
+                return NotFound();
+            }
+
             var garagesMapped = _mapper.Map<IEnumerable<GarageReadDto>>(garages);
+
             return Ok(garagesMapped);
         }
         catch (Exception e)
@@ -34,6 +58,5 @@ public class GaragesController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-
     
 }
