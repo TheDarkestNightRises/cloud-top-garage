@@ -31,15 +31,8 @@ public class GarageRepository : IGarageRepository
 
     public async Task<Garage?> GetGarageAsync(int id)
     {
-        try
-        {
-            var garage = await _context.Garages.Include(g => g.Cars).Include(g => g.Owner).Where(g => g.Id == id).FirstAsync();
-            return garage;
-        }
-        catch (InvalidOperationException)
-        {
-            return null;
-        }
+        var garage = await _context.Garages.Include(g => g.Cars).Include(g => g.Owner).Where(g => g.Id == id).FirstOrDefaultAsync();
+        return garage;
     }
 
 }
