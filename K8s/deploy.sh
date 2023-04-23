@@ -23,8 +23,8 @@ cd EnvironmentService
 ./deploy-environment.sh
 cd ..
 
-
+#If applying custom ingress doenst work kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
 #Ingress nginx
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.7.0/deploy/static/provider/cloud/deploy.yaml
-kubectl apply -f ingress-srv.yaml
+# kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.7.0/deploy/static/provider/cloud/deploy.yaml
+# kubectl apply -f ingress-srv.yaml
 
