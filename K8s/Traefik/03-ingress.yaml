@@ -6,8 +6,8 @@ metadata:
     kubernetes.io/ingress.class: traefik
 spec:
   rules:
-  - host: acme.com
-  - http:
+  - host: topgarage.com
+    http:
       paths:
         - path: /Cars
           pathType: Prefix
@@ -16,24 +16,24 @@ spec:
               name: cars-clusterip-srv
               port:
                 number: 80
-        - path: /Users
-          pathType: Prefix
-          backend:
-            service:
-              name: users-clusterip-srv
-              port:
-                number: 80
-        - path: /IndoorEnvironments
-          pathType: Prefix
-          backend:
-            service:
-              name: environments-clusterip-srv
-              port:
-                number: 80
-        - path: /Garages
-          pathType: Prefix
-          backend:
-            service:
-              name: garages-clusterip-srv
-              port:
-                number: 80
+        # - path: /Users
+        #   pathType: Prefix
+        #   backend:
+        #     service:
+        #       name: users-clusterip-srv
+        #       port:
+        #         number: 80
+        # - path: /IndoorEnvironments
+        #   pathType: Prefix
+        #   backend:
+        #     service:
+        #       name: environments-clusterip-srv
+        #       port:
+        #         number: 80
+        # - path: /Garages
+        #   pathType: Prefix
+        #   backend:
+        #     service:
+        #       name: garages-clusterip-srv
+        #       port:
+        #         number: 80

@@ -4,7 +4,7 @@ metadata:
   name: whoami-ingress
 spec:
   rules:
-  - host: acme.com
+  - host: topgarage.com
     http:
       paths:
       - path: /
