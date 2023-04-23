@@ -17,8 +17,8 @@ spec:
           image: rabbitmq:3-management
           resources:
             limits:
-              memory: "128Mi"
-              cpu: "500m"
+              memory: "512Mi"
+              cpu: "1"
           ports:
             - containerPort: 15672
               name: rbmq-mgmt-port

@@ -22,3 +22,8 @@ cd ..
 
 #Ingress loadbalancer
 kubectl delete deployment ingress-nginx-controller -n ingress-nginx
+
+#RabbitMq
+kubectl delete service rabbitmq-clusterip-srv
+kubectl delete service rabbitmq-loadbalancer 
+kubectl delete deployment rabbitmq-depl
