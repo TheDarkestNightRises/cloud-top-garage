@@ -9,16 +9,26 @@ public class CarLogic : ICarLogic
 {
     private readonly ICarRepository _repository;
     private readonly IPublishEndpoint _publishEndpoint;
+    private readonly IBus _bus;
 
-    public CarLogic(ICarRepository carRepository, IPublishEndpoint publishEndpoint)
+    public CarLogic(ICarRepository carRepository, IPublishEndpoint publishEndpoint, IBus bus)
     {
         _repository = carRepository;
         _publishEndpoint = publishEndpoint;
+        _bus = bus;
     }
 
-    public Task<Car> CreateAsync(Car car)
+    public async Task<Car> CreateAsync(Car car)
     {
-        throw new NotImplementedException();
+        var response = await _bus.Request<CheckGarage, GarageChecked>(new CheckGarage(car.Garage.Id));
+        if (response.Message.IsGarageValid)
+        {
+            return await _repository.AddCarAsync(car);
+        }
+        else
+        {
+            throw new Exception("Garage does not exist");
+        }
     }
 
     public async Task<IEnumerable<Car>> GetAllCarsAsync()

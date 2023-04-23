@@ -11,6 +11,8 @@ public class CarRegisterDto
     [Required]
     public string Description { get; set; }
 
-    public GarageDto GarageDto { get; set; }
+    // public Image Image { get; set; }
+
+    public GarageDto Garage { get; set; }
 
 }

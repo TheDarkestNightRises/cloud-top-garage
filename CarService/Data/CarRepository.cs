@@ -12,9 +12,10 @@ public class CarRepository : ICarRepository
         _context = context;
     }
 
-    public Task<Car> AddCarAsync(Car car)
+    public async Task<Car> AddCarAsync(Car car)
     {
-        throw new NotImplementedException();
+        var addedCar = await _context.AddAsync(car);
+        return addedCar.Entity;
     }
 
     public async Task<Car> DeleteCarAsync(int id)
