@@ -14,6 +14,8 @@ public class CarRepository : ICarRepository
 
     public async Task<Car> AddCarAsync(Car car)
     {
+        var garage = await _context.Garages.FindAsync(car.Garage.Id);
+        car.Garage = garage;
         await _context.AddAsync(car);
         await _context.SaveChangesAsync();
         return car;
