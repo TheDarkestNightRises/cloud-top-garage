@@ -5,7 +5,6 @@ namespace CarService.Models;
 
 public class Car
 {
-    [Required]
     public int Id { get; set; }
 
     [Required]
