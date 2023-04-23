@@ -14,11 +14,12 @@ public class CarRepository : ICarRepository
 
     public async Task<Car> AddCarAsync(Car car)
     {
-        var addedCar = await _context.AddAsync(car);
-        return addedCar.Entity;
+        await _context.AddAsync(car);
+        await _context.SaveChangesAsync();
+        return car;
     }
 
-    public async Task<Car> DeleteCarAsync(int id)
+    public async Task DeleteCarAsync(int id)
     {
         var carToDelete = await _context.Cars.FindAsync(id);
         if (carToDelete != null)
@@ -26,7 +27,6 @@ public class CarRepository : ICarRepository
             _context.Cars.Remove(carToDelete);
             await _context.SaveChangesAsync();
         }
-        return carToDelete;
     }
 
     public async Task<IEnumerable<Car>> GetAllCarsAsync()
