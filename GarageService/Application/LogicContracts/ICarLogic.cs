@@ -5,6 +5,6 @@ namespace GarageService.Application.LogicContracts;
 public interface ICarLogic
 {
     Task DeleteCarAsync(int id);
-    Task<Car> GetCarByIdAsync(int carId);
+    Task<Car?> GetCarByIdAsync(int carId);
 
 }

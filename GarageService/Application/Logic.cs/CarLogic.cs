@@ -23,7 +23,7 @@ public class CarLogic : ICarLogic
         await _repository.DeleteCarAsync(id);
     }
 
-    public async Task<Car> GetCarByIdAsync(int carId)
+    public async Task<Car?> GetCarByIdAsync(int carId)
     {
         return await _repository.GetCarByIdAsync(carId);
     }

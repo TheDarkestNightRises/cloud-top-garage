@@ -11,6 +11,6 @@ public class Garage
     public uint Capacity { get; set; }
     [NotMapped]
     public uint SlotsUsed { get; set; }
-    public User Owner { get; set; }
+    public User User { get; set; }
     public List<Car> Cars { get; set; }
 }
