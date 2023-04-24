@@ -8,9 +8,14 @@ public class Garage
     [Required]
     public string Name { get; set; }
     [Required]
-    public uint Capacity { get; set; }
-    [NotMapped]
-    public uint SlotsUsed { get; set; }
+    public int Capacity { get; set; }
+
+    public int AvailableSlots { get; set; }
     public User User { get; set; }
     public List<Car> Cars { get; set; }
+
+    public override string ToString()
+    {
+        return $"Available slots: {AvailableSlots}, User: {User}, Cars: {string.Join(",", Cars)}";
+    }
 }

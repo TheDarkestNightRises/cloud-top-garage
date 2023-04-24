@@ -13,7 +13,7 @@ public class GarageReadDto
     public uint Capacity { get; set; }
 
     [Required]
-    public uint SlotsUsed { get; set; }
+    public int AvailableSlots { get; set; }
 
     [Required]
     public UserReadDto User { get; set; }

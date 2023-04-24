@@ -14,12 +14,8 @@ public class GarageRepository : IGarageRepository
 
     public async Task<IEnumerable<Garage>> GetAllGaragesAsync()
     {
-        
+
         var garages = await _context.Garages.Include(g => g.Cars).Include(g => g.User).ToListAsync();
-        foreach (var garage in garages)
-        {
-            garage.SlotsUsed = (uint) garage.Cars.Count();
-        }
         return garages;
     }
 
@@ -32,18 +28,13 @@ public class GarageRepository : IGarageRepository
             query = query.Where(g => g.User.Id == garageQuery.UserId);
         }
         var garages = await query.ToListAsync();
-        foreach (var garage in garages)
-        {
-            garage.SlotsUsed = (uint) garage.Cars.Count();
-        }
+
         return garages;
     }
 
     public async Task<Garage?> GetGarageAsync(int id)
     {
         var garage = await _context.Garages.Include(g => g.Cars).Include(g => g.User).Where(g => g.Id == id).FirstOrDefaultAsync();
-        if(garage is not null)
-        garage.SlotsUsed = (uint) garage.Cars.Count();
         return garage;
     }
 
