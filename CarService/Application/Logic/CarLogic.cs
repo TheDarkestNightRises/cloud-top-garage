@@ -50,7 +50,7 @@ public class CarLogic : ICarLogic
         return await _repository.GetAllCarsAsync(carQuery);
     }
 
-    public async Task<Car> GetCarAsync(int id)
+    public async Task<Car?> GetCarAsync(int id)
     {
         return await _repository.GetCarAsync(id);
     }

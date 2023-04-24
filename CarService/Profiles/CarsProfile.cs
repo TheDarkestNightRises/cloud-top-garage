@@ -10,7 +10,7 @@ public class CarsProfile : Profile
         //Source --> Target
         CreateMap<Car, CarReadDto>();
         CreateMap<CarReadDto, Car>();
-        CreateMap<CarRegisterDto, Car>();
-        CreateMap<Car,CarReadDto>();
+        CreateMap<CarCreateDto, Car>();
+        CreateMap<Car, CarReadDto>();
     }
 }

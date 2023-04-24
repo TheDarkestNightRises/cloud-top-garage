@@ -16,7 +16,7 @@ public class GarageReadDto
     public uint SlotsUsed { get; set; }
 
     [Required]
-    public UserReadDto Owner { get; set; }
+    public UserReadDto User { get; set; }
 
     public IEnumerable<CarReadDto> Cars { get; set; }
 }
