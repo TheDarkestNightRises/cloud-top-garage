@@ -3,7 +3,7 @@ namespace CarService.Dtos;
 using System.ComponentModel.DataAnnotations;
 using CarService.Models;
 
-public class CarRegisterDto
+public class CarCreateDto
 {
     [Required]
     public string Name { get; set; }

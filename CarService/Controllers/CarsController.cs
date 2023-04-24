@@ -52,11 +52,11 @@ public class CarsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<CarReadDto>> CreateCar([FromBody] CarRegisterDto carRegisterDto)
+    public async Task<ActionResult<CarReadDto>> CreateCar([FromBody] CarCreateDto carCreateDto)
     {
         try
         {
-            Car car = _mapper.Map<Car>(carRegisterDto);
+            Car car = _mapper.Map<Car>(carCreateDto);
             Car created = await _logic.CreateAsync(car);
             CarReadDto createdDto = _mapper.Map<CarReadDto>(created);
             return Created($"/Cars/{created.Id}", createdDto);
