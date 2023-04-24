@@ -19,22 +19,6 @@ public class GaragesController : ControllerBase
         _logic = logic;
     }
 
-    // [HttpGet]
-    // public async Task<ActionResult<IEnumerable<GarageReadDto>>> GetAllCarsAsync()
-    // {
-    //     try
-    //     {
-    //         var garages = await _logic.GetAllGaragesAsync();
-    //         var garagesMapped = _mapper.Map<IEnumerable<GarageReadDto>>(garages);
-    //         return Ok(garagesMapped);
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         Console.WriteLine(e);
-    //         return StatusCode(500, e.Message);
-    //     }
-    // }
-
     [HttpGet]
     public async Task<ActionResult<IEnumerable<GarageReadDto>>> GetAllGaragesAsync([FromQuery] GarageQueryDto garageQueryDto)
     {

@@ -1,0 +1,16 @@
+using System.ComponentModel.DataAnnotations.Schema;
+using GarageService.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace GarageService.Data;
+
+
+public class AvailableSlots : IEntityTypeConfiguration<Garage>
+{
+    public void Configure(EntityTypeBuilder<Garage> builder)
+    {
+        // builder.Property(c => c.Capacity).HasComputedColumnSql("(SELECT COUNT(*) FROM Cars WHERE Cars.GarageId = c.GarageId)");
+        builder.Property(c => c.AvailableSlots).HasComputedColumnSql("(SELECT COUNT(*) FROM Cars c WHERE c.GarageId = GarageId)");
+    }
+}
