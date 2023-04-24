@@ -37,9 +37,9 @@ public class CarRepository : ICarRepository
                                     .ToListAsync();
     }
 
-    public async Task<Car> GetCarAsync(int id)
+    public async Task<Car?> GetCarAsync(int id)
     {
-        var car = await _context.Cars.FindAsync(id);
+        var car = await _context.Cars.Include(c => c.Garage).FirstOrDefaultAsync(c => c.Id == id);
         return car;
     }
 
