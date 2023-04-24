@@ -20,8 +20,13 @@ cd EnvironmentService
 ./destroy-environment.sh
 cd ..
 
-#Ingress loadbalancer
-kubectl delete deployment ingress-nginx-controller -n ingress-nginx
+# Traefik
+cd Traefik
+./destroy-traefik.sh
+
+
+# #Ingress loadbalancer
+# kubectl delete deployment ingress-nginx-controller -n ingress-nginx
 
 #RabbitMq
 kubectl delete service rabbitmq-clusterip-srv

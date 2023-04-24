@@ -9,13 +9,13 @@ spec:
   - host: topgarage.com
     http:
       paths:
-        - path: /Cars
-          pathType: Prefix
-          backend:
-            service:
-              name: cars-clusterip-srv
-              port:
-                number: 80
+        # - path: /Cars
+        #   pathType: Prefix
+        #   backend:
+        #     service:
+        #       name: cars-clusterip-srv
+        #       port:
+        #         number: 80
         # - path: /Users
         #   pathType: Prefix
         #   backend:
@@ -30,10 +30,10 @@ spec:
         #       name: environments-clusterip-srv
         #       port:
         #         number: 80
-        # - path: /Garages
-        #   pathType: Prefix
-        #   backend:
-        #     service:
-        #       name: garages-clusterip-srv
-        #       port:
-        #         number: 80
+        - path: /Garages
+          pathType: Prefix
+          backend:
+            service:
+              name: garages-clusterip-srv
+              port:
+                number: 80
