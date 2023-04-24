@@ -18,7 +18,7 @@ public class UserLogic : IUserLogic
         var userFound = await _userRepository.GetUserByEmail(user.Email);
         if (userFound != null)
         {
-            throw new Exception("Email already exists!");
+            throw new ArgumentException("Email already exists!");
         }
         user.Role = "User";
         return await _userRepository.CreateUserAsync(user);
@@ -36,11 +36,11 @@ public class UserLogic : IUserLogic
 
         if (userFound == null)
         {
-            throw new Exception("Email doesn't exist!");
+            throw new ArgumentException("Email doesn't exist!");
         }
         if (!userFound.Password.Equals(password))
         {
-            throw new Exception("Wrong password!");
+            throw new ArgumentException("Wrong password!");
         }
         return userFound;
 
@@ -51,10 +51,11 @@ public class UserLogic : IUserLogic
         User? userFound = await _userRepository.GetUserByIdAsync(userToUpdate.Id);
         if (userFound == null)
         {
-            throw new Exception($"There is no user with the id: {userToUpdate.Id}");
+            throw new ArgumentException($"There is no user with the id: {userToUpdate.Id}");
         }
         userFound.Email = userToUpdate.Email;
         userFound.Password = userToUpdate.Password;
+        userFound.Name = userToUpdate.Name;
         await _userRepository.UpdateUserAsync(userFound);
         return userFound;
     }
