@@ -68,9 +68,12 @@ public class GaragesController : ControllerBase
             {
                 return NotFound();
             }
-
             var garageReadDto = _mapper.Map<GarageReadDto>(garage);
             return Ok(garageReadDto);
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
         }
         catch (Exception e)
         {
@@ -78,5 +81,5 @@ public class GaragesController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-    
+
 }

@@ -35,9 +35,12 @@ public class UsersController : ControllerBase
             await _userLogic.UpdateUser(userToUpdate);
             return NoContent();
         }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
+        }
         catch (Exception e)
         {
-            Console.Write(e);
             return StatusCode(500, e.Message);
         }
     }
@@ -52,9 +55,12 @@ public class UsersController : ControllerBase
             UserReadDto userReadDto = _mapper.Map<UserReadDto>(userCreated);
             return Created($"/users/{userReadDto.Id}", userReadDto);
         }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
+        }
         catch (Exception e)
         {
-            Console.Write(e);
             return StatusCode(500, e.Message);
         }
     }

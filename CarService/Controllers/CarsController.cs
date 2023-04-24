@@ -77,14 +77,17 @@ public class CarsController : ControllerBase
     {
         try
         {
-            Car car = await _logic.GetCarAsync(id);
+            Car? car = await _logic.GetCarAsync(id);
             if (car == null)
             {
                 return NotFound();
             }
-
             CarReadDto carReadDto = _mapper.Map<CarReadDto>(car);
             return Ok(carReadDto);
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
         }
         catch (Exception e)
         {
@@ -100,6 +103,10 @@ public class CarsController : ControllerBase
         {
             await _logic.DeleteCarAsync(id);
             return NoContent();
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
         }
         catch (Exception e)
         {
@@ -119,8 +126,11 @@ public class CarsController : ControllerBase
             {
                 return File(carImage.Data, "image/jpeg");
             }
-
             return NotFound();
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
         }
         catch (Exception e)
         {
