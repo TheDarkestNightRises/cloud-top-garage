@@ -48,8 +48,8 @@ namespace GarageService.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<long>("Capacity")
-                        .HasColumnType("bigint");
+                    b.Property<int>("Capacity")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()

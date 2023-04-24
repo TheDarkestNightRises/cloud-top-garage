@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GarageService.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230424141527_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20230424172733_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,8 +51,8 @@ namespace GarageService.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<long>("Capacity")
-                        .HasColumnType("bigint");
+                    b.Property<int>("Capacity")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
