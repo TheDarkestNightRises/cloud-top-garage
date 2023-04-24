@@ -10,7 +10,12 @@ public class Garage
     [Required]
     public int Capacity { get; set; }
 
-    public int AvailableSlots { get; set; }
+    public int AvailableSlots
+    {
+        get { return Capacity - Cars?.Count ?? 0; }
+        private set { }
+    }
+
     public User User { get; set; }
     public List<Car> Cars { get; set; }
 
