@@ -11,4 +11,6 @@ public interface ICarRepository
     Task DeleteCarAsync(int id);
     Task<IEnumerable<Car>> GetAllCarsAsync(CarQuery carQuery);
     Task<Image> GetCarImageAsync(int id);
+    Task<Image> CreateCarImageAsync(Image carImage);
+    Task<Image> UpdateCarImageAsync(Image carImage, int carId);
 }
