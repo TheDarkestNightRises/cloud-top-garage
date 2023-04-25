@@ -38,4 +38,10 @@ public class GarageRepository : IGarageRepository
         return garage;
     }
 
+
+    public async Task DeleteGarageAsync(int id)
+    {
+        var garage = await _context.Garages.FindAsync(id);
+      
+    }
 }
