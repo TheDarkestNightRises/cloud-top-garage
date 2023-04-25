@@ -14,7 +14,6 @@ public class GarageRepository : IGarageRepository
 
     public async Task DeleteGarageAsync(int id)
     {
-        // Get the garage to be deleted
         var garageToDelete = _context.Garages.Find(id);
         _context.Garages.Remove(garageToDelete);
         await _context.SaveChangesAsync(); 
