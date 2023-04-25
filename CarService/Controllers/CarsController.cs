@@ -151,7 +151,16 @@ public class CarsController : ControllerBase
                 await image.CopyToAsync(ms);
                 imageData = ms.ToArray();
             }
-            var carImage = await _logic.CreateCarImage(id);
+
+            //Create Image model
+            Image carImage = new Image
+            {
+                Name = image.FileName,
+                Data = imageData
+            };
+
+            var created = await _logic.CreateCarImage(carImage, id);
+            return File(created.Data, created.Name);
         }
         catch (ArgumentException e)
         {
