@@ -42,6 +42,6 @@ public class GarageRepository : IGarageRepository
     public async Task DeleteGarageAsync(int id)
     {
         var garage = await _context.Garages.FindAsync(id);
-      
+        _context.Garages.Remove(garage);
     }
 }
