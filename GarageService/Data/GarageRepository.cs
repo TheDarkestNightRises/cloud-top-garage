@@ -43,5 +43,6 @@ public class GarageRepository : IGarageRepository
     {
         var garage = await _context.Garages.FindAsync(id);
         _context.Garages.Remove(garage);
+        await _context.SaveChangesAsync();
     }
 }
