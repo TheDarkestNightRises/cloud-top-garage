@@ -34,4 +34,10 @@ public class CarRepository : ICarRepository
     {
         return await _context.Cars.FindAsync(carId);
     }
+
+    public async Task UpdateCarAsync(Car car)
+    {
+        _context.Cars.Update(car);
+        await _context.SaveChangesAsync();
+    }
 }

@@ -74,4 +74,22 @@ public class CarLogic : ICarLogic
         }
         return await _carRepository.GetCarImageAsync(id);
     }
+
+    public async Task<Car> UpdateCarAsync(Car carToUpdate)
+    {
+        Car? carFound = await _carRepository.GetCarAsync(carToUpdate.Id);
+        if (carFound == null)
+        {
+            throw new ArgumentException($"There is no car with the id: {carToUpdate.Id}");
+        }
+        Garage? garageFound = await _garageRepository.GetGarageAsync(carToUpdate.Garage.Id);
+        if (garageFound == null)
+        {
+            throw new ArgumentException($"There is no garage with the id: {carToUpdate.Garage.Id}");
+        }
+        carFound.Garage = garageFound;
+        await _publishEndpoint.Publish(new CarUpdated(carToUpdate));
+        await _carRepository.UpdateCarAsync(carFound);
+        return carFound;
+    }
 }

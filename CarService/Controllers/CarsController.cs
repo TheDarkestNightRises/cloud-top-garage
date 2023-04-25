@@ -50,6 +50,25 @@ public class CarsController : ControllerBase
         }
     }
 
+    [HttpPatch]
+    public async Task<ActionResult> UpdateCar([FromBody] CarUpdateDto carUpdateDto)
+    {
+        try
+        {
+            var carToUpdate = _mapper.Map<Car>(carUpdateDto);
+            await _logic.UpdateCarAsync(carToUpdate);
+            return NoContent();
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
+
     [HttpPost]
     public async Task<ActionResult<CarReadDto>> CreateCar([FromBody] CarCreateDto carCreateDto)
     {
