@@ -66,4 +66,22 @@ public class GaragesController : ControllerBase
         }
     }
 
+    [HttpDelete ("{id}")]
+    public async Task<ActionResult> DeleteGarageAsync(int id)
+    {
+        try
+        {
+            await _logic.DeleteGarageAsync(id);
+            return NoContent();
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }
