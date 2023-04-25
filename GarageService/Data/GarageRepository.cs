@@ -12,6 +12,13 @@ public class GarageRepository : IGarageRepository
         _context = context;
     }
 
+    public async Task DeleteGarageAsync(int id)
+    {
+        var garageToDelete = _context.Garages.Find(id);
+        _context.Garages.Remove(garageToDelete);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task<IEnumerable<Garage>> GetAllGaragesAsync()
     {
 
@@ -36,13 +43,5 @@ public class GarageRepository : IGarageRepository
     {
         var garage = await _context.Garages.Include(g => g.Cars).Include(g => g.User).Where(g => g.Id == id).FirstOrDefaultAsync();
         return garage;
-    }
-
-
-    public async Task DeleteGarageAsync(int id)
-    {
-        var garage = await _context.Garages.FindAsync(id);
-        _context.Garages.Remove(garage);
-        await _context.SaveChangesAsync();
     }
 }
