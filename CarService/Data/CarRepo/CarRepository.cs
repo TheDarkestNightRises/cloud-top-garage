@@ -43,9 +43,11 @@ public class CarRepository : ICarRepository
         return car;
     }
 
-    public Task<Car> UpdateCarAsync(Car car)
+    public async Task<Car> UpdateCarAsync(Car car)
     {
-        throw new NotImplementedException();
+        _context.Cars.Update(car);
+        await _context.SaveChangesAsync();
+        return car;
     }
 
     public async Task<IEnumerable<Car>> GetAllCarsAsync(CarQuery carQuery)
