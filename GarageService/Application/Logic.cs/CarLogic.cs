@@ -32,4 +32,9 @@ public class CarLogic : ICarLogic
     {
         return await _repository.GetCarByIdAsync(carId);
     }
+
+    public async Task UpdateCarAsync(Car car)
+    {
+       await _repository.UpdateCarAsync(car);
+    }
 }
