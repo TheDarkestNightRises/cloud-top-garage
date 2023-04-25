@@ -12,5 +12,6 @@ public class CarsProfile : Profile
         CreateMap<CarReadDto, Car>();
         CreateMap<CarCreateDto, Car>();
         CreateMap<Car, CarReadDto>();
+        CreateMap<CarUpdateDto, Car>();
     }
 }
