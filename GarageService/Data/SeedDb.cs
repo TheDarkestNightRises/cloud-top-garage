@@ -33,18 +33,18 @@ public static class PrepDb
 
         if (!context.Garages.Any())
         {
-            var car1 = new Car {};
-            var car2 = new Car {};
-            var car3 = new Car {};
-            var car4 = new Car {};
-            var car5 = new Car {};
+            var car1 = new Car { Name = "car", Description = "description" };
+            var car2 = new Car { Name = "car", Description = "description" };
+            var car3 = new Car { Name = "car", Description = "description" };
+            var car4 = new Car { Name = "car", Description = "description" };
+            var car5 = new Car { Name = "car", Description = "description" };
 
-            var user1 = new User {};
-            var user2 = new User {};
+            var user1 = new User { };
+            var user2 = new User { };
 
             // Creating some garage instances
             var garage1 = new Garage { Name = "Main Garage", Capacity = 5, User = user1, Cars = new List<Car> { car1, car2 } };
-            var garage2 = new Garage { Name = "Secondary", Capacity = 3, User = user1, Cars = new List<Car> { car3 }};
+            var garage2 = new Garage { Name = "Secondary", Capacity = 3, User = user1, Cars = new List<Car> { car3 } };
             var garage3 = new Garage { Name = "Waffle", Capacity = 7, User = user2, Cars = new List<Car> { car4, car5 } };
 
             // Adding the garage and car instances to the database context
