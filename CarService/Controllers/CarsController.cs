@@ -14,7 +14,6 @@ public class CarsController : ControllerBase
 {
     private readonly IMapper _mapper;
     private readonly ICarLogic _logic;
-
     private readonly IPublishEndpoint _publishEndpoint;
 
     public CarsController(IMapper mapper, ICarLogic logic, IPublishEndpoint publishEndpoint)
@@ -57,7 +56,9 @@ public class CarsController : ControllerBase
         try
         {
             Car car = _mapper.Map<Car>(carCreateDto);
-            Car created = await _logic.CreateAsync(car);
+            Car? created = await _logic.CreateAsync(car);
+            if (created == null)
+                return NotFound();
             CarReadDto createdDto = _mapper.Map<CarReadDto>(created);
             return Created($"/Cars/{created.Id}", createdDto);
         }

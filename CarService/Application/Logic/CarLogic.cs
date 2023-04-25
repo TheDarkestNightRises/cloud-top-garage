@@ -1,4 +1,3 @@
-
 using Application.LogicContracts;
 using CarService.Models;
 using CarService.Data;
@@ -7,33 +6,33 @@ using Contracts;
 
 public class CarLogic : ICarLogic
 {
-    private readonly ICarRepository _repository;
-    private readonly IPublishEndpoint _publishEndpoint;
-    private readonly IBus _bus;
+    private readonly ICarRepository _carRepository;
 
-    public CarLogic(ICarRepository carRepository, IPublishEndpoint publishEndpoint, IBus bus)
+    private readonly IGarageRepository _garageRepository;
+    private readonly IPublishEndpoint _publishEndpoint;
+
+    public CarLogic(ICarRepository carRepository, IPublishEndpoint publishEndpoint, IGarageRepository garageRepository)
     {
-        _repository = carRepository;
+        _carRepository = carRepository;
         _publishEndpoint = publishEndpoint;
-        _bus = bus;
+        _garageRepository = garageRepository;
     }
 
-    public async Task<Car> CreateAsync(Car car)
+    public async Task<Car?> CreateAsync(Car car)
     {
-        var response = await _bus.Request<CheckGarage, GarageChecked>(new CheckGarage(car.Garage.Id));
-        if (response.Message.IsGarageValid)
+        Garage? garage = await _garageRepository.GetGarageAsync(car.Garage.Id);
+        if (garage is null)
         {
-            return await _repository.AddCarAsync(car);
+            throw new Exception($"Car with id {car.Garage.Id} not found");
         }
-        else
-        {
-            throw new Exception("Garage does not exist");
-        }
+        car.Garage = garage;
+        await _publishEndpoint.Publish(new CarCreated(car));
+        return await _carRepository.CreateCarAsync(car);
     }
 
     public async Task<IEnumerable<Car>> GetAllCarsAsync()
     {
-        var cars = await _repository.GetAllCarsAsync();
+        var cars = await _carRepository.GetAllCarsAsync();
         foreach (Car car in cars)
         {
             Console.WriteLine(car.ToString());
@@ -45,34 +44,34 @@ public class CarLogic : ICarLogic
     {
         if (carQuery.GarageId is null && carQuery.CarName is null)
         {
-            var cars = await _repository.GetAllCarsAsync();
+            var cars = await _carRepository.GetAllCarsAsync();
         }
-        return await _repository.GetAllCarsAsync(carQuery);
+        return await _carRepository.GetAllCarsAsync(carQuery);
     }
 
     public async Task<Car?> GetCarAsync(int id)
     {
-        return await _repository.GetCarAsync(id);
+        return await _carRepository.GetCarAsync(id);
     }
 
     public async Task DeleteCarAsync(int id)
     {
-        var car = await _repository.GetCarAsync(id);
+        var car = await _carRepository.GetCarAsync(id);
         if (car is null)
         {
             throw new Exception($"Car with id {id} not found");
         }
         await _publishEndpoint.Publish(new CarDeleted(id));
-        await _repository.DeleteCarAsync(id);
+        await _carRepository.DeleteCarAsync(id);
     }
 
     public async Task<Image> GetCarImageAsync(int id)
     {
-        var car = await _repository.GetCarAsync(id);
+        var car = await _carRepository.GetCarAsync(id);
         if (car is null)
         {
             throw new Exception($"Car with id {id} not found");
         }
-        return await _repository.GetCarImageAsync(id);
+        return await _carRepository.GetCarImageAsync(id);
     }
 }
