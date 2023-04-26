@@ -18,7 +18,7 @@ public class CarLogic : ICarLogic
         _garageRepository = garageRepository;
     }
 
-    public async Task<Car?> CreateAsync(Car car)
+    public async Task<Car> CreateCarAsync(Car car)
     {
         Garage? garage = await _garageRepository.GetGarageAsync(car.Garage.Id);
         if (garage is null)

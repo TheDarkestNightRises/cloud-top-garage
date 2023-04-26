@@ -14,13 +14,11 @@ public class CarsController : ControllerBase
 {
     private readonly IMapper _mapper;
     private readonly ICarLogic _logic;
-    private readonly IPublishEndpoint _publishEndpoint;
 
-    public CarsController(IMapper mapper, ICarLogic logic, IPublishEndpoint publishEndpoint)
+    public CarsController(IMapper mapper, ICarLogic logic)
     {
         _mapper = mapper;
         _logic = logic;
-        _publishEndpoint = publishEndpoint;
     }
 
 
@@ -39,7 +37,6 @@ public class CarsController : ControllerBase
 
             var carsMapped = _mapper.Map<IEnumerable<CarReadDto>>(cars);
 
-            await _publishEndpoint.Publish(new HelloEvent("Hello"));
 
             return Ok(carsMapped);
         }
@@ -74,19 +71,26 @@ public class CarsController : ControllerBase
     {
         try
         {
+            // Convert from DTO to a Model
             Car car = _mapper.Map<Car>(carCreateDto);
-            Car? created = await _logic.CreateAsync(car);
-            if (created == null)
-                return NotFound();
+
+            // Delegate to the logic layer to create a car 
+            Car created = await _logic.CreateCarAsync(car);
+
+            // Map the created result into a ReadDto 
             CarReadDto createdDto = _mapper.Map<CarReadDto>(created);
+
+            //Return 200 created 
             return Created($"/Cars/{created.Id}", createdDto);
         }
         catch (ArgumentException e)
         {
+            // Return 400 if the client made a mistake and didnt follow the rules of creating a car
             return BadRequest(e.Message);
         }
         catch (Exception e)
         {
+            // Return 500 if the system failed to create a car
             Console.WriteLine(e);
             return StatusCode(500, e.Message);
         }
