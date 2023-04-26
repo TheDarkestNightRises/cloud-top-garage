@@ -81,18 +81,10 @@ public class CarRepository : ICarRepository
         return carImage;
     }
 
-    public Task<Image> UpdateCarImageAsync(Image carImage, int carId)
+    public async Task UpdateCarWithImageAsync(Image carImage, int carId)
     {
-        var carImage = await _context.CarImages.FindAsync(carImageId);
-
-        if (carImage != null)
-        {
-            carImage.Name = newName;
-            carImage.Data = newData;
-
-            await _context.SaveChangesAsync();
-        }
-
-        return carImage;
+        var car = await _context.Cars.FindAsync(carId);
+        car.Image = carImage;
+        await _context.SaveChangesAsync();
     }
 }

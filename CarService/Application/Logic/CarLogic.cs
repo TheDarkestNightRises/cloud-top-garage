@@ -84,7 +84,7 @@ public class CarLogic : ICarLogic
             throw new Exception($"Car with id {id} not found");
         }
         var created = await _repository.CreateCarImageAsync(carImage);
-        await _repository.UpdateCarImageAsync(created, id);
+        await _repository.UpdateCarWithImageAsync(created, id);
         return created;
     }
 }

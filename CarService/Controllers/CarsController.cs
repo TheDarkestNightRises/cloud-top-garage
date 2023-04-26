@@ -139,13 +139,13 @@ public class CarsController : ControllerBase
         }
     }
 
-    [HttpPost, Route("cars/{id}/image")]
-    public async Task<IActionResult> CreateCarImage([FromRoute] int id, [FromForm] IFormFile image)
+    [HttpPost, Route("/Cars/{id}/image")]
+    public async Task<IActionResult> CreateCarImage([FromRoute] int id, IFormFile image)
     {
         try
         {
             // Convert the image to a byte array
-            byte[] imageData = null;
+            byte[]? imageData = null;
             using (var ms = new MemoryStream())
             {
                 await image.CopyToAsync(ms);
@@ -155,12 +155,11 @@ public class CarsController : ControllerBase
             //Create Image model
             Image carImage = new Image
             {
-                Name = image.FileName,
                 Data = imageData
             };
 
             var created = await _logic.CreateCarImage(carImage, id);
-            return File(created.Data, created.Name);
+            return File(created.Data, "image/jpeg");
         }
         catch (ArgumentException e)
         {

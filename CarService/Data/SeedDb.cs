@@ -40,7 +40,6 @@ public static class PrepDb
         {
             new Image
             {
-                Name = "image1",
                 Data = GetImageData("car.png")
             }
         };
