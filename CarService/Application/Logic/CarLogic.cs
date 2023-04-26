@@ -95,13 +95,13 @@ public class CarLogic : ICarLogic
 
     public async Task<Image> CreateCarImage(Image carImage, int id)
     {
-        var car = await _repository.GetCarAsync(id);
+        var car = await _carRepository.GetCarAsync(id);
         if (car is null)
         {
             throw new Exception($"Car with id {id} not found");
         }
-        var created = await _repository.CreateCarImageAsync(carImage);
-        await _repository.UpdateCarWithImageAsync(created, id);
+        var created = await _carRepository.CreateCarImageAsync(carImage);
+        await _carRepository.UpdateCarWithImageAsync(created, id);
         return created;
     }
 }
