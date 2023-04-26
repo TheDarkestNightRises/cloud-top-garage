@@ -2,4 +2,4 @@ using GarageService.Models;
 
 namespace Contracts;
 
-public record CarCreated(Car car);
+public record CarCreated(int carId, int garageId);

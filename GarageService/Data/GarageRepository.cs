@@ -44,4 +44,16 @@ public class GarageRepository : IGarageRepository
         var garage = await _context.Garages.Include(g => g.Cars).Include(g => g.User).Where(g => g.Id == id).FirstOrDefaultAsync();
         return garage;
     }
+
+    public async Task UpdateGarageAsync(Garage? garage)
+    {
+        var existingGarage = await _context.Garages.FindAsync(garage.Id);
+
+        if (existingGarage != null)
+        {
+            existingGarage.Cars = garage.Cars;
+            await _context.SaveChangesAsync();
+        }
+
+    }
 }

@@ -25,9 +25,10 @@ public class CarLogic : ICarLogic
         {
             throw new Exception($"Car with id {car.Garage.Id} not found");
         }
-        car.Garage = garage;
-        await _publishEndpoint.Publish(new CarCreated(car));
-        return await _carRepository.CreateCarAsync(car);
+        Car carCreated = await _carRepository.CreateCarAsync(car);
+        await _publishEndpoint.Publish(new CarCreated(carCreated.Id, garage.Id));
+        return carCreated;
+
     }
 
     public async Task<IEnumerable<Car>> GetAllCarsAsync()
