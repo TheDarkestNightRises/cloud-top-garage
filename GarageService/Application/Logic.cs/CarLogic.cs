@@ -14,13 +14,12 @@ public class CarLogic : ICarLogic
 
     public async Task CreateCarAsync(Car car)
     {
-       await _repository.CreateCarAsync(car);
+        await _repository.CreateCarAsync(car);
     }
 
     public async Task DeleteCarAsync(int id)
     {
         var car = _repository.GetCarByIdAsync(id);
-
         if (car == null)
         {
             throw new Exception($"Car with id {id} not found");
@@ -35,6 +34,6 @@ public class CarLogic : ICarLogic
 
     public async Task UpdateCarAsync(Car car)
     {
-       await _repository.UpdateCarAsync(car);
+        await _repository.UpdateCarAsync(car);
     }
 }
