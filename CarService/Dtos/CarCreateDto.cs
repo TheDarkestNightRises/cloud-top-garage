@@ -11,8 +11,6 @@ public class CarCreateDto
     [Required]
     public string Description { get; set; }
 
-    // public Image Image { get; set; }
-
+    [Required]
     public GarageDto Garage { get; set; }
-
 }

@@ -12,9 +12,18 @@ public class GarageLogic : IGarageLogic
         _repository = garageRepository;
     }
 
-    public Task DeleteGarageAsync(int id)
+    public async Task DeleteGarageAsync(int id)
     {
-        throw new NotImplementedException();
+        // Get the garage to be deleted
+        var garageToDelete = await _repository.GetGarageAsync(id);
+        // check if the garage exists
+        if (garageToDelete == null)
+        {
+            throw new Exception($"Garage with id {id} not found");
+        }
+        // delete the garage
+        await _repository.DeleteGarageAsync(id);
+
     }
 
     public async Task<IEnumerable<Garage>> GetAllGaragesAsync()

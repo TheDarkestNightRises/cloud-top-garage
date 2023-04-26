@@ -12,6 +12,11 @@ public class CarLogic : ICarLogic
         _repository = carRepository;
     }
 
+    public async Task CreateCarAsync(Car car)
+    {
+       await _repository.CreateCarAsync(car);
+    }
+
     public async Task DeleteCarAsync(int id)
     {
         var car = _repository.GetCarByIdAsync(id);
@@ -26,5 +31,10 @@ public class CarLogic : ICarLogic
     public async Task<Car?> GetCarByIdAsync(int carId)
     {
         return await _repository.GetCarByIdAsync(carId);
+    }
+
+    public async Task UpdateCarAsync(Car car)
+    {
+       await _repository.UpdateCarAsync(car);
     }
 }

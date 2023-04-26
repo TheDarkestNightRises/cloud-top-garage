@@ -12,6 +12,17 @@ public class CarRepository : ICarRepository
         _context = context;
     }
 
+    public async Task CreateCarAsync(Car car)
+    {
+        Garage? garage = await _context.Garages.FindAsync(car.Garage.Id);
+        if (garage != null)
+        {
+            car.Garage = garage;
+            await _context.AddAsync(car);
+            await _context.SaveChangesAsync();
+        }
+    }
+
     public async Task DeleteCarAsync(int id)
     {
         var car = await _context.Cars.FindAsync(id);
@@ -22,5 +33,11 @@ public class CarRepository : ICarRepository
     public async Task<Car?> GetCarByIdAsync(int carId)
     {
         return await _context.Cars.FindAsync(carId);
+    }
+
+    public async Task UpdateCarAsync(Car car)
+    {
+        _context.Cars.Update(car);
+        await _context.SaveChangesAsync();
     }
 }
