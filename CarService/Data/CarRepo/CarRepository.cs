@@ -73,4 +73,18 @@ public class CarRepository : ICarRepository
         .SingleOrDefaultAsync();
         return car.Image;
     }
+
+    public async Task<Image> CreateCarImageAsync(Image carImage)
+    {
+        await _context.Images.AddAsync(carImage);
+        await _context.SaveChangesAsync();
+        return carImage;
+    }
+
+    public async Task UpdateCarWithImageAsync(Image carImage, int carId)
+    {
+        var car = await _context.Cars.FindAsync(carId);
+        car.Image = carImage;
+        await _context.SaveChangesAsync();
+    }
 }

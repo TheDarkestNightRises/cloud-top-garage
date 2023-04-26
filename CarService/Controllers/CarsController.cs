@@ -140,7 +140,7 @@ public class CarsController : ControllerBase
     }
 
 
-    [HttpGet, Route("/Cars/{id}/images")]
+    [HttpGet, Route("/Cars/{id}/image")]
     public async Task<IActionResult> GetCarImage(int id)
     {
         try
@@ -151,6 +151,39 @@ public class CarsController : ControllerBase
                 return File(carImage.Data, "image/jpeg");
             }
             return NotFound();
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpPost, Route("/Cars/{id}/image")]
+    public async Task<IActionResult> CreateCarImage([FromRoute] int id, IFormFile image)
+    {
+        try
+        {
+            // Convert the image to a byte array
+            byte[]? imageData = null;
+            using (var ms = new MemoryStream())
+            {
+                await image.CopyToAsync(ms);
+                imageData = ms.ToArray();
+            }
+
+            //Create Image model
+            Image carImage = new Image
+            {
+                Data = imageData
+            };
+
+            var created = await _logic.CreateCarImage(carImage, id);
+            return File(created.Data, "image/jpeg");
         }
         catch (ArgumentException e)
         {
