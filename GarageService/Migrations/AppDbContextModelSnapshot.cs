@@ -89,7 +89,7 @@ namespace GarageService.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Location");
+                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("GarageService.Models.User", b =>

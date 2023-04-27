@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GarageService.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230427084902_LocationEntityAdded")]
-    partial class LocationEntityAdded
+    [Migration("20230427092600_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -92,7 +92,7 @@ namespace GarageService.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Location");
+                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("GarageService.Models.User", b =>

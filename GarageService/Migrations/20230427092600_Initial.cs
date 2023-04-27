@@ -11,17 +11,17 @@ namespace GarageService.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Image",
+                name: "Locations",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Data = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
+                    Latitude = table.Column<double>(type: "float", nullable: false),
+                    Longitude = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Image", x => x.Id);
+                    table.PrimaryKey("PK_Locations", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -45,11 +45,18 @@ namespace GarageService.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Capacity = table.Column<int>(type: "int", nullable: false),
                     AvailableSlots = table.Column<int>(type: "int", nullable: false),
+                    LocationId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Garages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Garages_Locations_LocationId",
+                        column: x => x.LocationId,
+                        principalTable: "Locations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Garages_Users_UserId",
                         column: x => x.UserId,
@@ -64,10 +71,7 @@ namespace GarageService.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImageId = table.Column<int>(type: "int", nullable: false),
-                    GarageId = table.Column<int>(type: "int", nullable: false)
+                    GarageId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -76,14 +80,7 @@ namespace GarageService.Migrations
                         name: "FK_Cars_Garages_GarageId",
                         column: x => x.GarageId,
                         principalTable: "Garages",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Cars_Image_ImageId",
-                        column: x => x.ImageId,
-                        principalTable: "Image",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -92,9 +89,9 @@ namespace GarageService.Migrations
                 column: "GarageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cars_ImageId",
-                table: "Cars",
-                column: "ImageId");
+                name: "IX_Garages_LocationId",
+                table: "Garages",
+                column: "LocationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Garages_UserId",
@@ -112,7 +109,7 @@ namespace GarageService.Migrations
                 name: "Garages");
 
             migrationBuilder.DropTable(
-                name: "Image");
+                name: "Locations");
 
             migrationBuilder.DropTable(
                 name: "Users");
