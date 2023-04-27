@@ -33,11 +33,11 @@ public static class PrepDb
 
         if (!context.Garages.Any())
         {
-            var car1 = new Car { Name = "car", Description = "description" };
-            var car2 = new Car { Name = "car", Description = "description" };
-            var car3 = new Car { Name = "car", Description = "description" };
-            var car4 = new Car { Name = "car", Description = "description" };
-            var car5 = new Car { Name = "car", Description = "description" };
+            var car1 = new Car { };
+            var car2 = new Car {  };
+            var car3 = new Car {  };
+            var car4 = new Car {  };
+            var car5 = new Car {  };
 
             var user1 = new User { };
             var user2 = new User { };

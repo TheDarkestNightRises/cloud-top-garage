@@ -14,13 +14,8 @@ public class CarRepository : ICarRepository
 
     public async Task CreateCarAsync(Car car)
     {
-        Garage? garage = await _context.Garages.FindAsync(car.Garage.Id);
-        if (garage != null)
-        {
-            car.Garage = garage;
-            await _context.AddAsync(car);
-            await _context.SaveChangesAsync();
-        }
+        await _context.Cars.AddAsync(car);
+        await _context.SaveChangesAsync();
     }
 
     public async Task DeleteCarAsync(int id)

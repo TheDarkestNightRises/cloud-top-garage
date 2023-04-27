@@ -22,11 +22,8 @@ public class CarRepository : ICarRepository
     public async Task DeleteCarAsync(int id)
     {
         var carToDelete = await _context.Cars.FindAsync(id);
-        if (carToDelete != null)
-        {
-            _context.Cars.Remove(carToDelete);
-            await _context.SaveChangesAsync();
-        }
+        _context.Cars.Remove(carToDelete);
+        await _context.SaveChangesAsync();
     }
 
     public async Task<IEnumerable<Car>> GetAllCarsAsync()
@@ -50,7 +47,7 @@ public class CarRepository : ICarRepository
 
     public async Task<IEnumerable<Car>> GetAllCarsAsync(CarQuery carQuery)
     {
-        var query = _context.Cars.AsQueryable();
+        var query = _context.Cars.Include(c => c.Garage).AsQueryable();
 
         if (!(carQuery.GarageId is null))
         {

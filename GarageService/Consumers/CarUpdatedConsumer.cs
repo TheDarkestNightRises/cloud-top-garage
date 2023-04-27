@@ -20,12 +20,7 @@ public class CarUpdatedConsumer : IConsumer<CarUpdated>
             var carCreatedMessage = context.Message.carToUpdate;
             Car car = new Car
             {
-                Id = carCreatedMessage.Id,
-                Name = carCreatedMessage.Name,
-                Description = carCreatedMessage.Description,
-                Image = carCreatedMessage.Image,
-                Garage = carCreatedMessage.Garage
-
+                Id = carCreatedMessage.Id
             };
             await _carLogic.UpdateCarAsync(car);
         }

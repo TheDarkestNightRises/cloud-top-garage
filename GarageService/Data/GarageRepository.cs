@@ -41,7 +41,13 @@ public class GarageRepository : IGarageRepository
 
     public async Task<Garage?> GetGarageAsync(int id)
     {
-        var garage = await _context.Garages.Include(g => g.Cars).Include(g => g.User).Where(g => g.Id == id).FirstOrDefaultAsync();
+        var garage = await _context.Garages.Include(g => g.Cars).Include(g => g.User).FirstOrDefaultAsync(g => g.Id == id);
         return garage;
+    }
+
+    public async Task UpdateGarageAsync(Garage garage)
+    {
+        _context.Entry(garage).State = EntityState.Modified;
+        await _context.SaveChangesAsync();
     }
 }

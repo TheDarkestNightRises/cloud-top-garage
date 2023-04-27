@@ -5,35 +5,58 @@ using GarageService.Data;
 
 public class CarLogic : ICarLogic
 {
-    private readonly ICarRepository _repository;
+    private readonly ICarRepository _carRepository;
+    private readonly IGarageRepository _garageRepository;
 
-    public CarLogic(ICarRepository carRepository)
+
+    public CarLogic(ICarRepository carRepository, IGarageRepository garageRepository)
     {
-        _repository = carRepository;
+        _carRepository = carRepository;
+        _garageRepository = garageRepository;
     }
 
-    public async Task CreateCarAsync(Car car)
+    public async Task CreateCarAsync(int carId, int garageId)
     {
-        await _repository.CreateCarAsync(car);
+
+        var garage = await _garageRepository.GetGarageAsync(garageId);
+        Console.WriteLine($"--> Initial garage {garage}");
+        if (garage == null)
+        {
+            throw new ArgumentException("Invalid garage ID");
+        }
+
+        if (garage.Cars.Any(c => c.Id == carId))
+        {
+            throw new ArgumentException("Car already exists in the garage");
+        }
+
+        var car = new Car
+        {
+            Id = carId
+        };
+        await _carRepository.CreateCarAsync(car);
+        garage.Cars.Add(car);
+        Console.WriteLine($"---> It was modified {garage}");
+        await _garageRepository.UpdateGarageAsync(garage);
     }
 
     public async Task DeleteCarAsync(int id)
     {
-        var car = _repository.GetCarByIdAsync(id);
+        var car = _carRepository.GetCarByIdAsync(id);
         if (car == null)
         {
             throw new Exception($"Car with id {id} not found");
         }
-        await _repository.DeleteCarAsync(id);
+        await _carRepository.DeleteCarAsync(id);
     }
 
     public async Task<Car?> GetCarByIdAsync(int carId)
     {
-        return await _repository.GetCarByIdAsync(carId);
+        return await _carRepository.GetCarByIdAsync(carId);
     }
 
     public async Task UpdateCarAsync(Car car)
     {
-        await _repository.UpdateCarAsync(car);
+        await _carRepository.UpdateCarAsync(car);
     }
 }
