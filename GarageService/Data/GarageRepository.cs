@@ -22,13 +22,19 @@ public class GarageRepository : IGarageRepository
     public async Task<IEnumerable<Garage>> GetAllGaragesAsync()
     {
 
-        var garages = await _context.Garages.Include(g => g.Cars).Include(g => g.User).ToListAsync();
+        var garages = await _context.Garages.Include(g => g.Cars)
+                                            .Include(g => g.User)
+                                            .Include(g => g.Location)
+                                            .ToListAsync();
         return garages;
     }
 
     public async Task<IEnumerable<Garage>> GetAllGaragesAsync(GarageQuery garageQuery)
     {
-        var query = _context.Garages.Include(g => g.Cars).Include(g => g.User).AsQueryable();
+        var query = _context.Garages.Include(g => g.Cars)
+                                    .Include(g => g.User)
+                                    .Include(g => g.Location)
+                                    .AsQueryable();
 
         if (!(garageQuery.UserId is null))
         {
@@ -41,7 +47,10 @@ public class GarageRepository : IGarageRepository
 
     public async Task<Garage?> GetGarageAsync(int id)
     {
-        var garage = await _context.Garages.Include(g => g.Cars).Include(g => g.User).FirstOrDefaultAsync(g => g.Id == id);
+        var garage = await _context.Garages.Include(g => g.Cars)
+                                            .Include(g => g.User)
+                                            .Include(g => g.Location)
+                                            .FirstOrDefaultAsync(g => g.Id == id);
         return garage;
     }
 
