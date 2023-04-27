@@ -49,8 +49,8 @@ public static class PrepDb
 
             // Creating some garage instances
             var garage1 = new Garage { Name = "Main Garage", Capacity = 5, Location = location1, User = user1, Cars = new List<Car> { car1, car2 } };
-            var garage2 = new Garage { Name = "Secondary", Capacity = 3, Location = location2, Cars = new List<Car> { car3 } };
-            var garage3 = new Garage { Name = "Waffle", Capacity = 7, Location = location3, Cars = new List<Car> { car4, car5 } };
+            var garage2 = new Garage { Name = "Secondary", Capacity = 3, Location = location2, User = user1, Cars = new List<Car> { car3 } };
+            var garage3 = new Garage { Name = "Waffle", Capacity = 7, Location = location3, User = user2, Cars = new List<Car> { car4, car5 } };
 
             // Adding the garage and car instances to the database context
             context.Cars.AddRange(new List<Car> { car1, car2, car3, car4, car5 });
