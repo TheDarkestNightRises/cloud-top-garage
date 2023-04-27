@@ -22,11 +22,8 @@ public class CarRepository : ICarRepository
     public async Task DeleteCarAsync(int id)
     {
         var carToDelete = await _context.Cars.FindAsync(id);
-        if (carToDelete != null)
-        {
-            _context.Cars.Remove(carToDelete);
-            await _context.SaveChangesAsync();
-        }
+        _context.Cars.Remove(carToDelete);
+        await _context.SaveChangesAsync();
     }
 
     public async Task<IEnumerable<Car>> GetAllCarsAsync()
