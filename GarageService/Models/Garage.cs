@@ -15,7 +15,8 @@ public class Garage
         get { return Capacity - Cars?.Count ?? 0; }
         private set { }
     }
-
+    
+    public Location Location { get; set; }
     public User User { get; set; }
     public List<Car> Cars { get; set; }
 
