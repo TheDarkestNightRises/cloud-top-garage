@@ -17,7 +17,6 @@ public class CarLogic : ICarLogic
 
     public async Task CreateCarAsync(int carId, int garageId)
     {
-
         var garage = await _garageRepository.GetGarageAsync(garageId);
         Console.WriteLine($"--> Initial garage {garage}");
         if (garage == null)
@@ -55,8 +54,21 @@ public class CarLogic : ICarLogic
         return await _carRepository.GetCarByIdAsync(carId);
     }
 
-    public async Task UpdateCarAsync(Car car)
+    public async Task UpdateCarAsync(int carId, int garageId, int currentGarageId)
     {
-        await _carRepository.UpdateCarAsync(car);
+        Garage? currentGarage = await _garageRepository.GetGarageAsync(currentGarageId);
+        Garage? garage = await _garageRepository.GetGarageAsync(garageId);
+        if (garage == null)
+        {
+            throw new ArgumentException("Invalid garage ID");
+        }
+        Car? car = await _carRepository.GetCarByIdAsync(carId);
+        if (car == null)
+        {
+            throw new Exception($"Car with id {carId} not found");
+        }
+        currentGarage?.Cars.Remove(car);
+        garage.Cars.Add(car);
+        await _garageRepository.UpdateGarageAsync(garage);
     }
 }

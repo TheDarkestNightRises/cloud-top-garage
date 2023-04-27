@@ -5,7 +5,7 @@ using MassTransit;
 
 namespace GarageService.Consumers;
 
-public class CarUpdatedConsumer : IConsumer<CarUpdated>
+public class CarUpdatedConsumer : IConsumer<CarMoved>
 {
     private readonly ICarLogic _carLogic;
 
@@ -13,16 +13,14 @@ public class CarUpdatedConsumer : IConsumer<CarUpdated>
     {
         _carLogic = carLogic;
     }
-    public async Task Consume(ConsumeContext<CarUpdated> context)
+    public async Task Consume(ConsumeContext<CarMoved> context)
     {
         try
         {
-            var carCreatedMessage = context.Message.carToUpdate;
-            Car car = new Car
-            {
-                Id = carCreatedMessage.Id
-            };
-            await _carLogic.UpdateCarAsync(car);
+            var carId = context.Message.carId;
+            var garageId = context.Message.garageId;
+            var currentGarageId = context.Message.currentGarageId;
+            await _carLogic.UpdateCarAsync(carId, garageId, currentGarageId);
         }
         catch (Exception e)
         {

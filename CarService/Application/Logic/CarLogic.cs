@@ -91,7 +91,7 @@ public class CarLogic : ICarLogic
             throw new ArgumentException($"There is no garage with the id: {carToUpdate.Garage.Id}");
         }
         carFound.Garage = garageFound;
-        await _publishEndpoint.Publish(new CarUpdated(carToUpdate));
+        await _publishEndpoint.Publish(new CarMoved(carFound.Id, garageFound.Id, carFound.Garage.Id));
         await _carRepository.UpdateCarAsync(carFound);
         return carFound;
     }
