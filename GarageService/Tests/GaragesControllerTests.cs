@@ -22,13 +22,24 @@ public class GaragesControllerTests
         _controller = new GaragesController(_mapperMock.Object, _logicMock.Object);
     }
 
+    // ----------------------------- GET ALL GARAGE --------------------------------------------
+
+
     [Fact]
     public async Task GetAllGaragesAsync_ReturnsOkResult_WhenGaragesExist()
     {
         var garageQueryDto = new GarageQueryDto();
         var garageQuery = new GarageQuery();
-        var garages = new List<Garage>();
-        var garageReadDtos = new List<GarageReadDto>();
+        var garages = new List<Garage>
+        {
+            new Garage { Id = 1, Name = "Garage 1", Capacity = 10, Cars = new List<Car>() },
+            new Garage { Id = 2, Name = "Garage 2", Capacity = 5, Cars = new List<Car>() }
+        };
+        var garageReadDtos = new List<GarageReadDto>
+        {
+            new GarageReadDto { Id = 1, Name = "Garage 1", AvailableSlots = 10 },
+            new GarageReadDto { Id = 2, Name = "Garage 2", AvailableSlots = 5 }
+        };
 
         _mapperMock.Setup(m => m.Map<GarageQuery>(garageQueryDto)).Returns(garageQuery);
         _logicMock.Setup(l => l.GetAllGaragesAsync(garageQuery)).ReturnsAsync(garages);
@@ -40,4 +51,53 @@ public class GaragesControllerTests
         var model = Assert.IsAssignableFrom<IEnumerable<GarageReadDto>>(okResult.Value);
         Assert.Equal(garageReadDtos, model);
     }
+
+
+
+    [Fact]
+    public async Task GetAllGaragesAsync_ReturnsNotFoundResult_WhenGaragesDontExist()
+    {
+        // Arrange
+        var garageQueryDto = new GarageQueryDto();
+        var garageQuery = new GarageQuery();
+        List<Garage> garages = null;
+        List<GarageReadDto> garageReadDtos = null;
+
+
+        _mapperMock.Setup(m => m.Map<GarageQuery>(garageQueryDto)).Returns(garageQuery);
+        _logicMock.Setup(l => l.GetAllGaragesAsync(garageQuery)).ReturnsAsync(garages);
+        _mapperMock.Setup(m => m.Map<IEnumerable<GarageReadDto>>(garages)).Returns(garageReadDtos);
+
+
+        // Act
+        var result = await _controller.GetAllGaragesAsync(garageQueryDto);
+
+        // Assert
+        var notFoundResult = Assert.IsType<NotFoundResult>(result.Result);
+        Assert.Equal(404, notFoundResult.StatusCode);
+    }
+
+
+    [Fact]
+    public async Task GetAllGaragesAsync_ReturnsInternalServer_WhenException()
+    {
+        // Arrange
+        var garageQueryDto = new GarageQueryDto();
+        var garageQuery = new GarageQuery();
+        var emsg = "Some error occurred.";
+
+        _mapperMock.Setup(m => m.Map<GarageQuery>(garageQueryDto)).Returns(garageQuery);
+        _logicMock.Setup(l => l.GetAllGaragesAsync(garageQuery)).ThrowsAsync(new Exception(emsg));
+
+        // Act
+        var result = await _controller.GetAllGaragesAsync(garageQueryDto);
+
+        // Assert
+        var errorResponse = Assert.IsType<ObjectResult>(result.Result);
+        Assert.Equal(500, errorResponse.StatusCode);
+        Assert.Equal(emsg, errorResponse.Value);
+    }
+
+
+
 }
