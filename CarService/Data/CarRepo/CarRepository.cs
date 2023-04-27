@@ -50,7 +50,7 @@ public class CarRepository : ICarRepository
 
     public async Task<IEnumerable<Car>> GetAllCarsAsync(CarQuery carQuery)
     {
-        var query = _context.Cars.AsQueryable();
+        var query = _context.Cars.Include(c => c.Garage).AsQueryable();
 
         if (!(carQuery.GarageId is null))
         {

@@ -19,20 +19,21 @@ public class CarLogic : ICarLogic
     {
 
         Garage? garage = await _garageRepository.GetGarageAsync(garageId);
-         if(garage == null)
+        if (garage == null)
         {
             throw new Exception($"Garage with id {garageId} doesn't exists");
         }
         Car? carExists = await _carRepository.GetCarByIdAsync(carId);
-        if(carExists != null)
+        if (carExists != null)
         {
             throw new Exception($"Car with id {carId} already exists");
         }
-        Car car = new Car {
+        Car car = new Car
+        {
             Id = carId
         };
         garage?.Cars.Add(car);
-        await _garageRepository.UpdateGarageAsync(garage); 
+        await _garageRepository.UpdateGarageAsync(garage);
     }
 
     public async Task DeleteCarAsync(int id)
