@@ -38,13 +38,11 @@ public class CarLogic : ICarLogic
         garage.Cars.Add(car);
         Console.WriteLine($"---> It was modified {garage}");
         await _garageRepository.UpdateGarageAsync(garage);
-
     }
 
     public async Task DeleteCarAsync(int id)
     {
         var car = _carRepository.GetCarByIdAsync(id);
-
         if (car == null)
         {
             throw new Exception($"Car with id {id} not found");
