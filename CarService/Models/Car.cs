@@ -12,8 +12,16 @@ public class Car
 
     [Required]
     public string Description { get; set; }
-
+    [Required]
+    public string Manufacturer { get; set; }
+    [Required]
+    public string Model { get; set; }
+    [Required]
+    public int Year { get; set; }
+    [Required]
+    public int Seats { get; set; }
     public Image Image { get; set; }
+    public Engine Engine { get; set; }
 
     public Garage Garage { get; set; }
 
