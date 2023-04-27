@@ -14,6 +14,7 @@ public class GarageReadDto
 
     [Required]
     public int AvailableSlots { get; set; }
+    public LocationReadDto Location { get; set; }
 
     [Required]
     public UserReadDto User { get; set; }
