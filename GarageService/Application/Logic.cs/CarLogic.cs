@@ -18,22 +18,27 @@ public class CarLogic : ICarLogic
     public async Task CreateCarAsync(int carId, int garageId)
     {
 
-        Garage? garage = await _garageRepository.GetGarageAsync(garageId);
+        var garage = await _garageRepository.GetGarageAsync(garageId);
+        Console.WriteLine($"--> Initial garage {garage}");
         if (garage == null)
         {
-            throw new Exception($"Garage with id {garageId} doesn't exists");
+            throw new ArgumentException("Invalid garage ID");
         }
-        Car? carExists = await _carRepository.GetCarByIdAsync(carId);
-        if (carExists != null)
+
+        if (garage.Cars.Any(c => c.Id == carId))
         {
-            throw new Exception($"Car with id {carId} already exists");
+            throw new ArgumentException("Car already exists in the garage");
         }
-        Car car = new Car
+
+        var car = new Car
         {
             Id = carId
         };
-        garage?.Cars.Add(car);
+        await _carRepository.CreateCarAsync(car);
+        garage.Cars.Add(car);
+        Console.WriteLine($"---> It was modified {garage}");
         await _garageRepository.UpdateGarageAsync(garage);
+
     }
 
     public async Task DeleteCarAsync(int id)

@@ -8,5 +8,5 @@ public interface IGarageRepository
     Task<IEnumerable<Garage>> GetAllGaragesAsync(GarageQuery garageQuery);
     Task<Garage?> GetGarageAsync(int id);
     Task DeleteGarageAsync(int id);
-    Task UpdateGarageAsync(Garage? garage);
+    Task UpdateGarageAsync(Garage garage);
 }

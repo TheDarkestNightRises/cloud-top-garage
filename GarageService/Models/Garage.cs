@@ -21,6 +21,6 @@ public class Garage
 
     public override string ToString()
     {
-        return $"Available slots: {AvailableSlots}, User: {User}, Cars: {string.Join(",", Cars)}";
+        return $"{Id} vailable slots: {AvailableSlots}, User: {User}, Cars: {string.Join(",", Cars)}";
     }
 }
