@@ -56,6 +56,8 @@ public class UserLogic : IUserLogic
         userFound.Email = userToUpdate.Email;
         userFound.Password = userToUpdate.Password;
         userFound.Name = userToUpdate.Name;
+        userFound.Age = userToUpdate.Age;
+        userFound.Phone = userToUpdate.Phone;
         await _userRepository.UpdateUserAsync(userFound);
         return userFound;
     }
