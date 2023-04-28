@@ -21,7 +21,7 @@ public class Car
     [Required]
     public int Seats { get; set; }
     public Image Image { get; set; }
-    public Engine Engine { get; set; }
+    //public Engine Engine { get; set; }
 
     public Garage Garage { get; set; }
 
