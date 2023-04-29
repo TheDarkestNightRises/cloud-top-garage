@@ -1,20 +1,37 @@
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
-WORKDIR /app
+# Base phase. Pull the base image from microsoft ASP.NET 
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base  
+# Change the working directory to /app
+WORKDIR /app  
+# Expose port 80 for communication 
 EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-WORKDIR /src
-COPY ["CarService.csproj", "./"]
-RUN dotnet restore "CarService.csproj"
+# Building phase
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build  
+# Change the working directory to /src
+WORKDIR /src  
+# Copy the csproj file that contains the project configuration
+COPY ["CarService.csproj", "./"]  
+# Restore dependecies
+RUN dotnet restore "CarService.csproj" 
+# Copy the entire project
 COPY . .
-WORKDIR "/src/."
-RUN dotnet build "CarService.csproj" -c Release -o /app/build
+# Change the working directory to /src
+WORKDIR "/src/."  
+# Build the project and release the output in /app/build
+RUN dotnet build "CarService.csproj" -c Release -o /app/build  
 
-FROM build AS publish
-RUN dotnet publish "CarService.csproj" -c Release -o /app/publish /p:UseAppHost=false
+#Publishing phase 
+FROM build AS publish 
+# Publish the app and release the output to /app/publish,
+RUN dotnet publish "CarService.csproj" -c Release -o /app/publish /p:UseAppHost=false  
 
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-COPY ["Images/car.png", "/app/Images/"]
-ENTRYPOINT ["dotnet", "CarService.dll"]
+# Final phase.
+FROM base AS final 
+# Change the working directory to /app
+WORKDIR /app  
+# Copy the files from the publishing phase
+COPY --from=publish /app/publish .  
+# Copy the images 
+COPY ["Images/car.png", "/app/Images/"] 
+# Set the starting point for the container.
+ENTRYPOINT ["dotnet", "CarService.dll"]  
