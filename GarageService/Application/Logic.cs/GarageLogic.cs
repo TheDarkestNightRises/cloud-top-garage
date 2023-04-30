@@ -1,17 +1,20 @@
-
 using GarageService.Application.LogicContracts;
 using GarageService.Models;
 using GarageService.Data;
-
+using MassTransit;
+using Contracts;
 public class GarageLogic : IGarageLogic
 {
     private readonly IGarageRepository _garageRepository;
     private readonly IUserRepository _userRepository;
+    
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public GarageLogic(IGarageRepository garageRepository, IUserRepository userRepository)
+    public GarageLogic(IGarageRepository garageRepository, IUserRepository userRepository, IPublishEndpoint publishEndpoint)
     {
         _garageRepository = garageRepository;
         _userRepository = userRepository;
+        _publishEndpoint = publishEndpoint;
     }
 
     public async Task DeleteGarageAsync(int id)
@@ -25,7 +28,6 @@ public class GarageLogic : IGarageLogic
         }
         // delete the garage
         await _garageRepository.DeleteGarageAsync(id);
-
     }
 
     public async Task<IEnumerable<Garage>> GetAllGaragesAsync()
@@ -61,7 +63,8 @@ public class GarageLogic : IGarageLogic
 
         garage.User = user;
         Garage carCreated = await _garageRepository.CreateGarageAsync(garage);
-        //await _publishEndpoint.Publish(new GarageCreated(carCreated.Id, garage.Id));
+        await _publishEndpoint.Publish(new GarageCreated(garage.Id));
+
         return carCreated;
     }
 }
