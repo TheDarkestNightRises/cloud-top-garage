@@ -14,5 +14,7 @@ public class GaragesProfile : Profile
         CreateMap<GarageReadDto, Garage>();
         CreateMap<GarageQuery, GarageQueryDto>();
         CreateMap<GarageQueryDto, GarageQuery>();
+        CreateMap<Garage, GarageCreateDto>();
+        CreateMap<GarageCreateDto, Garage>();
     }
 }
