@@ -15,4 +15,6 @@ public class AppDbContext : DbContext
     public DbSet<Garage> Garages { get; set; }
 
     public DbSet<Image> Images { get; set; }
+
+    public DbSet<Engine> Engines { get; set; }
 }
