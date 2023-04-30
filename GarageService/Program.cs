@@ -44,6 +44,7 @@ else
 }
 builder.Services.AddScoped<ICarRepository, CarRepository>();
 builder.Services.AddScoped<IGarageRepository, GarageRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IGarageLogic, GarageLogic>();
 builder.Services.AddScoped<ICarLogic, CarLogic>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
