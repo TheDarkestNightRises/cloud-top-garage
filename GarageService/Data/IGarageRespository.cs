@@ -9,4 +9,5 @@ public interface IGarageRepository
     Task<Garage?> GetGarageAsync(int id);
     Task DeleteGarageAsync(int id);
     Task UpdateGarageAsync(Garage garage);
+    Task<Garage> CreateGarageAsync(Garage garage);
 }

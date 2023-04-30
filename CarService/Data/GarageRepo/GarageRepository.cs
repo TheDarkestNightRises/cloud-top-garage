@@ -23,4 +23,10 @@ public class GarageRepository : IGarageRepository
         _context.Garages.Remove(garageToDelete);
         await _context.SaveChangesAsync();
     }
+
+    public async Task CreateGarageAsync(Garage garage)
+    {
+        await _context.Garages.AddAsync(garage);
+        await _context.SaveChangesAsync();
+    }
 }

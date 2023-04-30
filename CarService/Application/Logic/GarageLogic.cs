@@ -32,4 +32,13 @@ public class GarageLogic : IGarageLogic
     {
         throw new NotImplementedException();
     }
+
+    public async Task CreateGarageAsync(int garageId)
+    {
+        Garage garage = new Garage
+        {
+            Id = garageId
+        };
+        await _garageRepository.CreateGarageAsync(garage);
+    }
 }

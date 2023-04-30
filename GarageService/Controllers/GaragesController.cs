@@ -19,6 +19,36 @@ public class GaragesController : ControllerBase
         _logic = logic;
     }
 
+    [HttpPost]
+    public async Task<ActionResult<CarReadDto>> CreateGarageAsync([FromBody] GarageCreateDto carCreateDto)
+    {
+        try
+        {
+            // Convert from DTO to a Model
+            Garage garage = _mapper.Map<Garage>(carCreateDto);
+
+            // Delegate to the logic layer to create a garage 
+            Garage created = await _logic.CreateGarageAsync(garage);
+
+            // Map the created result into a ReadDto 
+            GarageReadDto createdDto = _mapper.Map<GarageReadDto>(created);
+
+            //Return 200 created 
+            return Created($"/Garages/{created.Id}", createdDto);
+        }
+        catch (ArgumentException e)
+        {
+            // Return 400 if the client made a mistake and didnt follow the rules of creating a garage
+            return BadRequest(e.Message);
+        }
+        catch (Exception e)
+        {
+            // Return 500 if the system failed to create a garage
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+
     [HttpGet]
     public async Task<ActionResult<IEnumerable<GarageReadDto>>> GetAllGaragesAsync([FromQuery] GarageQueryDto garageQueryDto)
     {

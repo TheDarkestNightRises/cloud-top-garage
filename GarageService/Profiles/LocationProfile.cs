@@ -12,5 +12,7 @@ public class LocationProfile : Profile
         //Source --> Target
         CreateMap<Location, LocationReadDto>();
         CreateMap<LocationReadDto, Location>();
+        CreateMap<Location, LocationCreateDto>();
+        CreateMap<LocationCreateDto, Location>();
     }
 }

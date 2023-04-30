@@ -59,4 +59,11 @@ public class GarageRepository : IGarageRepository
         _context.Entry(garage).State = EntityState.Modified;
         await _context.SaveChangesAsync();
     }
+
+    public async Task<Garage> CreateGarageAsync(Garage garage)
+    {
+        await _context.Garages.AddAsync(garage);
+        await _context.SaveChangesAsync();
+        return garage;
+    }
 }
