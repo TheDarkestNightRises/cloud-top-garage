@@ -25,10 +25,10 @@ public class GaragesController : ControllerBase
         try
         {
             // Convert from DTO to a Model
-            Garage car = _mapper.Map<Garage>(carCreateDto);
+            Garage garage = _mapper.Map<Garage>(carCreateDto);
 
             // Delegate to the logic layer to create a garage 
-            Garage created = await _logic.CreateGarageAsync(car);
+            Garage created = await _logic.CreateGarageAsync(garage);
 
             // Map the created result into a ReadDto 
             GarageReadDto createdDto = _mapper.Map<GarageReadDto>(created);
