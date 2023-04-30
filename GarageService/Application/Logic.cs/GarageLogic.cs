@@ -3,6 +3,8 @@ using GarageService.Models;
 using GarageService.Data;
 using MassTransit;
 using Contracts;
+using System.ComponentModel.DataAnnotations;
+
 public class GarageLogic : IGarageLogic
 {
     private readonly IGarageRepository _garageRepository;
@@ -55,16 +57,29 @@ public class GarageLogic : IGarageLogic
     }
     public async Task<Garage> CreateGarageAsync(Garage garage)
     {
+        ValidateGarage(garage);
         User? user = await _userRepository.GetUserByIdAsync(garage.User.Id);
         if (user is null)
         {
-            throw new Exception($"Car with id {garage.User.Id} not found");
+            throw new Exception($"User with id {garage.User.Id} not found");
         }
-
         garage.User = user;
-        Garage carCreated = await _garageRepository.CreateGarageAsync(garage);
+        Garage garageCreated = await _garageRepository.CreateGarageAsync(garage);
         await _publishEndpoint.Publish(new GarageCreated(garage.Id));
 
-        return carCreated;
+        return garageCreated;
+    }
+    private void ValidateGarage(Garage car)
+    {
+        var validationContext = new ValidationContext(car);
+        var validationResults = new List<System.ComponentModel.DataAnnotations.ValidationResult>();
+
+        bool isValid = Validator.TryValidateObject(car, validationContext, validationResults, true);
+
+        if (!isValid)
+        {
+            var firstError = validationResults.First();
+            throw new ArgumentException(firstError.ErrorMessage);
+        }
     }
 }
