@@ -6,8 +6,10 @@ public class Garage
 {
     public int Id { get; set; }
     [Required]
+    [StringLength(50, MinimumLength = 1, ErrorMessage = "Name must be between {2} and {1    } characters.")]
     public string Name { get; set; }
     [Required]
+    [Range(1, int.MaxValue, ErrorMessage = "Capacity must be a positive number.")]
     public int Capacity { get; set; }
 
     public int AvailableSlots
