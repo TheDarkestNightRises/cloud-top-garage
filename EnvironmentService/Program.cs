@@ -25,7 +25,7 @@ builder.Services.AddMassTransit(x =>
     });
 });
 // Add services to the container.
-
+builder.Services.AddSingleton<WebSocketSharp.WebSocketClient>(provider => new WebSocketSharp.WebSocketClient("wss://iotnet.cibicom.dk/app?token=vnoUBwAAABFpb3RuZXQuY2liaWNvbS5ka54Zx4fqYp5yzAQtnGzDDUw="));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

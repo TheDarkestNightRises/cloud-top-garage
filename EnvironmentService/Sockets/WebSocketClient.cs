@@ -15,7 +15,9 @@ public class WebSocketClient
 
     public void Connect()
     {
+         Console.WriteLine("WebSocket connecting");
         _webSocket.Connect();
+        Console.WriteLine("WebSocket connected");
     }
 
     public void Send(byte[] data)
