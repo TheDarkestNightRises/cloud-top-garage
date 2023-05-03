@@ -8,6 +8,7 @@ public class WebSocketClient
     public WebSocketClient(string url)
     {
         _webSocket = new WebSocket(url);
+        _webSocket.SslConfiguration.EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12;
         _webSocket.OnOpen += OnOpen;
         _webSocket.OnMessage += OnMessage;
         _webSocket.OnClose += OnClose;
@@ -15,8 +16,15 @@ public class WebSocketClient
 
     public void Connect()
     {
-         Console.WriteLine("WebSocket connecting");
-        _webSocket.Connect();
+        Console.WriteLine("WebSocket connecting");
+        try
+        {
+            _webSocket.Connect();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
         Console.WriteLine("WebSocket connected");
     }
 

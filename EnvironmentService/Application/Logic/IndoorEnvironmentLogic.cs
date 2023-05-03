@@ -1,3 +1,4 @@
+using System.Text;
 using EnvironmentService.Application.LogicContracts;
 using EnvironmentService.Data;
 using EnvironmentService.Models;
@@ -11,15 +12,15 @@ public class IndoorEnvironmentLogic : IIndoorEnvironmentLogic
 
 
     public IndoorEnvironmentLogic(IIndoorEnvironmentRepository indoorEnvironmentRepository, WebSocketSharp.WebSocketClient client)
-     {
-         _indoorEnvironmentRepository = indoorEnvironmentRepository;
-         _webSocketClient = client;
-         //_webSocketClient.Connect();
-     }
+    {
+        _indoorEnvironmentRepository = indoorEnvironmentRepository;
+        _webSocketClient = client;
+        //_webSocketClient.Connect();
+    }
 
     public async Task<IEnumerable<IndoorEnvironment>> GetAllIndoorEnvironmentsAsync()
     {
-         _webSocketClient.Connect();
-       return await _indoorEnvironmentRepository.GetAllIndoorEnvironmentsAsync();
+        _webSocketClient.Connect();
+        return await _indoorEnvironmentRepository.GetAllIndoorEnvironmentsAsync();
     }
 }
