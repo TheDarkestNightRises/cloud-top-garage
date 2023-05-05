@@ -27,6 +27,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 if (builder.Environment.IsProduction())
 {
     Console.WriteLine("--> Using SqlServer Db");
@@ -49,6 +50,12 @@ builder.Services.AddScoped<IGarageLogic, GarageLogic>();
 builder.Services.AddScoped<ICarLogic, CarLogic>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();
+
+app.UseCors(x => x
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .SetIsOriginAllowed(origin => true) // allow any origin
+    .AllowCredentials());
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
