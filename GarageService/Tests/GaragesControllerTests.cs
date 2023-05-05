@@ -98,6 +98,92 @@ public class GaragesControllerTests
         Assert.Equal(emsg, errorResponse.Value);
     }
 
+    // ----------------------------- CREATE GARAGE --------------------------------------------
 
 
+    [Fact]
+    public async Task CreateGarageAsync_ReturnsOkResult_WhenGaragesCreated()
+    {
+        // Arrange
+        var garageCreateDto = new GarageCreateDto
+        {
+            Name = "TopGarage",
+            Capacity = 15
+        };
+        var garage = new Garage
+        {
+            Id = 1,
+            Name = "TopGarage",
+            Capacity = 15
+        };
+        var createdGarage = new Garage
+        {
+            Id = 1,
+            Name = "TopGarage",
+            Capacity = 15
+        };
+        var createdDto = new GarageReadDto
+        {
+            Id = 1,
+            Name = "TopGarage",
+            Capacity = 15
+        };
+
+        _mapperMock.Setup(m => m.Map<Garage>(garageCreateDto)).Returns(garage);
+        _logicMock.Setup(l => l.CreateGarageAsync(garage)).ReturnsAsync(createdGarage);
+        _mapperMock.Setup(m => m.Map<GarageReadDto>(createdGarage)).Returns(createdDto);
+
+        // Act
+        var result = await _controller.CreateGarageAsync(garageCreateDto);
+
+        // Assert
+        var createdResult = Assert.IsType<CreatedResult>(result.Result);
+        var model = Assert.IsType<GarageReadDto>(createdResult.Value);
+        Console.WriteLine(model);
+        Assert.Equal(201, createdResult.StatusCode);
+        Assert.Equal(createdDto, model);
+    }
+
+    [Fact]
+    public async Task CreateGarageAsync_ReturnsBadRequest_WhenInvalidDataProvided()
+    {
+
+        // Arrange
+        var garageCreateDto = new GarageCreateDto
+        {
+            Name = "",
+            Capacity = -5
+        };
+
+        // Act
+        var result = await _controller.CreateGarageAsync(garageCreateDto);
+
+        // Assert
+        var badRequestResult = Assert.IsType<ObjectResult>(result.Result);
+        Assert.Equal(500, badRequestResult.StatusCode);
+        Assert.NotNull(badRequestResult.Value);
+    }
+
+    [Fact]
+    public async Task CreateGarageAsync_ReturnsInternalServerError_WhenExceptionOccurs()
+    {
+        // Arrange
+        var garageCreateDto = new GarageCreateDto
+        {
+            Name = "TopGarage",
+            Capacity = 15
+        };
+
+        _logicMock.Setup(l => l.CreateGarageAsync(It.IsAny<Garage>())).ThrowsAsync(new Exception("Something went wrong"));
+
+        // Act
+        var result = await _controller.CreateGarageAsync(garageCreateDto);
+
+        // Assert
+        var internalServerErrorResult = Assert.IsType<ObjectResult>(result.Result);
+        Assert.Equal(500, internalServerErrorResult.StatusCode);
+        Assert.NotNull(internalServerErrorResult.Value);
+    }
+
+    // ----------------------------- GET GARAGE BY ID --------------------------------------------
 }

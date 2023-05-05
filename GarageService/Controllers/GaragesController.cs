@@ -127,7 +127,7 @@ public class GaragesController : ControllerBase
         }
         catch (Exception e)
         {
-            // Return 500 if the system failed to delete the garage
+            // Return 500 if the system failed to fetch the garage
             Console.WriteLine(e);
             return StatusCode(500, e.Message);
         }
