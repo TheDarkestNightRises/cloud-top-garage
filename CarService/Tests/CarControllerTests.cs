@@ -211,4 +211,72 @@ public class CarsControllerTests
         var statusCodeResult = Assert.IsType<ObjectResult>(result.Result);
         Assert.Equal(StatusCodes.Status500InternalServerError, statusCodeResult.StatusCode);
     }
+    [Fact]
+    public async Task GetCarById_WhenCarExists_ReturnsOkResult()
+    {
+        // Arrange
+        var garageDto = new GarageDto{ Id = 1 };
+        var engine = new Engine{ Id = 1, Size = 1.4, FuelType = "Diesel", PowerHP = 100, TorqueNM = 400 };
+
+        var garage = new Garage{ Id = 1 };
+
+        var car1 = new Car { Id = 1, Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 5, Engine = engine, Garage = garage };
+        var engineReadDto = new EngineReadDto{ Id = 1, Size = 1.4, FuelType = "Diesel", PowerHP = 100, TorqueNM = 400 };
+
+        var carReadDto1 = new CarReadDto { Id = 1, Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 5, Engine = engineReadDto, Garage = garageDto };
+        _logicMock.Setup(x => x.GetCarAsync(1)).ReturnsAsync(car1);
+        _mapperMock.Setup(x => x.Map<CarReadDto>(car1)).Returns(carReadDto1);
+        _mapperMock.Setup(m => m.Map<EngineReadDto>(engine)).Returns(engineReadDto);
+        _mapperMock.Setup(m => m.Map<GarageDto>(garage)).Returns(garageDto);
+
+        // Act
+        var result = await _controller.GetCarById(1);
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result.Result);
+        var model = Assert.IsType<CarReadDto>(okResult.Value);
+        Assert.Equal(carReadDto1, model);
+    }
+
+    [Fact]
+    public async Task GetCarById_WhenCarDoesNotExist_ReturnsNotFoundResult()
+    {
+        // Arrange
+        _logicMock.Setup(x => x.GetCarAsync(1)).ReturnsAsync((Car)null);
+
+        // Act
+        var result = await _controller.GetCarById(1);
+
+        // Assert
+        Assert.IsType<NotFoundResult>(result.Result);
+    }
+
+    [Fact]
+    public async Task GetCarById_WhenArgumentExceptionThrown_ReturnsBadRequestResult()
+    {
+        // Arrange
+        _logicMock.Setup(x => x.GetCarAsync(1)).ThrowsAsync(new ArgumentException("Invalid argument"));
+
+        // Act
+        var result = await _controller.GetCarById(1);
+
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
+        Assert.Equal("Invalid argument", badRequestResult.Value);
+    }
+
+    [Fact]
+    public async Task GetCarById_WhenExceptionThrown_ReturnsInternalServerErrorResult()
+    {
+        // Arrange
+        _logicMock.Setup(x => x.GetCarAsync(1)).ThrowsAsync(new Exception("Error message"));
+
+        // Act
+        var result = await _controller.GetCarById(1);
+
+        // Assert
+        var statusCodeResult = Assert.IsType<ObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status500InternalServerError, statusCodeResult.StatusCode);
+    }
+    
 }
