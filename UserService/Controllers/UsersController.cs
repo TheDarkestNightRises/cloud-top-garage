@@ -64,4 +64,31 @@ public class UsersController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+
+    [HttpGet("{email}")]
+    public async Task<ActionResult<UserReadDto>> GetUserByEmail(string email)
+    {
+        try
+        {
+            // Delegate to the logic layer to get the user by email
+            var user = await _userLogic.GetUserByEmail(email);
+            if (user == null)
+            {
+                // Return 404 if no user was found
+                return NotFound();
+            }
+            // Convert from Model to Read DTO
+            var userReadDto = _mapper.Map<UserReadDto>(user);
+
+            //Return 200 retrieved
+            return Ok(userReadDto);
+        }
+        catch (Exception e)
+        {
+            // Return 500 if the system failed to fetch the user
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+
 }

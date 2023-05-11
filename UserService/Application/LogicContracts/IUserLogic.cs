@@ -6,6 +6,7 @@ public interface IUserLogic
 {
     Task<User> CreateUser(User user);
     Task<IEnumerable<User>> GetAllUsersAsync();
+    Task<User?> GetUserByEmail(string email);
     Task<User> LoginUserAsync(string email, string password);
     Task<User> UpdateUser(User userToUpdate);
     

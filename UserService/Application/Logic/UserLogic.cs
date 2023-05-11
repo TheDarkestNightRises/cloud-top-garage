@@ -61,4 +61,11 @@ public class UserLogic : IUserLogic
         await _userRepository.UpdateUserAsync(userFound);
         return userFound;
     }
+
+    public async Task<User?> GetUserByEmail(string email)
+    {
+        return await _userRepository.GetUserByEmail(email);
+    }
+
+
 }
