@@ -329,8 +329,8 @@ public class CarsControllerTests
         {
             // Arrange
             int carId = 1;
-            var imageBytes = await File.ReadAllBytesAsync("../../../Images/car2.jpg"); // Provide the path to a real image file
-            var imageFile = new FormFile(new MemoryStream(imageBytes), 0, imageBytes.Length, "image/jpg", "carx.jpg");
+            var imageBytes = new byte[]{ 1, 2, 3};
+            var imageFile = new FormFile(new MemoryStream(imageBytes), 0, imageBytes.Length, "image/jpg", "car.jpg");
             
             var carImage = new Image { Data = imageBytes };
             var createdImage = new Image { Data = imageBytes };
