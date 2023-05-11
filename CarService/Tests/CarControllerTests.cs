@@ -140,4 +140,75 @@ public class CarsControllerTests
         // Assert
         Assert.IsType<BadRequestObjectResult>(result);
     }
+
+    [Fact]
+    public async Task CreateCar_ValidCar_ReturnsCreatedWithCorrectObject()
+    {
+        // Arrange
+        var engineCreateDto = new EngineCreateDto{ Size = 1.4, FuelType = "Diesel", PowerHP = 100, TorqueNM = 400 };
+        var garageDto = new GarageDto{ Id = 1 };
+        var carCreateDto = new CarCreateDto{ Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 5, Engine = engineCreateDto, Garage = garageDto };
+        
+        var engine = new Engine{ Id = 1, Size = 1.4, FuelType = "Diesel", PowerHP = 100, TorqueNM = 400 };
+
+        var garage = new Garage{ Id = 1 };
+
+        var car = new Car { Id = 1, Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 5, Engine = engine, Garage = garage };
+        var engineReadDto = new EngineReadDto{ Id = 1, Size = 1.4, FuelType = "Diesel", PowerHP = 100, TorqueNM = 400 };
+
+        var carReadDto = new CarReadDto { Id = 1, Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 5, Engine = engineReadDto, Garage = garageDto };
+        
+        _mapperMock.Setup(m => m.Map<Car>(carCreateDto)).Returns(car);
+        _mapperMock.Setup(m => m.Map<Engine>(engineCreateDto)).Returns(engine);
+        _mapperMock.Setup(m => m.Map<Garage>(garageDto)).Returns(garage);
+        _logicMock.Setup(l => l.CreateCarAsync(car)).ReturnsAsync(car);
+        _mapperMock.Setup(m => m.Map<CarReadDto>(car)).Returns(carReadDto);
+        _mapperMock.Setup(m => m.Map<EngineReadDto>(engine)).Returns(engineReadDto);
+        _mapperMock.Setup(m => m.Map<GarageDto>(garage)).Returns(garageDto);
+        // Act
+        var result = await _controller.CreateCar(carCreateDto);
+
+        // Assert
+        var createdResult = Assert.IsType<CreatedResult>(result.Result);
+        var createdDto = Assert.IsType<CarReadDto>(createdResult.Value);
+        Console.WriteLine(carReadDto.Description);
+        Assert.Equal(carReadDto, createdDto);
+    }
+
+    [Fact]
+    public async Task CreateCar_InvalidCar_ReturnsBadRequest()
+    {
+        var carCreateDto = new CarCreateDto{ Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 0 };
+        var car = new Car();
+        var carReadDto = new CarReadDto();
+        _mapperMock.Setup(m => m.Map<Car>(carCreateDto)).Returns(car);
+        _logicMock.Setup(l => l.CreateCarAsync(car)).Throws(new ArgumentException());
+        _mapperMock.Setup(m => m.Map<CarReadDto>(car)).Returns(carReadDto);
+
+        // Act
+        var result = await _controller.CreateCar(carCreateDto);
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
+        //var error = Assert.IsType<String>(badRequestResult.Value);
+    }
+
+    [Fact]
+    public async Task CreateCar_Exception_ReturnsStatusCode500()
+    {
+            // Arrange
+        var carCreateDto = new CarCreateDto{ Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 5
+        };
+        var car = new Car();
+        var carReadDto = new CarReadDto();
+        _mapperMock.Setup(m => m.Map<Car>(carCreateDto)).Returns(car);
+        _logicMock.Setup(l => l.CreateCarAsync(car)).Throws(new Exception());
+        _mapperMock.Setup(m => m.Map<CarReadDto>(car)).Returns(carReadDto);
+
+        // Act
+        var result = await _controller.CreateCar(carCreateDto);
+
+        // Assert
+        var statusCodeResult = Assert.IsType<ObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status500InternalServerError, statusCodeResult.StatusCode);
+    }
 }
