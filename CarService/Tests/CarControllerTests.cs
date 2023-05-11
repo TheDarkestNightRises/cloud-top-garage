@@ -84,4 +84,60 @@ public class CarsControllerTests
         // Assert
         Assert.IsType<NotFoundResult>(result.Result);
     }
+    [Fact]
+    public async Task UpdateCar_ReturnsUpdatedCar_WhenCarExists()
+    {
+        // Arrange
+        var garageDto = new GarageDto{ Id = 1 };
+
+        var carUpdateDto = new CarUpdateDto{ Id = 1, Garage = garageDto };
+        var garage = new Garage{ Id = 1 };
+        var car = new Car{ Id = 1, Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 5, Garage = garage };
+        _mapperMock.Setup(x => x.Map<Car>(carUpdateDto)).Returns(car);
+        _mapperMock.Setup(m => m.Map<Garage>(garageDto)).Returns(garage);
+        _logicMock.Setup(x => x.UpdateCarAsync(car)).ReturnsAsync(car);
+
+        // Act
+        var result = await _controller.UpdateCarAsync(carUpdateDto);
+
+        // Assert
+        Assert.IsType<NoContentResult>(result);
+    }
+    
+    [Fact]
+    public async Task UpdateCar_ReturnsStatusCode500_WhenExceptionThrown()
+    {
+        // Arrange
+        var carUpdateDto = new CarUpdateDto();
+        var car = new Car();
+        _mapperMock.Setup(x => x.Map<Car>(carUpdateDto)).Returns(car);
+        _logicMock.Setup(x => x.UpdateCarAsync(car)).Throws(new Exception());
+
+        // Act
+        var result = await _controller.UpdateCarAsync(carUpdateDto);
+
+        // // Assert
+        // Assert.IsType<NoContentResult>(result);
+
+        // Assert
+        Assert.IsType<ObjectResult>(result);
+        var objectResult = (ObjectResult)result;
+        Assert.Equal(500, objectResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task UpdateCar_ReturnsNotFoundResult_WhenCarDoesNotExist()
+    {
+        // Act
+        var carUpdateDto = new CarUpdateDto();
+        var car = new Car { Id = 1, Manufacturer = "Toyota", Model = "Camry", Year = 2021 };
+        _mapperMock.Setup(x => x.Map<Car>(carUpdateDto)).Returns(car);
+        _logicMock.Setup(x => x.UpdateCarAsync(car)).Throws(new ArgumentException($"There is no car with the id: {carUpdateDto.Id}"));
+
+        // Act
+        var result = await _controller.UpdateCarAsync(carUpdateDto);
+
+        // Assert
+        Assert.IsType<BadRequestObjectResult>(result);
+    }
 }
