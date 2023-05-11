@@ -278,5 +278,50 @@ public class CarsControllerTests
         var statusCodeResult = Assert.IsType<ObjectResult>(result.Result);
         Assert.Equal(StatusCodes.Status500InternalServerError, statusCodeResult.StatusCode);
     }
-    
+    [Fact]
+    public async Task DeleteCarAsync_ReturnsNoContent_WhenLogicDeletesCar()
+    {
+        // Arrange
+        int id = 1;
+        _logicMock.Setup(x => x.DeleteCarAsync(id)).Verifiable();
+
+        // Act
+        var result = await _controller.DeleteCarAsync(id);
+
+        // Assert
+        Assert.IsType<NoContentResult>(result);
+        _logicMock.Verify();
+    }
+
+    [Fact]
+    public async Task DeleteCarAsync_ReturnsBadRequest_WhenLogicThrowsArgumentException()
+    {
+        // Arrange
+        int id = 1;
+        var message = "Car not found";
+        _logicMock.Setup(x => x.DeleteCarAsync(id)).ThrowsAsync(new ArgumentException(message));
+
+        // Act
+        var result = await _controller.DeleteCarAsync(id);
+
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal(message, badRequestResult.Value);
+    }
+
+    [Fact]
+    public async Task DeleteCarAsync_ReturnsInternalServerError_WhenLogicThrowsException()
+    {
+        // Arrange
+        int id = 1;
+        var exceptionMessage = "Something went wrong";
+        _logicMock.Setup(x => x.DeleteCarAsync(id)).ThrowsAsync(new Exception(exceptionMessage));
+
+        // Act
+        var result = await _controller.DeleteCarAsync(id);
+
+        // Assert
+        var statusCodeResult = Assert.IsType<ObjectResult>(result);
+        Assert.Equal(500, statusCodeResult.StatusCode);
+    }
 }
