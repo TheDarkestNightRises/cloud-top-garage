@@ -359,4 +359,65 @@ public class CarsControllerTests
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
         Assert.Equal("Invalid image", badRequestResult.Value);
     }
+     [Fact]
+    public async Task GetCarImage_Returns_FileContentResult_With_Image()
+    {
+        // Arrange
+        const int id = 123;
+        var imageData = new byte[] { 0x01, 0x02, 0x03 };
+        var carImage = new Image { Data = imageData };
+        _logicMock.Setup(x => x.GetCarImageAsync(id)).ReturnsAsync(carImage);
+
+        // Act
+        var result = await _controller.GetCarImage(id);
+
+        // Assert
+        var fileContentResult = Assert.IsType<FileContentResult>(result);
+        Assert.Equal("image/jpeg", fileContentResult.ContentType);
+        Assert.Equal(imageData, fileContentResult.FileContents);
+    }
+
+    [Fact]
+    public async Task GetCarImage_Returns_NotFound_When_Image_Not_Found()
+    {
+        // Arrange
+        const int id = 123;
+        _logicMock.Setup(x => x.GetCarImageAsync(id)).ReturnsAsync(null as Image);
+
+        // Act
+        var result = await _controller.GetCarImage(id);
+
+        // Assert
+        Assert.IsType<NotFoundResult>(result);
+    }
+
+    [Fact]
+    public async Task GetCarImage_Returns_BadRequest_When_ArgumentException()
+    {
+        // Arrange
+        const int id = 123;
+        _logicMock.Setup(x => x.GetCarImageAsync(id)).ThrowsAsync(new ArgumentException("Invalid argument"));
+
+        // Act
+        var result = await _controller.GetCarImage(id);
+
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal("Invalid argument", badRequestResult.Value);
+    }
+
+    [Fact]
+    public async Task GetCarImage_Returns_InternalServerError_When_Exception()
+    {
+        // Arrange
+        const int id = 123;
+        _logicMock.Setup(x => x.GetCarImageAsync(id)).ThrowsAsync(new Exception("Something went wrong"));
+
+        // Act
+        var result = await _controller.GetCarImage(id);
+
+        // Assert
+        var statusCodeResult = Assert.IsType<ObjectResult>(result);
+        Assert.Equal(StatusCodes.Status500InternalServerError, statusCodeResult.StatusCode);
+    }
 }
