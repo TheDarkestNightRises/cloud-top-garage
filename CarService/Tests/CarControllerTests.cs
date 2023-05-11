@@ -324,4 +324,39 @@ public class CarsControllerTests
         var statusCodeResult = Assert.IsType<ObjectResult>(result);
         Assert.Equal(500, statusCodeResult.StatusCode);
     }
+    [Fact]
+        public async Task CreateCarImage_ReturnsFileContentResult_WithCreatedImageData()
+        {
+            // Arrange
+            int carId = 1;
+            var imageBytes = await File.ReadAllBytesAsync("../../../Images/car2.jpg"); // Provide the path to a real image file
+            var imageFile = new FormFile(new MemoryStream(imageBytes), 0, imageBytes.Length, "image/jpg", "carx.jpg");
+            
+            var carImage = new Image { Data = imageBytes };
+            var createdImage = new Image { Data = imageBytes };
+            
+            _logicMock.Setup(x => x.CreateCarImage(carImage, carId)).ReturnsAsync(createdImage);
+            Assert.Equal(carImage.Data, createdImage.Data);
+            // Act
+            var result = await _controller.CreateCarImage(carId, imageFile);
+
+            // Assert
+            var fileContentResult = Assert.IsType<FileContentResult>(result);
+            Assert.Equal("image/jpeg", fileContentResult.ContentType);
+            Assert.Equal(createdImage.Data, fileContentResult.FileContents);
+        }
+    [Fact]
+    public async Task CreateCarImage_InvalidImage_ReturnsBadRequest()
+    {
+        // Arrange
+        var formFileMock = new Mock<IFormFile>();
+        formFileMock.Setup(x => x.CopyToAsync(It.IsAny<Stream>(), CancellationToken.None)).ThrowsAsync(new ArgumentException("Invalid image"));
+
+        // Act
+        var result = await _controller.CreateCarImage(1, formFileMock.Object);
+
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal("Invalid image", badRequestResult.Value);
+    }
 }
