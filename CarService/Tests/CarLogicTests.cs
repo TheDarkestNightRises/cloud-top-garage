@@ -66,5 +66,41 @@ public class CarLogicTests
         await Assert.ThrowsAsync<ArgumentException>(async () => await _carLogic.CreateCarAsync(car));
     }
 
+    [Fact]
+    public async Task GetAllCarsAsync_ReturnsAllCars()
+    {
+        // Arrange
+        var cars = new List<Car> { new Car { Id = 1 }, new Car { Id = 2 } };
+        _mockCarRepository.Setup(x => x.GetAllCarsAsync()).ReturnsAsync(cars);
+
+        // Act
+        var result = await _carLogic.GetAllCarsAsync();
+
+        // Assert
+        Assert.Equal(cars, result);
+    }
+
+    [Fact]
+    public async Task GetAllCarsAsync_WithCarQuery_ReturnsFilteredCars()
+    {
+        // Arrange
+        var carQuery = new CarQuery() { GarageId = 1, CarName = "Car1" };
+
+        var cars = new List<Car>()
+        {
+            new Car() { Id = 1, Name = "Car1", Garage = new Garage() { Id = 1 } },
+            new Car() { Id = 2, Name = "Car2", Garage = new Garage() { Id = 2 } },
+            new Car() { Id = 3, Name = "Car3", Garage = new Garage() { Id = 1 } }
+        };
+
+        _mockCarRepository.Setup(x => x.GetAllCarsAsync(carQuery)).ReturnsAsync(cars.Where(c => c.Name == "Car1" && c.Garage?.Id == 1));
+
+        // Act
+        var result = await _carLogic.GetAllCarsAsync(carQuery);
+
+        // Assert
+        Assert.Equal(1, result.Count());
+        Assert.Equal("Car1", result.First().Name);
+    }
 
 }
