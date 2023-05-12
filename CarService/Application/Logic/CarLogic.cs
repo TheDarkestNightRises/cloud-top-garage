@@ -26,7 +26,7 @@ public class CarLogic : ICarLogic
         Garage? garage = await _garageRepository.GetGarageAsync(car.Garage.Id);
         if (garage is null)
         {
-            throw new Exception($"Car with id {car.Garage.Id} not found");
+            throw new Exception($"Garage with id {car.Garage.Id} not found");
         }
 
         car.Garage = garage;
@@ -136,4 +136,5 @@ public class CarLogic : ICarLogic
             throw new ArgumentException(firstError.ErrorMessage);
         }
     }
+    
 }
