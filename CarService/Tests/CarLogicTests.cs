@@ -156,4 +156,33 @@ public class CarLogicTests
         // Assert
         _mockCarRepository.Verify(repo => repo.DeleteCarAsync(carId), Times.Once);
     }
+    [Fact]
+    public async Task GetCarImageAsync_CarNotFound_ThrowsException()
+    {
+        // Arrange
+        int carId = 1;
+        Car car = null;
+        _mockCarRepository.Setup(repo => repo.GetCarAsync(carId)).ReturnsAsync(car);
+
+        // Act + Assert
+        await Assert.ThrowsAsync<Exception>(() => _carLogic.GetCarImageAsync(carId));
+    }
+
+    [Fact]
+    public async Task GetCarImageAsync_CarFound_ReturnsCarImage()
+    {
+        // Arrange
+        int carId = 1;
+        Car car = new Car { Id = carId };
+        Image carImage = new Image();
+        _mockCarRepository.Setup(repo => repo.GetCarAsync(carId)).ReturnsAsync(car);
+        _mockCarRepository.Setup(repo => repo.GetCarImageAsync(carId)).ReturnsAsync(carImage);
+
+        // Act
+        var result = await _carLogic.GetCarImageAsync(carId);
+
+        // Assert
+        Assert.Equal(carImage, result);
+    }
+
 }
