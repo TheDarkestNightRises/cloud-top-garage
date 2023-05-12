@@ -45,9 +45,10 @@ else
     // builder.Services.AddDbContext<AppDbContext>(opt =>
     //     opt.UseSqlServer(builder.Configuration.GetConnectionString("EnvironmentsConn")));
 }
-
+builder.Services.AddScoped<IStatRepository, StatRepository>();
 builder.Services.AddScoped<IIndoorEnvironmentRepository, IndoorEnvironmentRepository>();
 builder.Services.AddScoped<IIndoorEnvironmentLogic, IndoorEnvironmentLogic>();
+builder.Services.AddScoped<IStatLogic, StatLogic>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();

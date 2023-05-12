@@ -42,7 +42,7 @@ public static class PrepDb
 
             var indoorEnvironments = new List<IndoorEnvironment>
             {
-                new IndoorEnvironment { Name = "Environment 1", Garage = garages[0], MacAddress = 120,LorraWanURL="wss://iotnet.cibicom.dk/app?token=vnoUBwAAABFpb3RuZXQuY2liaWNvbS5ka54Zx4fqYp5yzAQtnGzDDUw=" },
+                new IndoorEnvironment { Name = "Environment 1", Garage = garages[0], MacAddress = 120,LoRaWANURL="wss://iotnet.cibicom.dk/app?token=vnoUBwAAABFpb3RuZXQuY2liaWNvbS5ka54Zx4fqYp5yzAQtnGzDDUw=" },
             };
 
             context.Garages.AddRange(garages);

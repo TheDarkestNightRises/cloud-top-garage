@@ -14,6 +14,11 @@ public class IndoorEnvironmentRepository : IIndoorEnvironmentRepository
     }
     public async Task<IEnumerable<IndoorEnvironment>> GetAllIndoorEnvironmentsAsync()
     {
-        return await _context.IndoorEnvironments.ToListAsync();
+        return await _context.IndoorEnvironments.Include(indoorEnvironment => indoorEnvironment.Garage).ToListAsync();
+    }
+
+    public async Task<IndoorEnvironment?> GetIndoorEnvironmentByMacAdress(int macAddress)
+    {
+        return await _context.IndoorEnvironments.FirstOrDefaultAsync(i => i.MacAddress == macAddress);
     }
 }

@@ -10,11 +10,13 @@ namespace EnvironmentService.Application.Logic;
 public class IndoorEnvironmentLogic : IIndoorEnvironmentLogic
 {
     private readonly IIndoorEnvironmentRepository _indoorEnvironmentRepository;
+    private readonly IStatRepository _statRepository;
     private Dictionary<int, WebSocket> _webSocketClients;
 
-    public IndoorEnvironmentLogic(IIndoorEnvironmentRepository indoorEnvironmentRepository)
+    public IndoorEnvironmentLogic(IIndoorEnvironmentRepository indoorEnvironmentRepository, IStatRepository statRepository)
     {
         _indoorEnvironmentRepository = indoorEnvironmentRepository;
+        _statRepository = statRepository;
         _webSocketClients = new Dictionary<int, WebSocket>();
     }
 
@@ -26,22 +28,24 @@ public class IndoorEnvironmentLogic : IIndoorEnvironmentLogic
         foreach (var environment in indoorEnvironments)
         {
             // Create a WebSocket client for each IndoorEnvironment
-            WebSocket client = new WebSocket(environment.LorraWanURL);
-            client.OnMessage += (sender, e) => OnMessageFromIot(e.RawData, environment);
+            WebSocket client = new WebSocket(environment.LoRaWANURL);
+            client.OnMessage += async (sender, e) => await OnMessageFromIotAsync(e.RawData);
             client.SslConfiguration.EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12;
-            Console.WriteLine($"Connecting environment {environment.Id} to {environment.LorraWanURL}");
+            Console.WriteLine($"Connecting environment {environment.Id} to {environment.LoRaWANURL}");
             client.Connect();
 
             _webSocketClients.Add(environment.Id, client);
         }
     }
 
-    private void OnMessageFromIot(byte[] data, IndoorEnvironment environment)
+
+
+    private async Task OnMessageFromIotAsync(byte[] data)
     {
         Console.WriteLine($"Message received from IoT: {data}");
-        Console.WriteLine($"Environment: {environment.Id}");
         var convertedData = ConvertDataIntoString(data);
-        TranslateData(convertedData);
+        var stat = await TranslateDataAsync(convertedData);
+        await _statRepository.AddStatAsync(stat);
     }
 
     public async Task<IEnumerable<IndoorEnvironment>> GetAllIndoorEnvironmentsAsync()
@@ -49,7 +53,7 @@ public class IndoorEnvironmentLogic : IIndoorEnvironmentLogic
         return await _indoorEnvironmentRepository.GetAllIndoorEnvironmentsAsync();
     }
 
-    private void TranslateData(string dataValue)
+    private async Task<Stat> TranslateDataAsync(string dataValue)
     {
         // Extract the individual components from the hex string
         string c02Hex = dataValue.Substring(0, 4);
@@ -74,6 +78,16 @@ public class IndoorEnvironmentLogic : IIndoorEnvironmentLogic
         Console.WriteLine($"Light: {light}");
         Console.WriteLine($"Motion/Alarm: {motionAlarm}");
         Console.WriteLine($"ID/MAC Address: {idMacAddress}");
+
+        Stat stat = new Stat()
+        {
+            CO2 = c02,
+            Temperature = temperature,
+            Humidity = humidity,
+            IndoorEnvironment = await _indoorEnvironmentRepository.GetIndoorEnvironmentByMacAdress(idMacAddress)
+        };
+
+        return stat;
     }
 
     private String ConvertDataIntoString(byte[] byteArray)
