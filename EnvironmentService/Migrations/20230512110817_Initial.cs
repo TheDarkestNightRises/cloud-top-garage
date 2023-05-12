@@ -30,7 +30,8 @@ namespace EnvironmentService.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     GarageId = table.Column<int>(type: "int", nullable: false),
-                    MacAddress = table.Column<int>(type: "int", nullable: false)
+                    MacAddress = table.Column<int>(type: "int", nullable: false),
+                    LoRaWANURL = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,7 +51,7 @@ namespace EnvironmentService.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IndoorEnvironmentId = table.Column<int>(type: "int", nullable: false),
-                    Temparature = table.Column<float>(type: "real", nullable: false),
+                    Temperature = table.Column<float>(type: "real", nullable: false),
                     Humidity = table.Column<float>(type: "real", nullable: false),
                     CO2 = table.Column<float>(type: "real", nullable: false)
                 },

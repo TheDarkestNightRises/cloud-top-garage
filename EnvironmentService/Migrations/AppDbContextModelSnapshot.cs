@@ -45,6 +45,10 @@ namespace EnvironmentService.Migrations
                     b.Property<int>("GarageId")
                         .HasColumnType("int");
 
+                    b.Property<string>("LoRaWANURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("MacAddress")
                         .HasColumnType("int");
 
@@ -76,7 +80,7 @@ namespace EnvironmentService.Migrations
                     b.Property<int>("IndoorEnvironmentId")
                         .HasColumnType("int");
 
-                    b.Property<float>("Temparature")
+                    b.Property<float>("Temperature")
                         .HasColumnType("real");
 
                     b.HasKey("Id");

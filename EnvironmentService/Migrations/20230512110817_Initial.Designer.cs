@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EnvironmentService.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230512091407_Initial")]
+    [Migration("20230512110817_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -48,6 +48,10 @@ namespace EnvironmentService.Migrations
                     b.Property<int>("GarageId")
                         .HasColumnType("int");
 
+                    b.Property<string>("LoRaWANURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("MacAddress")
                         .HasColumnType("int");
 
@@ -79,7 +83,7 @@ namespace EnvironmentService.Migrations
                     b.Property<int>("IndoorEnvironmentId")
                         .HasColumnType("int");
 
-                    b.Property<float>("Temparature")
+                    b.Property<float>("Temperature")
                         .HasColumnType("real");
 
                     b.HasKey("Id");
