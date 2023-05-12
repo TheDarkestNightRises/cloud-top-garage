@@ -102,5 +102,31 @@ public class CarLogicTests
         Assert.Equal(1, result.Count());
         Assert.Equal("Car1", result.First().Name);
     }
+     [Fact]
+    public async Task GetCarAsync_WithValidId_ReturnsCar()
+    {
+        // Arrange
+        var car = new Car() { Id = 1 };
 
+        _mockCarRepository.Setup(x => x.GetCarAsync(1)).ReturnsAsync(car);
+
+        // Act
+        var result = await _carLogic.GetCarAsync(1);
+
+        // Assert
+        Assert.Equal(car, result);
+    }
+
+    [Fact]
+    public async Task GetCarAsync_WithInvalidId_ReturnsNull()
+    {
+        // Arrange
+        _mockCarRepository.Setup(x => x.GetCarAsync(1)).ReturnsAsync((Car)null);
+
+        // Act
+        var result = await _carLogic.GetCarAsync(1);
+
+        // Assert
+        Assert.Null(result);
+    }
 }
