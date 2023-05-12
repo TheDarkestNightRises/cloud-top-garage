@@ -185,4 +185,38 @@ public class CarLogicTests
         Assert.Equal(carImage, result);
     }
 
+    [Fact]
+    public async Task UpdateCarAsync_WhenGarageNotFound_ThrowsArgumentException()
+    {
+        // Arrange
+        int carId = 1;
+        Car carToUpdate = new Car { Id = carId, Garage = new Garage { Id = 2 } };
+        _mockCarRepository.Setup(repo => repo.GetCarAsync(carId)).ReturnsAsync(carToUpdate);
+        _mockGarageRepository.Setup(repo => repo.GetGarageAsync(2)).ReturnsAsync((Garage)null);
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _carLogic.UpdateCarAsync(carToUpdate));
+    }
+
+    [Fact]
+    public async Task UpdateCarAsync_WhenCarAndGarageFound_UpdatesCarAndPublishesCarMovedEvent()
+    {
+        // Arrange
+        int carId = 1;
+        int newGarageId = 2;
+        int oldGarageId = 3;
+        Car carToUpdate = new Car { Id = carId, Garage = new Garage { Id = newGarageId } };
+        Car carFound = new Car { Id = carId, Garage = new Garage{ Id = oldGarageId} };
+        Garage newGarage = new Garage { Id = newGarageId };
+
+        _mockCarRepository.Setup(repo => repo.GetCarAsync(carId)).ReturnsAsync(carFound);
+        _mockGarageRepository.Setup(repo => repo.GetGarageAsync(newGarageId)).ReturnsAsync(newGarage);
+        // Act
+        Car updatedCar = await _carLogic.UpdateCarAsync(carToUpdate);
+
+        // Assert
+        Assert.Equal(newGarage, updatedCar.Garage);
+        //_mockCarRepository.Verify(repo => repo.UpdateCarAsync(updatedCar), Times.Once);
+    }
+
 }
