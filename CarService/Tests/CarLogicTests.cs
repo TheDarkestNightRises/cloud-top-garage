@@ -129,4 +129,31 @@ public class CarLogicTests
         // Assert
         Assert.Null(result);
     }
+
+     [Fact]
+    public async Task DeleteCarAsync_CarNotFound_ThrowsException()
+    {
+        // Arrange
+        int carId = 1;
+        Car car = null;
+        _mockCarRepository.Setup(repo => repo.GetCarAsync(carId)).ReturnsAsync(car);
+
+        // Act + Assert
+        await Assert.ThrowsAsync<Exception>(() => _carLogic.DeleteCarAsync(carId));
+    }
+
+    [Fact]
+    public async Task DeleteCarAsync_CarFound_DeletesCarAndPublishesMessage()
+    {
+        // Arrange
+        int carId = 1;
+        Car car = new Car { Id = carId };
+        _mockCarRepository.Setup(repo => repo.GetCarAsync(carId)).ReturnsAsync(car);
+        _mockCarRepository.Setup(repo1 => repo1.DeleteCarAsync(carId)).Verifiable();
+        // Act
+        await _carLogic.DeleteCarAsync(carId);
+
+        // Assert
+        _mockCarRepository.Verify(repo => repo.DeleteCarAsync(carId), Times.Once);
+    }
 }
