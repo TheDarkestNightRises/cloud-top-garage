@@ -21,11 +21,10 @@ builder.Services.AddMassTransit(x =>
             h.Username("guest");
             h.Password("guest");
         });
-        cfg.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter("CarService", false));
+        cfg.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter("EnvironmentService", false));
     });
 });
 // Add services to the container.
-builder.Services.AddSingleton<WebSocketSharp.WebSocketClient>(provider => new WebSocketSharp.WebSocketClient("wss://iotnet.cibicom.dk/app?token=vnoUBwAAABFpb3RuZXQuY2liaWNvbS5ka54Zx4fqYp5yzAQtnGzDDUw="));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -49,6 +48,7 @@ else
 
 builder.Services.AddScoped<IIndoorEnvironmentRepository, IndoorEnvironmentRepository>();
 builder.Services.AddScoped<IIndoorEnvironmentLogic, IndoorEnvironmentLogic>();
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();
 
@@ -72,4 +72,12 @@ app.UseAuthorization();
 
 app.MapControllers();
 PrepDb.PrepPopulation(app, app.Environment.IsProduction());
+// Build the service provider
+var serviceProvider = builder.Services.BuildServiceProvider();
+
+// Resolve the logic class
+var indoorEnvironmentLogic = serviceProvider.GetService<IIndoorEnvironmentLogic>();
+
+// Call the initialization method
+indoorEnvironmentLogic.InitializeWebSockets();
 app.Run();
