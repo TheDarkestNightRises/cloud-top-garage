@@ -2,7 +2,8 @@ using EnvironmentService.Models;
 
 namespace EnvironmentService.Application.LogicContracts;
 
-public interface IIndoorEnvironmentLogic 
+public interface IIndoorEnvironmentLogic
 {
-      public Task<IEnumerable<IndoorEnvironment>> GetAllIndoorEnvironmentsAsync();
+    public Task<IEnumerable<IndoorEnvironment>> GetAllIndoorEnvironmentsAsync();
+    void TranslateData(string dataValue);
 }
