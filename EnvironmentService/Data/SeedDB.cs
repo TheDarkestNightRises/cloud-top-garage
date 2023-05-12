@@ -35,13 +35,18 @@ public static class PrepDb
         if (!context.IndoorEnvironments.Any())
         {
             Console.WriteLine("--> Seeding Data...");
+            var garages = new List<Garage>
+            {
+                new Garage { Id = 1 },
+            };
 
-            context.IndoorEnvironments.AddRange(
-                new IndoorEnvironment() { Name = "Garage 1"},
-                new IndoorEnvironment() { Name = "Garage 2" },
-                new IndoorEnvironment() { Name = "Garage 3" }
-            );
+            var indoorEnvironments = new List<IndoorEnvironment>
+            {
+                new IndoorEnvironment { Name = "Environment 1", Garage = garages[0], MacAddress = 120,LoRaWANURL="wss://iotnet.cibicom.dk/app?token=vnoUBwAAABFpb3RuZXQuY2liaWNvbS5ka54Zx4fqYp5yzAQtnGzDDUw=" },
+            };
 
+            context.Garages.AddRange(garages);
+            context.IndoorEnvironments.AddRange(indoorEnvironments);
             context.SaveChanges();
         }
         else
