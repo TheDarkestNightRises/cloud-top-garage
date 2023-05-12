@@ -186,6 +186,18 @@ public class CarLogicTests
     }
 
     [Fact]
+    public async Task UpdateCarAsync_WhenCarNotFound_ThrowsArgumentException()
+    {
+        // Arrange
+        int carId = 1;
+        Car carToUpdate = new Car { Id = carId };
+        _mockCarRepository.Setup(repo => repo.GetCarAsync(carId)).ReturnsAsync((Car)null);
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _carLogic.UpdateCarAsync(carToUpdate));
+    }
+    
+    [Fact]
     public async Task UpdateCarAsync_WhenGarageNotFound_ThrowsArgumentException()
     {
         // Arrange
@@ -218,5 +230,39 @@ public class CarLogicTests
         Assert.Equal(newGarage, updatedCar.Garage);
         //_mockCarRepository.Verify(repo => repo.UpdateCarAsync(updatedCar), Times.Once);
     }
+    [Fact]
+    public async Task CreateCarImage_WithValidInputs_ShouldReturnCreatedImage()
+    {
+        // Arrange
+        int carId = 1;
+        var car = new Car { Id = carId };
+        var image = new Image { Id = 1, Data = new byte[] { 0x01, 0x02 } };
+        _mockCarRepository.Setup(repo => repo.GetCarAsync(carId)).ReturnsAsync(car);
+        _mockCarRepository.Setup(repo => repo.CreateCarImageAsync(image)).ReturnsAsync(image);
+        _mockCarRepository.Setup(repo => repo.UpdateCarWithImageAsync(image, carId)).Returns(Task.CompletedTask);
 
+        // Act
+        var result = await _carLogic.CreateCarImage(image, carId);
+
+        // Assert
+        Assert.Equal(image, result);
+        // _mockCarRepository.Verify(repo => repo.GetCarAsync(carId), Times.Once);
+        _mockCarRepository.Verify(repo => repo.CreateCarImageAsync(image), Times.Once);
+        _mockCarRepository.Verify(repo => repo.UpdateCarWithImageAsync(image, carId), Times.Once);
+    }
+
+    [Fact]
+    public async Task CreateCarImage_WithInvalidCarId_ShouldThrowException()
+    {
+        // Arrange
+        int carId = 1;
+        _mockCarRepository.Setup(repo => repo.GetCarAsync(carId)).ReturnsAsync((Car)null);
+        var image = new Image { Id = 1, Data = new byte[] { 0x01, 0x02 } };
+
+        // Act & Assert
+        await Assert.ThrowsAsync<Exception>(() => _carLogic.CreateCarImage(image, carId));
+        _mockCarRepository.Verify(repo => repo.GetCarAsync(carId), Times.Once);
+        _mockCarRepository.Verify(repo => repo.CreateCarImageAsync(image), Times.Never);
+        _mockCarRepository.Verify(repo => repo.UpdateCarWithImageAsync(image, carId), Times.Never);
+    }
 }
