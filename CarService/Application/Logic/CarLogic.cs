@@ -26,7 +26,7 @@ public class CarLogic : ICarLogic
         Garage? garage = await _garageRepository.GetGarageAsync(car.Garage.Id);
         if (garage is null)
         {
-            throw new Exception($"Garage with id {car.Garage.Id} not found");
+            throw new ArgumentException($"Garage with id {car.Garage.Id} not found");
         }
 
         car.Garage = garage;
@@ -65,7 +65,7 @@ public class CarLogic : ICarLogic
         var car = await _carRepository.GetCarAsync(id);
         if (car is null)
         {
-            throw new Exception($"Car with id {id} not found");
+            throw new ArgumentException($"Car with id {id} not found");
         }
         await _publishEndpoint.Publish(new CarDeleted(id));
         await _carRepository.DeleteCarAsync(id);
@@ -76,7 +76,7 @@ public class CarLogic : ICarLogic
         var car = await _carRepository.GetCarAsync(id);
         if (car is null)
         {
-            throw new Exception($"Car with id {id} not found");
+            throw new ArgumentException($"Car with id {id} not found");
         }
         return await _carRepository.GetCarImageAsync(id);
     }
@@ -86,12 +86,12 @@ public class CarLogic : ICarLogic
         Car? carFound = await _carRepository.GetCarAsync(carToUpdate.Id);
         if (carFound == null)
         {
-            throw new ArgumentException($"There is no car with the id: {carToUpdate.Id}");
+            throw new ArgumentException($"Car with id {carToUpdate.Id} not found");
         }
         Garage? garageFound = await _garageRepository.GetGarageAsync(carToUpdate.Garage.Id);
         if (garageFound == null)
         {
-            throw new ArgumentException($"There is no garage with the id: {carToUpdate.Garage.Id}");
+            throw new ArgumentException($"Garage with id {carToUpdate.Garage.Id} not found");
         }
         carFound.Garage = garageFound;
         await _publishEndpoint.Publish(new CarMoved(carFound.Id, garageFound.Id, carFound.Garage.Id));
@@ -104,7 +104,7 @@ public class CarLogic : ICarLogic
         var car = await _carRepository.GetCarAsync(id);
         if (car is null)
         {
-            throw new Exception($"Car with id {id} not found");
+            throw new ArgumentException($"Car with id {id} not found");
         }
         var created = await _carRepository.CreateCarImageAsync(carImage);
         await _carRepository.UpdateCarWithImageAsync(created, id);
