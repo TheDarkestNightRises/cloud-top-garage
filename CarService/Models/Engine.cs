@@ -15,10 +15,10 @@ public class Engine
     public string FuelType { get; set; }
 
     [Required(ErrorMessage = "The engine power is required.")]
-    [Range(1, 1000, ErrorMessage = "The engine power must be between {1} and {2} horsepower.")]
+    [Range(1, 10000, ErrorMessage = "The engine power must be between {1} and {2} horsepower.")]
     public int PowerHP { get; set; }
 
     [Required(ErrorMessage = "The engine torque is required.")]
-    [Range(1, 1000, ErrorMessage = "The engine torque must be between {1} and {2} Newton meters.")]
+    [Range(1, 100000, ErrorMessage = "The engine torque must be between {1} and {2} Newton meters.")]
     public int TorqueNM { get; set; }
 }

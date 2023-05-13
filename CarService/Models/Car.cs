@@ -17,11 +17,11 @@ public class Car
     public string Description { get; set; }
 
     [Required]
-    [StringLength(100, MinimumLength = 1, ErrorMessage = "{0} must be between {2} and {1} characters long")]
+    [StringLength(100, MinimumLength = 1, ErrorMessage = "{0} must be between {2} and {1} characters long.")]
     public string Manufacturer { get; set; }
 
     [Required]
-    [StringLength(100, MinimumLength = 1, ErrorMessage = "{0} must be between {2} and {1} characters long")]
+    [StringLength(100, MinimumLength = 1, ErrorMessage = "{0} must be between {2} and {1} characters long.")]
     public string Model { get; set; }
 
     [Required(ErrorMessage = "Year is required.")]
@@ -33,7 +33,9 @@ public class Car
     public int Seats { get; set; }
 
     public Image Image { get; set; }
+    [Required(ErrorMessage = "Engine must be specified.")]
     public Engine Engine { get; set; }
+    [Required(ErrorMessage = "Garage must be spiecified.")]
     public Garage Garage { get; set; }
 
     public override string ToString()

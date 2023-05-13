@@ -48,7 +48,7 @@ public class CarsController : ControllerBase
     }
 
     [HttpPatch]
-    public async Task<ActionResult> UpdateCar([FromBody] CarUpdateDto carUpdateDto)
+    public async Task<ActionResult> UpdateCarAsync([FromBody] CarUpdateDto carUpdateDto)
     {
         try
         {
@@ -175,13 +175,11 @@ public class CarsController : ControllerBase
                 await image.CopyToAsync(ms);
                 imageData = ms.ToArray();
             }
-
             //Create Image model
             Image carImage = new Image
             {
                 Data = imageData
             };
-
             var created = await _logic.CreateCarImage(carImage, id);
             return File(created.Data, "image/jpeg");
         }
@@ -192,7 +190,10 @@ public class CarsController : ControllerBase
         catch (Exception e)
         {
             Console.WriteLine(e);
+            throw e;
             return StatusCode(500, e.Message);
         }
     }
+    
+    
 }
