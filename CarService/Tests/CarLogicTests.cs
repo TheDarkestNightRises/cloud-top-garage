@@ -21,7 +21,7 @@ public class CarLogicTests
     }
 
     [Fact]
-    public async Task CreateCarAsync_ValidCar_CreatesCar()
+    public async Task CreateCarAsync_ReturnsCreatedCar_WhenCarValid()
     {
         // Arrange
         var garage = new Garage { Id = 1 };
@@ -45,21 +45,44 @@ public class CarLogicTests
     }
 
     [Fact]
-    public async Task CreateCarAsync_InvalidCar_ThrowsException()
+    public async Task CreateCarAsync_ThrowsExceptionWithCorrectMessage_WhenCarInvalid()
     {
-        // Arrange
-        var car = new Car { };
+        // Arrange invalid name
+        var car = new Car {  Name = "", Description = "Test Description", Manufacturer = "Test Manufacturer", Model = "Test Model", Year = 2023,Seats = 5, Garage = new Garage{Id = 1}, Engine = new Engine { Size = 2.0, FuelType = "Gas", PowerHP = 200, TorqueNM = 350 }};
+
 
         // Act & Assert
-        await Assert.ThrowsAsync<ArgumentException>(async () => await _carLogic.CreateCarAsync(car));
+        ArgumentException ex = await Assert.ThrowsAsync<ArgumentException>(async () => await _carLogic.CreateCarAsync(car));
+        Assert.Equal(ex.Message, "The Name field is required.");
     }
+    [Fact]
+    public async Task CreateCarAsync_ThrowsExceptionWithCorrectMessage_WhenEngineInvalid()
+    {
+        // Arrange
+        var car = new Car {  Name = "Test Name", Description = "Test Description", Manufacturer = "Test Manufacturer", Model = "Test Model", Year = 2023,Seats = 5, Garage = new Garage{Id = 1}, Engine = new Engine { Size = 0, FuelType = "Gas", PowerHP = 200, TorqueNM = 350 }};
 
+
+        // Act & Assert
+        ArgumentException ex = await Assert.ThrowsAsync<ArgumentException>(async () => await _carLogic.CreateCarAsync(car));
+        Assert.Equal(ex.Message, "The engine size must be between 0.1 and 10.");
+    }
+    [Fact]
+    public async Task CreateCarAsync_ThrowsExceptionWithCorrectMessage_WhenEngineIsNull()
+    {
+        // Arrange
+        var car = new Car {  Name = "Test Name", Description = "Test Description", Manufacturer = "Test Manufacturer", Model = "Test Model", Year = 2023,Seats = 5, Garage = new Garage{Id = 1}};
+
+
+        // Act & Assert
+        ArgumentException ex = await Assert.ThrowsAsync<ArgumentException>(async () => await _carLogic.CreateCarAsync(car));
+        Assert.Equal(ex.Message, "Engine must be specified.");
+    }
     [Fact]
     public async Task CreateCarAsync_InvalidGarage_ThrowsException()
     {
         // Arrange
         var garageId = 1;
-        _mockGarageRepository.Setup(x => x.GetGarageAsync(garageId)).ReturnsAsync((Garage)null);
+        _mockGarageRepository.Setup(x => x.GetGarageAsync(garageId)).ReturnsAsync(null as Garage);
         var car = new Car { Garage = new Garage { Id = garageId } };
 
         // Act & Assert
@@ -81,7 +104,7 @@ public class CarLogicTests
     }
 
     [Fact]
-    public async Task GetAllCarsAsync_WithCarQuery_ReturnsFilteredCars()
+    public async Task GetAllCarsAsync_ReturnsFilteredCars_WithCarQuery()
     {
         // Arrange
         var carQuery = new CarQuery() { GarageId = 1, CarName = "Car1" };
@@ -102,8 +125,8 @@ public class CarLogicTests
         Assert.Equal(1, result.Count());
         Assert.Equal("Car1", result.First().Name);
     }
-     [Fact]
-    public async Task GetCarAsync_WithValidId_ReturnsCar()
+    [Fact]
+    public async Task GetCarAsync_ReturnsCarById_WhenCarExists()
     {
         // Arrange
         var car = new Car() { Id = 1 };
@@ -118,7 +141,7 @@ public class CarLogicTests
     }
 
     [Fact]
-    public async Task GetCarAsync_WithInvalidId_ReturnsNull()
+    public async Task GetCarAsync_ReturnsNull_WhenInvalidId()
     {
         // Arrange
         _mockCarRepository.Setup(x => x.GetCarAsync(1)).ReturnsAsync((Car)null);
@@ -130,8 +153,8 @@ public class CarLogicTests
         Assert.Null(result);
     }
 
-     [Fact]
-    public async Task DeleteCarAsync_CarNotFound_ThrowsException()
+    [Fact]
+    public async Task DeleteCarAsync_ThrowsArgumentException_WhenCarDoesNotExist()
     {
         // Arrange
         int carId = 1;
@@ -139,11 +162,12 @@ public class CarLogicTests
         _mockCarRepository.Setup(repo => repo.GetCarAsync(carId)).ReturnsAsync(car);
 
         // Act + Assert
-        await Assert.ThrowsAsync<Exception>(() => _carLogic.DeleteCarAsync(carId));
+        ArgumentException ex = await Assert.ThrowsAsync<ArgumentException>(() => _carLogic.DeleteCarAsync(carId));
+        Assert.Equal(ex.Message, $"Car with id {carId} not found");
     }
 
     [Fact]
-    public async Task DeleteCarAsync_CarFound_DeletesCarAndPublishesMessage()
+    public async Task DeleteCarAsync_DeletesCar_WhenCarExists()
     {
         // Arrange
         int carId = 1;
@@ -157,7 +181,7 @@ public class CarLogicTests
         _mockCarRepository.Verify(repo => repo.DeleteCarAsync(carId), Times.Once);
     }
     [Fact]
-    public async Task GetCarImageAsync_CarNotFound_ThrowsException()
+    public async Task GetCarImageAsync_ThrowsArgumentException_WhenCarDoesNotExist()
     {
         // Arrange
         int carId = 1;
@@ -165,11 +189,12 @@ public class CarLogicTests
         _mockCarRepository.Setup(repo => repo.GetCarAsync(carId)).ReturnsAsync(car);
 
         // Act + Assert
-        await Assert.ThrowsAsync<Exception>(() => _carLogic.GetCarImageAsync(carId));
+        ArgumentException ex = await Assert.ThrowsAsync<ArgumentException>(() => _carLogic.GetCarImageAsync(carId));
+        Assert.Equal(ex.Message, $"Car with id {carId} not found");
     }
 
     [Fact]
-    public async Task GetCarImageAsync_CarFound_ReturnsCarImage()
+    public async Task GetCarImageAsync_ReturnsCarImage_WhenCarExistsAndHasImage()
     {
         // Arrange
         int carId = 1;
@@ -186,7 +211,7 @@ public class CarLogicTests
     }
 
     [Fact]
-    public async Task UpdateCarAsync_WhenCarNotFound_ThrowsArgumentException()
+    public async Task UpdateCarAsync_ThrowsArgumentException_WhenCarDOesNotExist()
     {
         // Arrange
         int carId = 1;
@@ -194,24 +219,27 @@ public class CarLogicTests
         _mockCarRepository.Setup(repo => repo.GetCarAsync(carId)).ReturnsAsync((Car)null);
 
         // Act & Assert
-        await Assert.ThrowsAsync<ArgumentException>(() => _carLogic.UpdateCarAsync(carToUpdate));
+        ArgumentException ex = await Assert.ThrowsAsync<ArgumentException>(() => _carLogic.UpdateCarAsync(carToUpdate));
+        Assert.Equal(ex.Message, $"Car with id {carId} not found");
     }
     
     [Fact]
-    public async Task UpdateCarAsync_WhenGarageNotFound_ThrowsArgumentException()
+    public async Task UpdateCarAsync_ThrowsArgumentException_WhenGarageDoesNotExist()
     {
         // Arrange
         int carId = 1;
-        Car carToUpdate = new Car { Id = carId, Garage = new Garage { Id = 2 } };
+        int garageId = 2;
+        Car carToUpdate = new Car { Id = carId, Garage = new Garage { Id = garageId } };
         _mockCarRepository.Setup(repo => repo.GetCarAsync(carId)).ReturnsAsync(carToUpdate);
         _mockGarageRepository.Setup(repo => repo.GetGarageAsync(2)).ReturnsAsync((Garage)null);
 
         // Act & Assert
-        await Assert.ThrowsAsync<ArgumentException>(() => _carLogic.UpdateCarAsync(carToUpdate));
+        ArgumentException ex = await Assert.ThrowsAsync<ArgumentException>(() => _carLogic.UpdateCarAsync(carToUpdate));
+        Assert.Equal(ex.Message, $"Garage with id {garageId} not found");
     }
 
     [Fact]
-    public async Task UpdateCarAsync_WhenCarAndGarageFound_UpdatesCarAndPublishesCarMovedEvent()
+    public async Task UpdateCarAsync_UpdatesCar_WhenCarAndGarageExist()
     {
         // Arrange
         int carId = 1;
@@ -231,7 +259,7 @@ public class CarLogicTests
         //_mockCarRepository.Verify(repo => repo.UpdateCarAsync(updatedCar), Times.Once);
     }
     [Fact]
-    public async Task CreateCarImage_WithValidInputs_ShouldReturnCreatedImage()
+    public async Task CreateCarImage_ReturnsCreatedImage_WhenCarExists()
     {
         // Arrange
         int carId = 1;
@@ -239,20 +267,18 @@ public class CarLogicTests
         var image = new Image { Id = 1, Data = new byte[] { 0x01, 0x02 } };
         _mockCarRepository.Setup(repo => repo.GetCarAsync(carId)).ReturnsAsync(car);
         _mockCarRepository.Setup(repo => repo.CreateCarImageAsync(image)).ReturnsAsync(image);
-        _mockCarRepository.Setup(repo => repo.UpdateCarWithImageAsync(image, carId)).Returns(Task.CompletedTask);
+        _mockCarRepository.Setup(repo => repo.UpdateCarWithImageAsync(image, carId)).Verifiable();
 
         // Act
         var result = await _carLogic.CreateCarImage(image, carId);
 
         // Assert
         Assert.Equal(image, result);
-        // _mockCarRepository.Verify(repo => repo.GetCarAsync(carId), Times.Once);
-        _mockCarRepository.Verify(repo => repo.CreateCarImageAsync(image), Times.Once);
         _mockCarRepository.Verify(repo => repo.UpdateCarWithImageAsync(image, carId), Times.Once);
     }
 
     [Fact]
-    public async Task CreateCarImage_WithInvalidCarId_ShouldThrowException()
+    public async Task CreateCarImage_ThrowsException_WhenCarDoesNotExist()
     {
         // Arrange
         int carId = 1;
@@ -260,8 +286,8 @@ public class CarLogicTests
         var image = new Image { Id = 1, Data = new byte[] { 0x01, 0x02 } };
 
         // Act & Assert
-        await Assert.ThrowsAsync<Exception>(() => _carLogic.CreateCarImage(image, carId));
-        _mockCarRepository.Verify(repo => repo.GetCarAsync(carId), Times.Once);
+        ArgumentException ex = await Assert.ThrowsAsync<ArgumentException>(() => _carLogic.CreateCarImage(image, carId));
+        Assert.Equal(ex.Message, $"Car with id {carId} not found");
         _mockCarRepository.Verify(repo => repo.CreateCarImageAsync(image), Times.Never);
         _mockCarRepository.Verify(repo => repo.UpdateCarWithImageAsync(image, carId), Times.Never);
     }
