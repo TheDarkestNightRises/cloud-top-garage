@@ -228,6 +228,25 @@ public class GaragesControllerTests
         Assert.IsType<NotFoundResult>(result.Result);
     }
 
+    [Fact]
+    public async Task GetGarageById_InvalidId_ReturnsBadRequestResult()
+    {
+        // Arrange
+        int garageId = -1;
+        var exceptionMessage = "Invalid garage id";
+
+    
+        _logicMock.Setup(logic => logic.GetGarageAsync(garageId)).ThrowsAsync(new ArgumentException(exceptionMessage));
+
+        // Act
+        var result = await _controller.GetGarageById(garageId);
+
+        // Assert
+        Assert.IsType<BadRequestObjectResult>(result.Result);
+
+        var badRequestResult = result.Result as BadRequestObjectResult;
+        Assert.Equal(exceptionMessage, badRequestResult?.Value);
+    }
 
 
     // ----------------------------- DELETE GARAGE BY ID --------------------------------------------
