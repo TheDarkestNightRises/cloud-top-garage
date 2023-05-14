@@ -235,7 +235,7 @@ public class GaragesControllerTests
         int garageId = -1;
         var exceptionMessage = "Invalid garage id";
 
-    
+
         _logicMock.Setup(logic => logic.GetGarageAsync(garageId)).ThrowsAsync(new ArgumentException(exceptionMessage));
 
         // Act
@@ -248,6 +248,27 @@ public class GaragesControllerTests
         Assert.Equal(exceptionMessage, badRequestResult?.Value);
     }
 
+    [Fact]
+    public async Task GetGarageById_ExceptionThrown_ReturnsInternalServerErrorResult()
+    {
+        // Arrange
+        int garageId = 1;
+        var exceptionMessage = "Failed to fetch garage";
 
-    // ----------------------------- DELETE GARAGE BY ID --------------------------------------------
+
+        _logicMock.Setup(logic => logic.GetGarageAsync(garageId)).ThrowsAsync(new Exception(exceptionMessage));
+
+        // Act
+        var result = await _controller.GetGarageById(garageId);
+
+        // Assert
+        Assert.IsType<ObjectResult>(result.Result);
+        var statusCodeResult = result.Result as ObjectResult;
+        Assert.Equal(500, statusCodeResult?.StatusCode);
+        Assert.Equal(exceptionMessage, statusCodeResult?.Value);
+    }
+
 }
+
+
+// ----------------------------- DELETE GARAGE BY ID --------------------------------------------
