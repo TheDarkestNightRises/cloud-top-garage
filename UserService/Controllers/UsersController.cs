@@ -21,9 +21,22 @@ public class UsersController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UserReadDto>>> GetAllUsers()
     {
-        var users = await _userLogic.GetAllUsersAsync();
-        var usersMapped = _mapper.Map<IEnumerable<UserReadDto>>(users);
-        return Ok(usersMapped);
+        try
+        {
+            var users = await _userLogic.GetAllUsersAsync();
+            if (users == null)
+            {
+                return NotFound();
+            }
+            var usersMapped = _mapper.Map<IEnumerable<UserReadDto>>(users);
+            return Ok(usersMapped);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+
     }
 
     [HttpPatch]
