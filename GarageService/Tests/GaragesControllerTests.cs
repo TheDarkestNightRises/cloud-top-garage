@@ -151,7 +151,7 @@ public class GaragesControllerTests
         // Arrange
         var garageCreateDto = new GarageCreateDto
         {
-            Name = "",
+            Name = "garage",
             Capacity = -5
         };
 
@@ -186,4 +186,148 @@ public class GaragesControllerTests
     }
 
     // ----------------------------- GET GARAGE BY ID --------------------------------------------
+
+    [Fact]
+    public async Task GetGarageById_WhenGarageExists_ReturnsOkResult()
+    {
+        // Arrange
+        int garageId = 1;
+        var garage = new Garage { Id = garageId, Name = "Test Garage" };
+        var garageReadDto = new GarageReadDto { Id = garageId, Name = "Test Garage" };
+
+
+        _logicMock.Setup(logic => logic.GetGarageAsync(garageId)).ReturnsAsync(garage);
+        _mapperMock.Setup(mapper => mapper.Map<GarageReadDto>(garage)).Returns(garageReadDto);
+
+        // Act
+        var result = await _controller.GetGarageById(garageId);
+
+        // Assert
+        Assert.IsType<OkObjectResult>(result.Result);
+
+        var okResult = result.Result as OkObjectResult;
+        Assert.Equal(garageReadDto, okResult?.Value);
+    }
+
+
+    [Fact]
+    public async Task GetGarageById_WhenGarageDoesNotExist_ReturnsNotFoundResult()
+    {
+        // Arrange
+        int garageId = 1;
+        Garage? garage = null;
+        GarageReadDto? garageReadDto = null;
+
+        _logicMock.Setup(logic => logic.GetGarageAsync(garageId)).ReturnsAsync(garage);
+        _mapperMock.Setup(mapper => mapper.Map<GarageReadDto>(garage)).Returns(garageReadDto);
+
+        // Act
+        var result = await _controller.GetGarageById(garageId);
+
+        // Assert
+        Assert.IsType<NotFoundResult>(result.Result);
+    }
+
+    [Fact]
+    public async Task GetGarageById_InvalidId_ReturnsBadRequestResult()
+    {
+        // Arrange
+        int garageId = -1;
+        var exceptionMessage = "Invalid garage id";
+
+
+        _logicMock.Setup(logic => logic.GetGarageAsync(garageId)).ThrowsAsync(new ArgumentException(exceptionMessage));
+
+        // Act
+        var result = await _controller.GetGarageById(garageId);
+
+        // Assert
+        Assert.IsType<BadRequestObjectResult>(result.Result);
+
+        var badRequestResult = result.Result as BadRequestObjectResult;
+        Assert.Equal(exceptionMessage, badRequestResult?.Value);
+    }
+
+    [Fact]
+    public async Task GetGarageById_ExceptionThrown_ReturnsInternalServerErrorResult()
+    {
+        // Arrange
+        int garageId = 1;
+        var exceptionMessage = "Failed to fetch garage";
+
+
+        _logicMock.Setup(logic => logic.GetGarageAsync(garageId)).ThrowsAsync(new Exception(exceptionMessage));
+
+        // Act
+        var result = await _controller.GetGarageById(garageId);
+
+        // Assert
+        Assert.IsType<ObjectResult>(result.Result);
+        var statusCodeResult = result.Result as ObjectResult;
+        Assert.Equal(500, statusCodeResult?.StatusCode);
+        Assert.Equal(exceptionMessage, statusCodeResult?.Value);
+    }
+
+    // ----------------------------- DELETE GARAGE BY ID --------------------------------------------
+
+    [Fact]
+    public async Task DeleteGarageAsync_WhenGarageExists_ReturnsNoContentResult()
+    {
+        // Arrange
+        int garageId = 1;
+
+        _logicMock.Setup(logic => logic.DeleteGarageAsync(garageId)).Returns(Task.CompletedTask);
+
+        // Act
+        var result = await _controller.DeleteGarageAsync(garageId);
+
+        // Assert
+        Assert.IsType<NoContentResult>(result);
+    }
+
+    [Fact]
+    public async Task DeleteGarageAsync_InvalidId_ReturnsBadRequestResult()
+    {
+        // Arrange
+        int garageId = -1;
+        var exceptionMessage = "Invalid garage id";
+
+
+        _logicMock.Setup(logic => logic.DeleteGarageAsync(garageId)).ThrowsAsync(new ArgumentException(exceptionMessage));
+
+        // Act
+        var result = await _controller.DeleteGarageAsync(garageId);
+
+        // Assert
+        Assert.IsType<BadRequestObjectResult>(result);
+
+        var badRequestResult = result as BadRequestObjectResult;
+        Assert.Equal(exceptionMessage, badRequestResult?.Value);
+    }
+
+    [Fact]
+    public async Task DeleteGarageAsync_ExceptionThrown_ReturnsInternalServerErrorResult()
+    {
+        // Arrange
+        int garageId = 1;
+        var exceptionMessage = "Failed to delete garage";
+
+        _logicMock.Setup(logic => logic.DeleteGarageAsync(garageId)).ThrowsAsync(new Exception(exceptionMessage));
+
+        // Act
+        var result = await _controller.DeleteGarageAsync(garageId);
+
+        // Assert
+        Assert.IsType<ObjectResult>(result);
+        var statusCodeResult = result as ObjectResult;
+        Assert.Equal(500, statusCodeResult?.StatusCode);
+        Assert.Equal(exceptionMessage, statusCodeResult?.Value);
+    }
 }
+
+
+
+
+
+
+
