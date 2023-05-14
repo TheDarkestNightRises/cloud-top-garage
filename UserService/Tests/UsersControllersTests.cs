@@ -23,7 +23,7 @@ public class UsersControllerTests
     }
     // ----------------------------- GET ALL USERS --------------------------------------------
     [Fact]
-    public async Task GetAllUsers_ReturnsOkResult_WhenUsersExists()
+    public async Task GetAllUsersAsync_ReturnsOkResult_WhenUsersExists()
     {
         // Arrange
         var users = new List<User> { new User { Name = "John Doe", Email = "johndoe@email.com", Password = "123", Role = "User", Age = "18", Phone = "123" } };
@@ -34,7 +34,7 @@ public class UsersControllerTests
         _mapperMock.Setup(m => m.Map<IEnumerable<UserReadDto>>(users)).Returns(usersMapped);
 
         // Act
-        var result = await _controller.GetAllUsers();
+        var result = await _controller.GetAllUsersAsync();
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
@@ -43,7 +43,7 @@ public class UsersControllerTests
     }
 
     [Fact]
-    public async Task GetAllUsers_ReturnsNotFoundResult_WhenUsersDontExist()
+    public async Task GetAllUsersAsync_ReturnsNotFoundResult_WhenUsersDontExist()
     {
         // Arrange
         List<User> users = null;
@@ -54,11 +54,33 @@ public class UsersControllerTests
         _mapperMock.Setup(m => m.Map<IEnumerable<UserReadDto>>(users)).Returns(usersMapped);
 
         // Act
-        var result = await _controller.GetAllUsers();
+        var result = await _controller.GetAllUsersAsync();
 
         // Assert
         var notFoundResult = Assert.IsType<NotFoundResult>(result.Result);
         Assert.Equal(404, notFoundResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task GetAllUsersAsync_ReturnsInternalServerErrors_WhenException()
+    {
+        // Arrange
+        List<User> users = new List<User>();
+        List<UserReadDto> usersMapped = new List<UserReadDto>();
+        var emsg = "Some error occurred.";
+
+
+        _logicMock.Setup(ul => ul.GetAllUsersAsync()).ThrowsAsync(new Exception(emsg));
+        _mapperMock.Setup(m => m.Map<IEnumerable<UserReadDto>>(users)).Returns(usersMapped);
+
+        // Act
+        var result = await _controller.GetAllUsersAsync();
+
+
+        // Assert
+        var errorResponse = Assert.IsType<ObjectResult>(result.Result);
+        Assert.Equal(500, errorResponse.StatusCode);
+        Assert.Equal(emsg, errorResponse.Value);
     }
 }
 

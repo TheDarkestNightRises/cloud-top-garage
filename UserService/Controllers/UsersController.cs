@@ -19,7 +19,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<UserReadDto>>> GetAllUsers()
+    public async Task<ActionResult<IEnumerable<UserReadDto>>> GetAllUsersAsync()
     {
         try
         {
@@ -39,7 +39,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPatch]
-    public async Task<ActionResult> UpdateUser([FromBody] UserUpdateDto userUpdateDto)
+    public async Task<ActionResult> UpdateUserAsync([FromBody] UserUpdateDto userUpdateDto)
     {
         try
         {
@@ -58,7 +58,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> CreateUser([FromBody] UserCreateDto userCreateDto)
+    public async Task<ActionResult> CreateUserAsync([FromBody] UserCreateDto userCreateDto)
     {
         try
         {
@@ -78,7 +78,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("{email}")]
-    public async Task<ActionResult<UserReadDto>> GetUserByEmail(string email)
+    public async Task<ActionResult<UserReadDto>> GetUserByEmailAsync(string email)
     {
         try
         {
