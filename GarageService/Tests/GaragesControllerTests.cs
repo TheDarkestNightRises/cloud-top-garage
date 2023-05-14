@@ -271,7 +271,7 @@ public class GaragesControllerTests
     // ----------------------------- DELETE GARAGE BY ID --------------------------------------------
 
     [Fact]
-    public async Task DeleteGarageAsync_ExistingId_ReturnsNoContentResult()
+    public async Task DeleteGarageAsync_WhenGarageExists_ReturnsNoContentResult()
     {
         // Arrange
         int garageId = 1;
@@ -284,7 +284,31 @@ public class GaragesControllerTests
         // Assert
         Assert.IsType<NoContentResult>(result);
     }
+
+    [Fact]
+    public async Task DeleteGarageAsync_InvalidId_ReturnsBadRequestResult()
+    {
+        // Arrange
+        int garageId = -1;
+        var exceptionMessage = "Invalid garage id";
+
+        
+        _logicMock.Setup(logic => logic.DeleteGarageAsync(garageId)).ThrowsAsync(new ArgumentException(exceptionMessage));
+
+        // Act
+        var result = await _controller.DeleteGarageAsync(garageId);
+
+        // Assert
+        Assert.IsType<BadRequestObjectResult>(result);
+
+        var badRequestResult = result as BadRequestObjectResult;
+        Assert.Equal(exceptionMessage, badRequestResult?.Value);
+    }
+
 }
+
+
+
 
 
 
