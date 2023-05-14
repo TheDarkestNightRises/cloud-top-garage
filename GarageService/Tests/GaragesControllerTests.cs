@@ -268,7 +268,23 @@ public class GaragesControllerTests
         Assert.Equal(exceptionMessage, statusCodeResult?.Value);
     }
 
+    // ----------------------------- DELETE GARAGE BY ID --------------------------------------------
+
+    [Fact]
+    public async Task DeleteGarageAsync_ExistingId_ReturnsNoContentResult()
+    {
+        // Arrange
+        int garageId = 1;
+
+        _logicMock.Setup(logic => logic.DeleteGarageAsync(garageId)).Returns(Task.CompletedTask);
+
+        // Act
+        var result = await _controller.DeleteGarageAsync(garageId);
+
+        // Assert
+        Assert.IsType<NoContentResult>(result);
+    }
 }
 
 
-// ----------------------------- DELETE GARAGE BY ID --------------------------------------------
+
