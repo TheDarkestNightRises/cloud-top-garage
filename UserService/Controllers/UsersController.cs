@@ -36,7 +36,6 @@ public class UsersController : ControllerBase
             Console.WriteLine(e);
             return StatusCode(500, e.Message);
         }
-
     }
 
     [HttpPatch]

@@ -3,6 +3,9 @@ using Moq;
 using AutoMapper;
 using UserService.Controllers;
 using UserService.Logic;
+using UserService.Models;
+using UserService.Dtos;
+using Microsoft.AspNetCore.Mvc;
 
 namespace UserService.Tests;
 
@@ -16,7 +19,28 @@ public class UsersControllerTests
     {
         _mapperMock = new Mock<IMapper>();
         _logicMock = new Mock<IUserLogic>();
-        _controller = new UsersController( _logicMock.Object, _mapperMock.Object);
+        _controller = new UsersController(_logicMock.Object, _mapperMock.Object);
+    }
+    // ----------------------------- GET ALL USERS --------------------------------------------
+    [Fact]
+    public async Task GetAllUsers_ReturnsOkResult_WhenUsersExists()
+    {
+        // Arrange
+        var users = new List<User> { new User { Name = "John Doe", Email = "johndoe@email.com", Password = "123", Role = "User", Age = "18", Phone = "123" } };
+        var usersMapped = new List<UserReadDto> { new UserReadDto { Name = "John Doe", Email = "johndoe@email.com", Age = "18", Phone = "123" } };
+
+
+        _logicMock.Setup(ul => ul.GetAllUsersAsync()).ReturnsAsync(users);
+        _mapperMock.Setup(m => m.Map<IEnumerable<UserReadDto>>(users)).Returns(usersMapped);
+
+        // Act
+        var result = await _controller.GetAllUsers();
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result.Result);
+        var returnedUsers = Assert.IsAssignableFrom<IEnumerable<UserReadDto>>(okResult.Value);
+        Assert.Equal(usersMapped, returnedUsers);
     }
 }
+
 
