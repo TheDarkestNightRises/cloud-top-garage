@@ -23,7 +23,7 @@ public class UsersControllerTests
     }
     // ----------------------------- GET ALL USERS --------------------------------------------
     [Fact]
-    public async Task GetAllUsersAsync_ReturnsOkResult_WhenUsersExists()
+    public async Task GetAllUsersAsync_WhenUsersExists_ReturnsOkResult()
     {
         // Arrange
         var users = new List<User> { new User { Name = "John Doe", Email = "johndoe@email.com", Password = "123", Role = "User", Age = "18", Phone = "123" } };
@@ -43,7 +43,7 @@ public class UsersControllerTests
     }
 
     [Fact]
-    public async Task GetAllUsersAsync_ReturnsNotFoundResult_WhenUsersDontExist()
+    public async Task GetAllUsersAsync_WhenUsersDontExist_ReturnsNotFoundResult()
     {
         // Arrange
         List<User> users = null;
@@ -62,7 +62,7 @@ public class UsersControllerTests
     }
 
     [Fact]
-    public async Task GetAllUsersAsync_ReturnsInternalServerErrors_WhenException()
+    public async Task GetAllUsersAsync_WhenException_ReturnsInternalServerErrors()
     {
         // Arrange
         List<User> users = new List<User>();
@@ -82,6 +82,24 @@ public class UsersControllerTests
         Assert.Equal(500, errorResponse.StatusCode);
         Assert.Equal(emsg, errorResponse.Value);
     }
+    // ----------------------------- UPDATE USER --------------------------------------------
+
+    [Fact]
+    public async Task UpdateUserAsync_WhenCalled_ReturnsNoContent()
+    {
+        // Arrange
+        var userUpdateDto = new UserUpdateDto { Name = "John Doe", Email = "johndoe@email.com", Password = "123", Age = "18", Phone = "123" };
+        var userToUpdate = new User { Name = "John Doe", Email = "johndoe@email.com", Password = "123", Age = "18", Phone = "123" };
+
+        _mapperMock.Setup(m => m.Map<User>(userUpdateDto)).Returns(userToUpdate);
+
+        // Act
+        var result = await _controller.UpdateUserAsync(userUpdateDto);
+
+        // Assert
+        Assert.IsType<NoContentResult>(result);
+    }
+
 }
 
 
