@@ -4,23 +4,24 @@ using GarageService.Data;
 using GarageService.Application.LogicContracts;
 using GarageService.Models;
 using MassTransit;
+using Contracts;
 
 public class GarageLogicTests
 {
     private readonly Mock<IGarageRepository> _repositoryMock;
-    private readonly Mock<UserRepository> _userRepositoryMock;
+    private readonly Mock<IUserRepository> _userRepositoryMock;
     private readonly Mock<IPublishEndpoint> _publishEndPoint;
     private readonly IGarageLogic _logic;
 
     public GarageLogicTests()
     {
         _repositoryMock = new Mock<IGarageRepository>();
-        _userRepositoryMock = new Mock<UserRepository>();
+        _userRepositoryMock = new Mock<IUserRepository>();
         _publishEndPoint = new Mock<IPublishEndpoint>();
         _logic = new GarageLogic(_repositoryMock.Object, _userRepositoryMock.Object, _publishEndPoint.Object);
     }
 
-    // ----------------------------- DELETE GARAGE --------------------------------------------
+    // ----------------------------- DELETE GARAGE -------------------------------------------- //
     [Theory]
     [InlineData(1)]
     [InlineData(2)]
@@ -47,7 +48,7 @@ public class GarageLogicTests
         _repositoryMock.Verify(r => r.DeleteGarageAsync(id));
     }
 
-    // ----------------------------- GET ALL GARAGES --------------------------------------------
+    // ----------------------------- GET ALL GARAGES -------------------------------------------- //
 
     [Theory]
     [InlineData(0)]
@@ -79,7 +80,7 @@ public class GarageLogicTests
         return garages;
     }
 
-    // ----------------------------- GET GARAGE --------------------------------------------
+    // ----------------------------- GET GARAGE -------------------------------------------- //
 
     [Theory]
     [InlineData(1)]
@@ -110,5 +111,26 @@ public class GarageLogicTests
 
         // Assert
         Assert.Null(result);
+    }
+
+    // ----------------------------- CREATE GARAGE -------------------------------------------- //
+
+    [Theory]
+    [InlineData(1, "Garage 1")]
+    [InlineData(2, "Garage 2")]
+    public async Task CreateGarageAsync_WhenUserExists_CreatesGarage(int userId, string garageName)
+    {
+        // Arrange
+        var garage = new Garage { Id = 1, Name = garageName, User = new User { Id = userId }, Capacity = 5 };
+
+        _userRepositoryMock.Setup(repo => repo.GetUserByIdAsync(It.IsAny<int>())).ReturnsAsync(new User());
+        _repositoryMock.Setup(repo => repo.CreateGarageAsync(garage)).ReturnsAsync(garage);
+
+        // Act
+        var result = await _logic.CreateGarageAsync(garage);
+
+        // Assert
+        Assert.Equal(garage, result);
+        _repositoryMock.Verify(repo => repo.CreateGarageAsync(garage), Times.Once);
     }
 }

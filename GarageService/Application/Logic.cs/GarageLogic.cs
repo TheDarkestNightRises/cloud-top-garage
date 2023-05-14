@@ -76,7 +76,7 @@ public class GarageLogic : IGarageLogic
         Garage garageCreated = await _garageRepository.CreateGarageAsync(garage);
         // Sends a message to the car service to notify it that a new garage has been created
         await _publishEndpoint.Publish(new GarageCreated(garage.Id));
-
+        // Returns the created garage
         return garageCreated;
     }
     private void ValidateGarage(Garage garage)
