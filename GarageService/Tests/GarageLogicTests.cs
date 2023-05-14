@@ -118,7 +118,7 @@ public class GarageLogicTests
     [Theory]
     [InlineData(1, "Garage 1")]
     [InlineData(2, "Garage 2")]
-    public async Task CreateGarageAsync_WhenUserExists_CreatesGarage(int userId, string garageName)
+    public async Task CreateGarageAsync_WhenValidInput_CreatesGarage(int userId, string garageName)
     {
         // Arrange
         var garage = new Garage { Id = 1, Name = garageName, User = new User { Id = userId }, Capacity = 5 };
@@ -132,5 +132,22 @@ public class GarageLogicTests
         // Assert
         Assert.Equal(garage, result);
         _repositoryMock.Verify(repo => repo.CreateGarageAsync(garage), Times.Once);
+    }
+
+
+    [Theory]
+    [InlineData(1, "Garage 1")]
+    [InlineData(2, "Garage 2")]
+    public async Task CreateGarageAsync_WhenInvalidInput_ThrowsInvalidCapacityException(int userId, string garageName)
+    {
+        // Arrange
+        var garage = new Garage { Id = 1, Name = garageName, User = new User { Id = userId }, Capacity = -5 };
+
+        // Act and Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _logic.CreateGarageAsync(garage));
+
+        // Verify
+        _userRepositoryMock.Verify(repo => repo.GetUserByIdAsync(It.IsAny<int>()), Times.Never);
+        _repositoryMock.Verify(repo => repo.CreateGarageAsync(It.IsAny<Garage>()), Times.Never);
     }
 }
