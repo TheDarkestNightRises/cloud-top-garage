@@ -117,6 +117,26 @@ public class UsersControllerTests
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
         Assert.Equal(emsg, badRequestResult.Value);
     }
+
+    [Fact]
+    public async Task UpdateUserAsync_WhenException_ReturnsInternalServerError()
+    {
+        // Arrange
+        var userUpdateDto = new UserUpdateDto { };
+        var exceptionMessage = "An error occurred.";
+        var userToUpdate = new User { };
+
+        _mapperMock.Setup(m => m.Map<User>(userUpdateDto)).Returns(userToUpdate);
+        _logicMock.Setup(ul => ul.UpdateUser(userToUpdate)).Throws(new Exception(exceptionMessage));
+
+        // Act
+        var result = await _controller.UpdateUserAsync(userUpdateDto);
+
+        // Assert
+        var statusCodeResult = Assert.IsType<ObjectResult>(result);
+        Assert.Equal(500, statusCodeResult.StatusCode);
+        Assert.Equal(exceptionMessage, statusCodeResult.Value);
+    }
 }
 
 
