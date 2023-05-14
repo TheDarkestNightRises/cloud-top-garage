@@ -41,6 +41,25 @@ public class UsersControllerTests
         var returnedUsers = Assert.IsAssignableFrom<IEnumerable<UserReadDto>>(okResult.Value);
         Assert.Equal(usersMapped, returnedUsers);
     }
+
+    [Fact]
+    public async Task GetAllUsers_ReturnsNotFoundResult_WhenUsersDontExist()
+    {
+        // Arrange
+        List<User> users = null;
+        List<UserReadDto> usersMapped = null;
+
+
+        _logicMock.Setup(ul => ul.GetAllUsersAsync()).ReturnsAsync(users);
+        _mapperMock.Setup(m => m.Map<IEnumerable<UserReadDto>>(users)).Returns(usersMapped);
+
+        // Act
+        var result = await _controller.GetAllUsers();
+
+        // Assert
+        var notFoundResult = Assert.IsType<NotFoundResult>(result.Result);
+        Assert.Equal(404, notFoundResult.StatusCode);
+    }
 }
 
 
