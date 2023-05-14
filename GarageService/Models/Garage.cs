@@ -17,13 +17,14 @@ public class Garage
         get { return Capacity - Cars?.Count ?? 0; }
         private set { }
     }
-    
+
     public Location Location { get; set; }
     public User User { get; set; }
     public List<Car> Cars { get; set; }
 
     public override string ToString()
     {
-        return $"{Id} vailable slots: {AvailableSlots}, User: {User}, Cars: {string.Join(",", Cars)}";
+        string carsString = Cars != null ? string.Join(",", Cars) : "No Cars";
+        return $"{Id} vailable slots: {AvailableSlots}, User: {User}, Cars: {carsString}";
     }
 }
