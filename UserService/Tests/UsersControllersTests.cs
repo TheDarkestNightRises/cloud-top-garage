@@ -99,7 +99,24 @@ public class UsersControllerTests
         // Assert
         Assert.IsType<NoContentResult>(result);
     }
+    [Fact]
+    public async Task UpdateUserAsync_WhenArgumentException_ReturnsBadRequest()
+    {
+        // Arrange
+        var userUpdateDto = new UserUpdateDto { };
+        var userToUpdate = new User { };
+        var emsg = "Invalid user update.";
 
+        _mapperMock.Setup(m => m.Map<User>(userUpdateDto)).Returns(userToUpdate);
+        _logicMock.Setup(ul => ul.UpdateUser(userToUpdate)).ThrowsAsync(new ArgumentException(emsg));
+
+        // Act
+        var result = await _controller.UpdateUserAsync(userUpdateDto);
+
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal(emsg, badRequestResult.Value);
+    }
 }
 
 
