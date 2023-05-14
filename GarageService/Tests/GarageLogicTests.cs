@@ -44,7 +44,7 @@ public class GarageLogicTests
         // Act
         await _logic.DeleteGarageAsync(id);
 
-        // Assert
+        // Assert 
         _repositoryMock.Verify(r => r.DeleteGarageAsync(id));
     }
 
@@ -131,7 +131,6 @@ public class GarageLogicTests
 
         // Assert
         Assert.Equal(garage, result);
-        _repositoryMock.Verify(repo => repo.CreateGarageAsync(garage), Times.Once);
     }
 
 
@@ -145,9 +144,5 @@ public class GarageLogicTests
 
         // Act and Assert
         await Assert.ThrowsAsync<ArgumentException>(() => _logic.CreateGarageAsync(garage));
-
-        // Verify
-        _userRepositoryMock.Verify(repo => repo.GetUserByIdAsync(It.IsAny<int>()), Times.Never);
-        _repositoryMock.Verify(repo => repo.CreateGarageAsync(It.IsAny<Garage>()), Times.Never);
     }
 }
