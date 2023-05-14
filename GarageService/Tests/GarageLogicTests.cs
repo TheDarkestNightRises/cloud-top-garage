@@ -79,5 +79,36 @@ public class GarageLogicTests
         return garages;
     }
 
+    // ----------------------------- GET GARAGE --------------------------------------------
 
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    public async Task GetGarageAsync_ReturnsGarage_WhenGarageExists(int id)
+    {
+        // Arrange
+        var expectedGarage = new Garage { Id = id, Name = "Garage 1" };
+        _repositoryMock.Setup(repo => repo.GetGarageAsync(id)).ReturnsAsync(expectedGarage);
+
+        // Act
+        var result = await _logic.GetGarageAsync(id);
+
+        // Assert
+        Assert.Equal(expectedGarage, result);
+    }
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    public async Task GetGarageAsync_ReturnsNull_WhenGarageDoesNotExist(int id)
+    {
+        // Arrange
+        _repositoryMock.Setup(repo => repo.GetGarageAsync(id)).ReturnsAsync((Garage)null);
+
+        // Act
+        var result = await _logic.GetGarageAsync(id);
+
+        // Assert
+        Assert.Null(result);
+    }
 }
