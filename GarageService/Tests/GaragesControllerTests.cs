@@ -187,27 +187,48 @@ public class GaragesControllerTests
 
     // ----------------------------- GET GARAGE BY ID --------------------------------------------
 
-[Fact]
-        public async Task GetGarageById_WhenGarageExists_ReturnsOkResult()
-        {
-            // Arrange
-            int garageId = 1;
-            var garage = new Garage { Id = garageId, Name = "Test Garage" };
-            var garageReadDto = new GarageReadDto { Id = garageId, Name = "Test Garage" };
+    [Fact]
+    public async Task GetGarageById_WhenGarageExists_ReturnsOkResult()
+    {
+        // Arrange
+        int garageId = 1;
+        var garage = new Garage { Id = garageId, Name = "Test Garage" };
+        var garageReadDto = new GarageReadDto { Id = garageId, Name = "Test Garage" };
 
-            
-            _logicMock.Setup(logic => logic.GetGarageAsync(garageId)).ReturnsAsync(garage);
-            _mapperMock.Setup(mapper => mapper.Map<GarageReadDto>(garage)).Returns(garageReadDto);
 
-            // Act
-            var result = await _controller.GetGarageById(garageId);
+        _logicMock.Setup(logic => logic.GetGarageAsync(garageId)).ReturnsAsync(garage);
+        _mapperMock.Setup(mapper => mapper.Map<GarageReadDto>(garage)).Returns(garageReadDto);
 
-            // Assert
-            Assert.IsType<OkObjectResult>(result.Result);
+        // Act
+        var result = await _controller.GetGarageById(garageId);
 
-            var okResult = result.Result as OkObjectResult;
-            Assert.Equal(garageReadDto, okResult?.Value);
-        }
+        // Assert
+        Assert.IsType<OkObjectResult>(result.Result);
+
+        var okResult = result.Result as OkObjectResult;
+        Assert.Equal(garageReadDto, okResult?.Value);
+    }
+
+
+    [Fact]
+    public async Task GetGarageById_WhenGarageDoesNotExist_ReturnsNotFoundResult()
+    {
+        // Arrange
+        int garageId = 1;
+        Garage? garage = null;
+        GarageReadDto? garageReadDto = null;
+
+        _logicMock.Setup(logic => logic.GetGarageAsync(garageId)).ReturnsAsync(garage);
+        _mapperMock.Setup(mapper => mapper.Map<GarageReadDto>(garage)).Returns(garageReadDto);
+
+        // Act
+        var result = await _controller.GetGarageById(garageId);
+
+        // Assert
+        Assert.IsType<NotFoundResult>(result.Result);
+    }
+
+
 
     // ----------------------------- DELETE GARAGE BY ID --------------------------------------------
 }
