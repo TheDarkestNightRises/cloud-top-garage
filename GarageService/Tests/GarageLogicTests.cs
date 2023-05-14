@@ -15,7 +15,9 @@ public class GarageLogicTests
     public GarageLogicTests()
     {
         _repositoryMock = new Mock<IGarageRepository>();
-        _logic = new GarageLogic(_repositoryMock.Object,_userRepositoryMock.Object,_publishEndPoint.Object);
+        _userRepositoryMock = new Mock<UserRepository>();
+        _publishEndPoint = new Mock<IPublishEndpoint>();
+        _logic = new GarageLogic(_repositoryMock.Object, _userRepositoryMock.Object, _publishEndPoint.Object);
     }
 
     // ----------------------------- DELETE GARAGE --------------------------------------------
@@ -44,5 +46,38 @@ public class GarageLogicTests
         // Assert
         _repositoryMock.Verify(r => r.DeleteGarageAsync(id));
     }
+
+    // ----------------------------- GET ALL GARAGES --------------------------------------------
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(1)]
+    [InlineData(10)]
+    public async Task GetAllGaragesAsync_ReturnsAllGarages(int garageCount)
+    {
+        // Arrange
+        var garageQuery = new GarageQuery();
+        var expectedGarages = GenerateGarageList(garageCount);
+        _repositoryMock.Setup(repo => repo.GetAllGaragesAsync(garageQuery)).ReturnsAsync(expectedGarages);
+
+        // Act
+        var result = await _logic.GetAllGaragesAsync(garageQuery);
+
+        // Assert
+        Assert.Equal(expectedGarages, result);
+    }
+
+    private List<Garage> GenerateGarageList(int count)
+    {
+        var garages = new List<Garage>();
+
+        for (int i = 1; i <= count; i++)
+        {
+            garages.Add(new Garage { Id = i, Name = $"Garage {i}", Capacity = 5, User = null, Cars = null });
+        }
+
+        return garages;
+    }
+
 
 }

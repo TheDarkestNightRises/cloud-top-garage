@@ -12,6 +12,10 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
+    public UserRepository()
+    {
+    }
+
     public async Task CreateUserAsync(User user)
     {
         await _context.Users.AddAsync(user);
