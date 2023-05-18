@@ -61,7 +61,14 @@ jobs:
         run: dotnet tool install -g dotnet-format
       - name: Format code
         run: dotnet format --verbosity diagnostic
+      - name: Commit files
+        if: steps.command.outputs.command-name && steps.command.outputs.command-arguments == 'format' && steps.format.outputs.has-changes == 'true'
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -a -m 'Automated dotnet-format update
 
+          Co-authored-by: ${{ github.event.comment.user.login }} <${{ github.event.comment.user.id }}+${{ github.event.comment.user.login }}@users.noreply.github.com>'
   test:
     needs: build
     defaults:
