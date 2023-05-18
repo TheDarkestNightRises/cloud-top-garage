@@ -17,4 +17,13 @@ public class StatLogic : IStatLogic
     {
         return await _statRepository.GetAllStatsAsync();
     }
+
+    public async Task<IEnumerable<Stat>> GetAllStatsAsync(StatQuery statQuery)
+    {
+        if (statQuery.GarageId == 0)
+        {   
+            return await _statRepository.GetAllStatsAsync();
+        }
+        return await _statRepository.GetAllStatsAsync(statQuery);
+    }
 }
