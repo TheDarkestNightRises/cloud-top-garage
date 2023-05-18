@@ -26,7 +26,7 @@ public class CarLogicTests
         // Arrange
         var garage = new Garage { Id = 1 };
         _mockGarageRepository.Setup(x => x.GetGarageAsync(garage.Id)).ReturnsAsync(garage);
-        var car = new Car { Name = "Test Car", Description = "Test Description", Manufacturer = "Test Manufacturer", Model = "Test Model", Year = 2023,Seats = 5, Garage = garage, Engine = new Engine { Size = 2.0, FuelType = "Gas", PowerHP = 200, TorqueNM = 350 } };
+        var car = new Car { Name = "Test Car", Description = "Test Description", Manufacturer = "Test Manufacturer", Model = "Test Model", Year = 2023, Seats = 5, Garage = garage, Engine = new Engine { Size = 2.0, FuelType = "Gas", PowerHP = 200, TorqueNM = 350 } };
         _mockCarRepository.Setup(x => x.CreateCarAsync(car)).ReturnsAsync(car);
 
         // Act
@@ -48,34 +48,34 @@ public class CarLogicTests
     public async Task CreateCarAsync_ThrowsExceptionWithCorrectMessage_WhenCarInvalid()
     {
         // Arrange invalid name
-        var car = new Car {  Name = "", Description = "Test Description", Manufacturer = "Test Manufacturer", Model = "Test Model", Year = 2023,Seats = 5, Garage = new Garage{Id = 1}, Engine = new Engine { Size = 2.0, FuelType = "Gas", PowerHP = 200, TorqueNM = 350 }};
+        var car = new Car { Name = "", Description = "Test Description", Manufacturer = "Test Manufacturer", Model = "Test Model", Year = 2023, Seats = 5, Garage = new Garage { Id = 1 }, Engine = new Engine { Size = 2.0, FuelType = "Gas", PowerHP = 200, TorqueNM = 350 } };
 
 
         // Act & Assert
         ArgumentException ex = await Assert.ThrowsAsync<ArgumentException>(async () => await _carLogic.CreateCarAsync(car));
-        Assert.Equal(ex.Message, "The Name field is required.");
+        Assert.Equal("The Name field is required.", ex.Message);
     }
     [Fact]
     public async Task CreateCarAsync_ThrowsExceptionWithCorrectMessage_WhenEngineInvalid()
     {
         // Arrange
-        var car = new Car {  Name = "Test Name", Description = "Test Description", Manufacturer = "Test Manufacturer", Model = "Test Model", Year = 2023,Seats = 5, Garage = new Garage{Id = 1}, Engine = new Engine { Size = 0, FuelType = "Gas", PowerHP = 200, TorqueNM = 350 }};
+        var car = new Car { Name = "Test Name", Description = "Test Description", Manufacturer = "Test Manufacturer", Model = "Test Model", Year = 2023, Seats = 5, Garage = new Garage { Id = 1 }, Engine = new Engine { Size = 0, FuelType = "Gas", PowerHP = 200, TorqueNM = 350 } };
 
 
         // Act & Assert
         ArgumentException ex = await Assert.ThrowsAsync<ArgumentException>(async () => await _carLogic.CreateCarAsync(car));
-        Assert.Equal(ex.Message, "The engine size must be between 0.1 and 10.");
+        Assert.Equal("The engine size must be between 0.1 and 10.", ex.Message);
     }
     [Fact]
     public async Task CreateCarAsync_ThrowsExceptionWithCorrectMessage_WhenEngineIsNull()
     {
         // Arrange
-        var car = new Car {  Name = "Test Name", Description = "Test Description", Manufacturer = "Test Manufacturer", Model = "Test Model", Year = 2023,Seats = 5, Garage = new Garage{Id = 1}};
+        var car = new Car { Name = "Test Name", Description = "Test Description", Manufacturer = "Test Manufacturer", Model = "Test Model", Year = 2023, Seats = 5, Garage = new Garage { Id = 1 } };
 
 
         // Act & Assert
         ArgumentException ex = await Assert.ThrowsAsync<ArgumentException>(async () => await _carLogic.CreateCarAsync(car));
-        Assert.Equal(ex.Message, "Engine must be specified.");
+        Assert.Equal("Engine must be specified.", ex.Message);
     }
     [Fact]
     public async Task CreateCarAsync_InvalidGarage_ThrowsException()
@@ -122,7 +122,7 @@ public class CarLogicTests
         var result = await _carLogic.GetAllCarsAsync(carQuery);
 
         // Assert
-        Assert.Equal(1, result.Count());
+        Assert.Single(result);
         Assert.Equal("Car1", result.First().Name);
     }
     [Fact]
@@ -222,7 +222,7 @@ public class CarLogicTests
         ArgumentException ex = await Assert.ThrowsAsync<ArgumentException>(() => _carLogic.UpdateCarAsync(carToUpdate));
         Assert.Equal(ex.Message, $"Car with id {carId} not found");
     }
-    
+
     [Fact]
     public async Task UpdateCarAsync_ThrowsArgumentException_WhenGarageDoesNotExist()
     {
@@ -246,7 +246,7 @@ public class CarLogicTests
         int newGarageId = 2;
         int oldGarageId = 3;
         Car carToUpdate = new Car { Id = carId, Garage = new Garage { Id = newGarageId } };
-        Car carFound = new Car { Id = carId, Garage = new Garage{ Id = oldGarageId} };
+        Car carFound = new Car { Id = carId, Garage = new Garage { Id = oldGarageId } };
         Garage newGarage = new Garage { Id = newGarageId };
 
         _mockCarRepository.Setup(repo => repo.GetCarAsync(carId)).ReturnsAsync(carFound);
