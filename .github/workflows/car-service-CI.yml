@@ -38,8 +38,23 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
 
-  lint:
+  test:
     needs: build
+    defaults:
+      run:
+        working-directory: ./CarService
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+  
+  lint:
+    needs: test
     defaults:
       run:
         working-directory: ./CarService
@@ -70,19 +85,4 @@ jobs:
 
           Co-authored-by: ${{ github.event.comment.user.login }} <${{ github.event.comment.user.id }}+${{ github.event.comment.user.login }}@users.noreply.github.com>'
       - name: Push changes
-        run: git push
-        
-  test:
-    needs: build
-    defaults:
-      run:
-        working-directory: ./CarService
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 6.0.x
-      - name: Test
-        run: dotnet test --no-build --verbosity normal
+        run: git push --force origin main
