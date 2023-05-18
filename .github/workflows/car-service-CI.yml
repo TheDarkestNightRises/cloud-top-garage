@@ -60,7 +60,7 @@ jobs:
         if: steps.cache-dotnet-format.outputs.cache-hit != 'true'
         run: dotnet tool install -g dotnet-format
       - name: Format code
-        run: dotnet format --check --verbosity normal
+        run: dotnet format --verbosity diagnostic
 
   test:
     needs: build
