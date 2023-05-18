@@ -7,4 +7,6 @@ public class Stat
     public float Temperature { get; set; }
     public float Humidity { get; set; }
     public float CO2 { get; set; }
+
+    public DateTime Time { get; set; } = DateTime.Now;
 }
