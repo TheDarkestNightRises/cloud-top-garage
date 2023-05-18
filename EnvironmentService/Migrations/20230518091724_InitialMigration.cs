@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace EnvironmentService.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -53,7 +54,8 @@ namespace EnvironmentService.Migrations
                     IndoorEnvironmentId = table.Column<int>(type: "int", nullable: false),
                     Temperature = table.Column<float>(type: "real", nullable: false),
                     Humidity = table.Column<float>(type: "real", nullable: false),
-                    CO2 = table.Column<float>(type: "real", nullable: false)
+                    CO2 = table.Column<float>(type: "real", nullable: false),
+                    Time = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -23,5 +23,16 @@ public class StatRepository : IStatRepository
         return await _context.Stats.Include(stat => stat.IndoorEnvironment).ToListAsync();
     }
 
+    public async Task<IEnumerable<Stat>> GetAllStatsAsync(StatQuery statQuery)
+    {
+        var query = _context.Stats.Include(stat => stat.IndoorEnvironment).AsQueryable();
 
+        if (statQuery.GarageId != 0)
+        {
+            query = query.Where(s => s.IndoorEnvironment.Garage.Id == statQuery.GarageId);
+        }
+        
+        var stats = await query.ToListAsync();
+        return stats;
+    }
 }
