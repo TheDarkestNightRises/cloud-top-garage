@@ -63,7 +63,6 @@ jobs:
         id: format
         run: dotnet format --verbosity diagnostic
       - name: Commit files
-        if: steps.format.outputs.has-changes == 'true'
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
