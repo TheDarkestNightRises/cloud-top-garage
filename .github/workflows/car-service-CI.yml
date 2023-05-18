@@ -77,6 +77,10 @@ jobs:
       - name: Format code
         id: format
         run: dotnet format --verbosity diagnostic
+      - name: Create new branch
+        run: git branch lint-updates
+      - name: Checkout new branch
+        run: git checkout lint-updates
       - name: Commit files
         run: |
           git config --local user.name "github-actions[bot]"
@@ -85,4 +89,5 @@ jobs:
 
           Co-authored-by: ${{ github.event.comment.user.login }} <${{ github.event.comment.user.id }}+${{ github.event.comment.user.login }}@users.noreply.github.com>'
       - name: Push changes
-        run: git push --force origin main
+        run: git push origin lint-updates
+
