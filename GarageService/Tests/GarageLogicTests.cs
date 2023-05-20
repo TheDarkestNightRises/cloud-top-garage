@@ -137,7 +137,7 @@ public class GarageLogicTests
     [Theory]
     [InlineData(1, "Garage 1")]
     [InlineData(2, "Garage 2")]
-    public async Task CreateGarageAsync_WhenInvalidInput_ThrowsInvalidCapacityException(int userId, string garageName)
+    public async Task CreateGarageAsync_WhenInvalidInput_ThrowsException(int userId, string garageName)
     {
         // Arrange
         var garage = new Garage { Id = 1, Name = garageName, User = new User { Id = userId }, Capacity = -5 };
