@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Cache dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.nuget/packages
           key: ${{ runner.os }}-dotnet-${{ hashFiles('**/EnvironmentService.csproj') }}
@@ -35,6 +35,30 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
   
+  lint:
+    needs: build
+    defaults:
+      run:
+        working-directory: ./EnvironmentService
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+      - name: Cache dotnet format
+        id: cache-dotnet-format
+        uses: actions/cache@v3
+        with:
+          path: ~/.dotnet/tools
+          key: ${{ runner.os }}-dotnet-format-${{ hashFiles('**/EnvironmentService.csproj') }}
+      - name: Install dotnet format
+        if: steps.cache-dotnet-format.outputs.cache-hit != 'true'
+        run: dotnet tool install -g dotnet-format
+      - name: Format code
+        run: dotnet format --verbosity diagnostic
+
   test:
     needs: build
     defaults:

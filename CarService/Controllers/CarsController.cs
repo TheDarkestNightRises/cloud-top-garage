@@ -190,10 +190,10 @@ public class CarsController : ControllerBase
         catch (Exception e)
         {
             Console.WriteLine(e);
-            throw e;
+            throw;
             return StatusCode(500, e.Message);
         }
     }
-    
-    
+
+
 }

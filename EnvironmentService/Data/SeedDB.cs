@@ -37,7 +37,7 @@ public static class PrepDb
             Console.WriteLine("--> Seeding Data...");
             var garages = new List<Garage>
             {
-                new Garage { Id = 1 },
+                new Garage { },
             };
 
             var indoorEnvironments = new List<IndoorEnvironment>
