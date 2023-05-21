@@ -164,5 +164,23 @@ public class UsersControllerTests
 
     }
 
+    [Fact]
+    public async Task CreateUserAsync_WhenArgumentException_ReturnsBadRequest()
+    {
+        // Arrange
+        var userCreateDto = new UserCreateDto { };
+        var exceptionMessage = "Invalid user create.";
+
+        _mapperMock.Setup(mapper => mapper.Map<User>(userCreateDto)).Returns(It.IsAny<User>());
+        _logicMock.Setup(userLogic => userLogic.CreateUser(It.IsAny<User>())).Throws(new ArgumentException(exceptionMessage));
+
+        // Act
+        var result = await _controller.CreateUserAsync(userCreateDto);
+
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal(exceptionMessage, badRequestResult.Value);
+    }
+
 }
 
