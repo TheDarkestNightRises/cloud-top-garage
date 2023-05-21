@@ -44,7 +44,7 @@ public class UsersController : ControllerBase
         try
         {
             var userToUpdate = _mapper.Map<User>(userUpdateDto);
-            await _userLogic.UpdateUser(userToUpdate);
+            await _userLogic.UpdateUserAsync(userToUpdate);
             return NoContent();
         }
         catch (ArgumentException e)
@@ -63,7 +63,7 @@ public class UsersController : ControllerBase
         try
         {
             var user = _mapper.Map<User>(userCreateDto);
-            var userCreated = await _userLogic.CreateUser(user);
+            var userCreated = await _userLogic.CreateUserAsync(user);
             UserReadDto userReadDto = _mapper.Map<UserReadDto>(userCreated);
             return Created($"/users/{userReadDto.Id}", userReadDto);
         }
@@ -83,7 +83,7 @@ public class UsersController : ControllerBase
         try
         {
             // Delegate to the logic layer to get the user by email
-            var user = await _userLogic.GetUserByEmail(email);
+            var user = await _userLogic.GetUserByEmailAsync(email);
             if (user == null)
             {
                 // Return 404 if no user was found

@@ -5,7 +5,7 @@
 namespace UserService.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,7 +20,7 @@ namespace UserService.Migrations
                     Email = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Age = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Age = table.Column<int>(type: "int", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
