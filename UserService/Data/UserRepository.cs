@@ -11,6 +11,9 @@ public class UserRepository : IUserRepository
     {
         _context = context;
     }
+    public UserRepository()
+    {
+    }
 
     public async Task<User> CreateUserAsync(User user)
     {

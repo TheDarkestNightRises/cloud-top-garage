@@ -14,7 +14,7 @@ public class UserLogic : IUserLogic
         _userRepository = userRepository;
     }
 
-    public async Task<User> CreateUser(User user)
+    public async Task<User> CreateUserAsync(User user)
     {
         var userFound = await _userRepository.GetUserByEmail(user.Email);
         if (userFound != null)
@@ -48,25 +48,35 @@ public class UserLogic : IUserLogic
 
     }
 
-    public async Task<User> UpdateUser(User userToUpdate)
+    public async Task<User> UpdateUserAsync(User userToUpdate)
     {
-        User? userFound = await _userRepository.GetUserByIdAsync(userToUpdate.Id);
-        if (userFound == null)
+        User? existingUser = await _userRepository.GetUserByIdAsync(userToUpdate.Id);
+        if (existingUser == null)
         {
             throw new ArgumentException($"There is no user with the id: {userToUpdate.Id}");
         }
-        userFound.Email = userToUpdate.Email;
-        userFound.Password = userToUpdate.Password;
-        userFound.Name = userToUpdate.Name;
-        userFound.Age = userToUpdate.Age;
-        userFound.Phone = userToUpdate.Phone;
-        Validator.ValidateObject(userFound, new ValidationContext(userFound), validateAllProperties: true);
-        await _userRepository.UpdateUserAsync(userFound);
-        return userFound;
+
+        existingUser = new User
+        {
+
+            Id = existingUser.Id,
+            Email = userToUpdate.Email,
+            Role = existingUser.Role,
+            Password = userToUpdate.Password,
+            Name = userToUpdate.Name,
+            Age = userToUpdate.Age,
+            Phone = userToUpdate.Phone
+        };
+        Validator.ValidateObject(existingUser, new ValidationContext(existingUser), validateAllProperties: true);
+
+        await _userRepository.UpdateUserAsync(existingUser);
+
+        return existingUser;
     }
 
-    public async Task<User?> GetUserByEmail(string email)
+    public async Task<User?> GetUserByEmailAsync(string email)
     {
         return await _userRepository.GetUserByEmail(email);
     }
+
 }

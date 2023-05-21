@@ -4,10 +4,10 @@ using UserService.Models;
 namespace UserService.Logic;
 public interface IUserLogic
 {
-    Task<User> CreateUser(User user);
+    Task<User> CreateUserAsync(User user);
     Task<IEnumerable<User>> GetAllUsersAsync();
-    Task<User?> GetUserByEmail(string email);
+    Task<User?> GetUserByEmailAsync(string email);
     Task<User> LoginUserAsync(string email, string password);
-    Task<User> UpdateUser(User userToUpdate);
-    
+    Task<User> UpdateUserAsync(User userToUpdate);
+
 }
