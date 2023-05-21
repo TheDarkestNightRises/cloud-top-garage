@@ -26,8 +26,8 @@ public class UsersControllerTests
     public async Task GetAllUsersAsync_WhenUsersExists_ReturnsOkResult()
     {
         // Arrange
-        var users = new List<User> { new User { Name = "John Doe", Email = "johndoe@email.com", Password = "123", Role = "User", Age = "18", Phone = "123" } };
-        var usersMapped = new List<UserReadDto> { new UserReadDto { Name = "John Doe", Email = "johndoe@email.com", Age = "18", Phone = "123" } };
+        var users = new List<User> { new User { Name = "John Doe", Email = "johndoe@email.com", Password = "123abcdefg", Role = "User", Age = 18, Phone = "123" } };
+        var usersMapped = new List<UserReadDto> { new UserReadDto { Name = "John Doe", Email = "johndoe@email.com", Age = 18, Phone = "123" } };
 
 
         _logicMock.Setup(ul => ul.GetAllUsersAsync()).ReturnsAsync(users);
@@ -88,8 +88,8 @@ public class UsersControllerTests
     public async Task UpdateUserAsync_WhenCalled_ReturnsNoContent()
     {
         // Arrange
-        var userUpdateDto = new UserUpdateDto { Name = "John Doe", Email = "johndoe@email.com", Password = "123", Age = "18", Phone = "123" };
-        var userToUpdate = new User { Name = "John Doe", Email = "johndoe@email.com", Password = "123", Age = "18", Phone = "123" };
+        var userUpdateDto = new UserUpdateDto { Name = "John Doe", Email = "johndoe@email.com", Password = "123abcdefg", Age = 18, Phone = "123" };
+        var userToUpdate = new User { Name = "John Doe", Email = "johndoe@email.com", Password = "123abcdefg", Age = 18, Phone = "123" };
 
         _mapperMock.Setup(m => m.Map<User>(userUpdateDto)).Returns(userToUpdate);
 
@@ -144,10 +144,10 @@ public class UsersControllerTests
     public async Task CreateUserAsync_WhenValidUser_ReturnsCreated()
     {
         // Arrange
-        var userCreateDto = new UserCreateDto { Name = "John Doe", Email = "johndoe@email.com", Password = "123", Age = "18", Phone = "123" };
-        var user = new User { Name = "John Doe", Email = "johndoe@email.com", Password = "123", Role = "User", Age = "18", Phone = "123" };
-        var userCreated = new User { Id = 1, Name = "John Doe", Email = "johndoe@email.com", Password = "123", Role = "User", Age = "18", Phone = "123" };
-        var userReadDto = new UserReadDto { Id = 1, Name = "John Doe", Email = "johndoe@email.com", Age = "18", Phone = "123" };
+        var userCreateDto = new UserCreateDto { Name = "John Doe", Email = "johndoe@email.com", Password = "123abcdefg", Age = 18, Phone = "123" };
+        var user = new User { Name = "John Doe", Email = "johndoe@email.com", Password = "123abcdefg", Role = "User", Age = 18, Phone = "123" };
+        var userCreated = new User { Id = 1, Name = "John Doe", Email = "johndoe@email.com", Password = "123abcdefg", Role = "User", Age = 18, Phone = "123" };
+        var userReadDto = new UserReadDto { Id = 1, Name = "John Doe", Email = "johndoe@email.com", Age = 18, Phone = "123" };
 
         _mapperMock.Setup(mapper => mapper.Map<User>(userCreateDto)).Returns(user);
         _logicMock.Setup(userLogic => userLogic.CreateUser(user)).ReturnsAsync(userCreated);
