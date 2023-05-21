@@ -137,6 +137,32 @@ public class UsersControllerTests
         Assert.Equal(500, statusCodeResult.StatusCode);
         Assert.Equal(exceptionMessage, statusCodeResult.Value);
     }
-}
 
+    // ----------------------------- CREATE USER --------------------------------------------
+
+    [Fact]
+    public async Task CreateUserAsync_WhenValidUser_ReturnsCreated()
+    {
+        // Arrange
+        var userCreateDto = new UserCreateDto { Name = "John Doe", Email = "johndoe@email.com", Password = "123", Age = "18", Phone = "123" };
+        var user = new User { Name = "John Doe", Email = "johndoe@email.com", Password = "123", Role = "User", Age = "18", Phone = "123" };
+        var userCreated = new User { Id = 1, Name = "John Doe", Email = "johndoe@email.com", Password = "123", Role = "User", Age = "18", Phone = "123" };
+        var userReadDto = new UserReadDto { Id = 1, Name = "John Doe", Email = "johndoe@email.com", Age = "18", Phone = "123" };
+
+        _mapperMock.Setup(mapper => mapper.Map<User>(userCreateDto)).Returns(user);
+        _logicMock.Setup(userLogic => userLogic.CreateUser(user)).ReturnsAsync(userCreated);
+        _mapperMock.Setup(mapper => mapper.Map<UserReadDto>(userCreated)).Returns(userReadDto);
+
+        // Act
+        var result = await _controller.CreateUserAsync(userCreateDto);
+
+        // Assert
+        Console.WriteLine(result);
+        var createdResult = Assert.IsType<CreatedResult>(result);
+        Assert.Equal($"/users/{userReadDto.Id}", "/users/1");
+        Assert.Equal(userReadDto, createdResult.Value);
+
+    }
+
+}
 
