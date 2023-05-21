@@ -30,17 +30,17 @@ public class CarsControllerTests
         var carQuery = new CarQuery();
 
         //car1
-        var garageDto = new GarageDto{ Id = 1 };
-        var engine = new Engine{Id = 1, Size = 1.4, FuelType = "Diesel", PowerHP = 100, TorqueNM = 400};
+        var garageDto = new GarageDto { Id = 1 };
+        var engine = new Engine { Id = 1, Size = 1.4, FuelType = "Diesel", PowerHP = 100, TorqueNM = 400 };
 
-        var garage = new Garage{ Id = 1 };
+        var garage = new Garage { Id = 1 };
 
-        var car1 = new Car {Id = 1, Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 5, Engine = engine, Garage = garage };
-        
-        var engineReadDto = new EngineReadDto{ Id = 1, Size = 1.4, FuelType = "Diesel", PowerHP = 100, TorqueNM = 400 };
+        var car1 = new Car { Id = 1, Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 5, Engine = engine, Garage = garage };
+
+        var engineReadDto = new EngineReadDto { Id = 1, Size = 1.4, FuelType = "Diesel", PowerHP = 100, TorqueNM = 400 };
 
         var carReadDto1 = new CarReadDto { Id = 1, Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 5, Engine = engineReadDto, Garage = garageDto };
-        
+
         //car2
         var car2 = new Car { Id = 1, Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 5, Engine = engine, Garage = garage };
         var carReadDto2 = new CarReadDto { Id = 1, Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 5, Engine = engineReadDto, Garage = garageDto };
@@ -54,7 +54,7 @@ public class CarsControllerTests
         //_mapperMock.Setup(m => m.Map<CarReadDto>(car)).Returns(carReadDto);
         _mapperMock.Setup(m => m.Map<EngineReadDto>(engine)).Returns(engineReadDto);
         _mapperMock.Setup(m => m.Map<GarageDto>(garage)).Returns(garageDto);
-        
+
         _mapperMock.Setup(x => x.Map<CarQuery>(carQueryDto)).Returns(carQuery);
         _logicMock.Setup(x => x.GetAllCarsAsync(carQuery)).ReturnsAsync(cars);
         _mapperMock.Setup(x => x.Map<IEnumerable<CarReadDto>>(cars)).Returns(carReadDtos);
@@ -88,11 +88,11 @@ public class CarsControllerTests
     public async Task UpdateCar_ReturnsUpdatedCar_WhenCarExists()
     {
         // Arrange
-        var garageDto = new GarageDto{ Id = 1 };
+        var garageDto = new GarageDto { Id = 1 };
 
-        var carUpdateDto = new CarUpdateDto{ Id = 1, Garage = garageDto };
-        var garage = new Garage{ Id = 1 };
-        var car = new Car{ Id = 1, Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 5, Garage = garage };
+        var carUpdateDto = new CarUpdateDto { Id = 1, Garage = garageDto };
+        var garage = new Garage { Id = 1 };
+        var car = new Car { Id = 1, Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 5, Garage = garage };
         _mapperMock.Setup(x => x.Map<Car>(carUpdateDto)).Returns(car);
         _mapperMock.Setup(m => m.Map<Garage>(garageDto)).Returns(garage);
         _logicMock.Setup(x => x.UpdateCarAsync(car)).ReturnsAsync(car);
@@ -104,7 +104,7 @@ public class CarsControllerTests
         Assert.IsType<NoContentResult>(result);
         _logicMock.Verify(logic => logic.UpdateCarAsync(car), Times.Once);
     }
-    
+
     [Fact]
     public async Task UpdateCar_ReturnsStatusCode500_WhenExceptionThrown()
     {
@@ -145,19 +145,19 @@ public class CarsControllerTests
     public async Task CreateCar_ReturnsCreatedWithCorrectObject_WhenCarIsValid()
     {
         // Arrange
-        var engineCreateDto = new EngineCreateDto{ Size = 1.4, FuelType = "Diesel", PowerHP = 100, TorqueNM = 400 };
-        var garageDto = new GarageDto{ Id = 1 };
-        var carCreateDto = new CarCreateDto{ Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 5, Engine = engineCreateDto, Garage = garageDto };
-        
-        var engine = new Engine{ Id = 1, Size = 1.4, FuelType = "Diesel", PowerHP = 100, TorqueNM = 400 };
+        var engineCreateDto = new EngineCreateDto { Size = 1.4, FuelType = "Diesel", PowerHP = 100, TorqueNM = 400 };
+        var garageDto = new GarageDto { Id = 1 };
+        var carCreateDto = new CarCreateDto { Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 5, Engine = engineCreateDto, Garage = garageDto };
 
-        var garage = new Garage{ Id = 1 };
+        var engine = new Engine { Id = 1, Size = 1.4, FuelType = "Diesel", PowerHP = 100, TorqueNM = 400 };
+
+        var garage = new Garage { Id = 1 };
 
         var car = new Car { Id = 1, Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 5, Engine = engine, Garage = garage };
-        var engineReadDto = new EngineReadDto{ Id = 1, Size = 1.4, FuelType = "Diesel", PowerHP = 100, TorqueNM = 400 };
+        var engineReadDto = new EngineReadDto { Id = 1, Size = 1.4, FuelType = "Diesel", PowerHP = 100, TorqueNM = 400 };
 
         var carReadDto = new CarReadDto { Id = 1, Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 5, Engine = engineReadDto, Garage = garageDto };
-        
+
         _mapperMock.Setup(m => m.Map<Car>(carCreateDto)).Returns(car);
         _mapperMock.Setup(m => m.Map<Engine>(engineCreateDto)).Returns(engine);
         _mapperMock.Setup(m => m.Map<Garage>(garageDto)).Returns(garage);
@@ -178,8 +178,8 @@ public class CarsControllerTests
     [Fact]
     public async Task CreateCar_ReturnsBadRequestObjectResult_WhenCarIsInvalid()
     {
-        var carCreateDto = new CarCreateDto{ Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 0 };
-        var car = new Car(){Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 0};
+        var carCreateDto = new CarCreateDto { Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 0 };
+        var car = new Car() { Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 0 };
         var carReadDto = new CarReadDto();
         _mapperMock.Setup(m => m.Map<Car>(carCreateDto)).Returns(car);
         _logicMock.Setup(l => l.CreateCarAsync(car)).Throws(new ArgumentException("Test message"));
@@ -195,11 +195,18 @@ public class CarsControllerTests
     [Fact]
     public async Task CreateCar_ReturnsStatusCode500_WhenLogicThrowsException()
     {
-            // Arrange
-        var carCreateDto = new CarCreateDto{ Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 5
+        // Arrange
+        var carCreateDto = new CarCreateDto
+        {
+            Name = "Test car",
+            Description = "Test description",
+            Manufacturer = "Test manufacturer",
+            Model = "Test model",
+            Year = 2022,
+            Seats = 5
         };
-        var car = new Car(){ Id = 1, Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 0};
-        var carReadDto = new CarReadDto(){ Id = 1,Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 0};
+        var car = new Car() { Id = 1, Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 0 };
+        var carReadDto = new CarReadDto() { Id = 1, Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 0 };
         _mapperMock.Setup(m => m.Map<Car>(carCreateDto)).Returns(car);
         _logicMock.Setup(l => l.CreateCarAsync(car)).Throws(new Exception("Test message"));
         _mapperMock.Setup(m => m.Map<CarReadDto>(car)).Returns(carReadDto);
@@ -216,13 +223,13 @@ public class CarsControllerTests
     public async Task GetCarById_ReturnsOkResultWithCorrectCarDto_WhenCarExists()
     {
         // Arrange
-        var garageDto = new GarageDto{ Id = 1 };
-        var engine = new Engine{ Id = 1, Size = 1.4, FuelType = "Diesel", PowerHP = 100, TorqueNM = 400 };
+        var garageDto = new GarageDto { Id = 1 };
+        var engine = new Engine { Id = 1, Size = 1.4, FuelType = "Diesel", PowerHP = 100, TorqueNM = 400 };
 
-        var garage = new Garage{ Id = 1 };
+        var garage = new Garage { Id = 1 };
 
         var car1 = new Car { Id = 1, Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 5, Engine = engine, Garage = garage };
-        var engineReadDto = new EngineReadDto{ Id = 1, Size = 1.4, FuelType = "Diesel", PowerHP = 100, TorqueNM = 400 };
+        var engineReadDto = new EngineReadDto { Id = 1, Size = 1.4, FuelType = "Diesel", PowerHP = 100, TorqueNM = 400 };
 
         var carReadDto1 = new CarReadDto { Id = 1, Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 5, Engine = engineReadDto, Garage = garageDto };
         _logicMock.Setup(x => x.GetCarAsync(1)).ReturnsAsync(car1);
@@ -330,12 +337,12 @@ public class CarsControllerTests
     {
         // Arrange
         int carId = 1;
-        var imageBytes = new byte[]{ 1, 2, 3};
+        var imageBytes = new byte[] { 1, 2, 3 };
         var imageFile = new FormFile(new MemoryStream(imageBytes), 0, imageBytes.Length, "image/jpg", "car.jpg");
-        
+
         var carImage = new Image { Data = imageBytes };
         var createdImage = new Image { Data = imageBytes };
-        
+
         _logicMock.Setup(x => x.CreateCarImage(carImage, carId)).ReturnsAsync(createdImage);
         Assert.Equal(carImage.Data, createdImage.Data);
         // Act

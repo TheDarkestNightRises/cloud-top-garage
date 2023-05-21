@@ -45,4 +45,8 @@ public class Image
         return true;
     }
 
+    public override int GetHashCode()
+    {
+        throw new NotImplementedException();
+    }
 }

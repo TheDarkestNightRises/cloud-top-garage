@@ -2,6 +2,7 @@
 using AutoMapper;
 using EnvironmentService.Application.LogicContracts;
 using EnvironmentService.Dtos;
+using EnvironmentService.Models;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -17,12 +18,14 @@ public class StatsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<StatReadDto>>> GetAllStatsAsync()
+    public async Task<ActionResult<IEnumerable<StatReadDto>>> GetAllStatsAsync([FromQuery] StatQueryDto statQueryDto)
     {
         try
         {
-            // Delegate to the logic layer to retrieve all garages
-            var stats = await _statLogic.GetAllStatsAsync();
+            // Delegate to the logic layer to retrieve all garages 
+            var statQuery = _mapper.Map<StatQuery>(statQueryDto);
+
+            var stats = await _statLogic.GetAllStatsAsync(statQuery);
 
             // Return 404 if no garage was found
             if (stats == null || stats.Count() == 0)
