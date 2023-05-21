@@ -182,5 +182,25 @@ public class UsersControllerTests
         Assert.Equal(exceptionMessage, badRequestResult.Value);
     }
 
+    [Fact]
+    public async Task CreateUserAsync_WhenException_ReturnsInternalServerError()
+    {
+        // Arrange
+        var userCreateDto = new UserCreateDto { };
+        var exceptionMessage = "An error occurred.";
+
+        _mapperMock.Setup(mapper => mapper.Map<User>(userCreateDto)).Returns(It.IsAny<User>());
+        _logicMock.Setup(userLogic => userLogic.CreateUser(It.IsAny<User>())).Throws(new Exception(exceptionMessage));
+
+        // Act
+        var result = await _controller.CreateUserAsync(userCreateDto);
+
+        // Assert
+        var statusCodeResult = Assert.IsType<ObjectResult>(result);
+        Assert.Equal(500, statusCodeResult.StatusCode);
+        Assert.Equal(exceptionMessage, statusCodeResult.Value);
+    }
+
+  
 }
 
