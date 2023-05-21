@@ -19,15 +19,27 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<UserReadDto>>> GetAllUsers()
+    public async Task<ActionResult<IEnumerable<UserReadDto>>> GetAllUsersAsync()
     {
-        var users = await _userLogic.GetAllUsersAsync();
-        var usersMapped = _mapper.Map<IEnumerable<UserReadDto>>(users);
-        return Ok(usersMapped);
+        try
+        {
+            var users = await _userLogic.GetAllUsersAsync();
+            if (users == null)
+            {
+                return NotFound();
+            }
+            var usersMapped = _mapper.Map<IEnumerable<UserReadDto>>(users);
+            return Ok(usersMapped);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
     }
 
     [HttpPatch]
-    public async Task<ActionResult> UpdateUser([FromBody] UserUpdateDto userUpdateDto)
+    public async Task<ActionResult> UpdateUserAsync([FromBody] UserUpdateDto userUpdateDto)
     {
         try
         {
@@ -46,7 +58,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> CreateUser([FromBody] UserCreateDto userCreateDto)
+    public async Task<ActionResult> CreateUserAsync([FromBody] UserCreateDto userCreateDto)
     {
         try
         {
@@ -66,7 +78,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("{email}")]
-    public async Task<ActionResult<UserReadDto>> GetUserByEmail(string email)
+    public async Task<ActionResult<UserReadDto>> GetUserByEmailAsync(string email)
     {
         try
         {
