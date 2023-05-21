@@ -222,6 +222,18 @@ public class UsersControllerTests
         var returnedUser = Assert.IsType<UserReadDto>(okResult.Value);
     }
 
- 
+    [Fact]
+    public async Task GetUserByEmailAsync_ReturnsNotFound_WhenUserDoesNotExist()
+    {
+        // Arrange
+        var email = "nonexistent@example.com";
+        _logicMock.Setup(ul => ul.GetUserByEmail(email)).ReturnsAsync((User)null);
+        // Act
+        var result = await _controller.GetUserByEmailAsync(email);
+        // Assert
+        Assert.IsType<NotFoundResult>(result.Result);
+    }
+
+  
 }
 
