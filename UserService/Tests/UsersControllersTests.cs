@@ -201,6 +201,27 @@ public class UsersControllerTests
         Assert.Equal(exceptionMessage, statusCodeResult.Value);
     }
 
-  
+    // ----------------------------- GET USERS BY EMAIL --------------------------------------------
+
+    [Fact]
+    public async Task GetUserByEmailAsync_ReturnsOkResult_WhenUserExists()
+    {
+        // Arrange
+        var email = "test@example.com";
+        var user = new User { Email = email, Name = "Test User" };
+        var userReadDto = new UserReadDto { Email = email, Name = "Test User" };
+
+        _logicMock.Setup(ul => ul.GetUserByEmail(email)).ReturnsAsync(user);
+        _mapperMock.Setup(m => m.Map<UserReadDto>(user)).Returns(userReadDto);
+
+        // Act
+        var result = await _controller.GetUserByEmailAsync(email);
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result.Result);
+        var returnedUser = Assert.IsType<UserReadDto>(okResult.Value);
+    }
+
+ 
 }
 
