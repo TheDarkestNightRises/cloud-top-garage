@@ -1,5 +1,6 @@
 namespace UserService.Logic;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using UserService.Data;
 using UserService.Dtos;
 using UserService.Models;
@@ -21,6 +22,7 @@ public class UserLogic : IUserLogic
             throw new ArgumentException("Email already exists!");
         }
         user.Role = "User";
+        Validator.ValidateObject(user, new ValidationContext(user), validateAllProperties: true);
         return await _userRepository.CreateUserAsync(user);
     }
 
@@ -58,6 +60,7 @@ public class UserLogic : IUserLogic
         userFound.Name = userToUpdate.Name;
         userFound.Age = userToUpdate.Age;
         userFound.Phone = userToUpdate.Phone;
+        Validator.ValidateObject(userFound, new ValidationContext(userFound), validateAllProperties: true);
         await _userRepository.UpdateUserAsync(userFound);
         return userFound;
     }
@@ -66,6 +69,4 @@ public class UserLogic : IUserLogic
     {
         return await _userRepository.GetUserByEmail(email);
     }
-
-
 }
