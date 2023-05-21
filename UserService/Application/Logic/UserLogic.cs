@@ -56,17 +56,9 @@ public class UserLogic : IUserLogic
             throw new ArgumentException($"There is no user with the id: {userToUpdate.Id}");
         }
 
-        existingUser = new User
-        {
+        (existingUser.Email, existingUser.Password, existingUser.Name, existingUser.Age, existingUser.Phone) =
+        (userToUpdate.Email, userToUpdate.Password, userToUpdate.Name, userToUpdate.Age, userToUpdate.Phone);
 
-            Id = existingUser.Id,
-            Email = userToUpdate.Email,
-            Role = existingUser.Role,
-            Password = userToUpdate.Password,
-            Name = userToUpdate.Name,
-            Age = userToUpdate.Age,
-            Phone = userToUpdate.Phone
-        };
         Validator.ValidateObject(existingUser, new ValidationContext(existingUser), validateAllProperties: true);
 
         await _userRepository.UpdateUserAsync(existingUser);
