@@ -108,7 +108,7 @@ public class UsersControllerTests
         var emsg = "Invalid user update.";
 
         _mapperMock.Setup(m => m.Map<User>(userUpdateDto)).Returns(userToUpdate);
-        _logicMock.Setup(ul => ul.UpdateUser(userToUpdate)).ThrowsAsync(new ArgumentException(emsg));
+        _logicMock.Setup(ul => ul.UpdateUserAsync(userToUpdate)).ThrowsAsync(new ArgumentException(emsg));
 
         // Act
         var result = await _controller.UpdateUserAsync(userUpdateDto);
@@ -127,7 +127,7 @@ public class UsersControllerTests
         var userToUpdate = new User { };
 
         _mapperMock.Setup(m => m.Map<User>(userUpdateDto)).Returns(userToUpdate);
-        _logicMock.Setup(ul => ul.UpdateUser(userToUpdate)).Throws(new Exception(exceptionMessage));
+        _logicMock.Setup(ul => ul.UpdateUserAsync(userToUpdate)).Throws(new Exception(exceptionMessage));
 
         // Act
         var result = await _controller.UpdateUserAsync(userUpdateDto);
@@ -150,7 +150,7 @@ public class UsersControllerTests
         var userReadDto = new UserReadDto { Id = 1, Name = "John Doe", Email = "johndoe@email.com", Age = 18, Phone = "123" };
 
         _mapperMock.Setup(mapper => mapper.Map<User>(userCreateDto)).Returns(user);
-        _logicMock.Setup(userLogic => userLogic.CreateUser(user)).ReturnsAsync(userCreated);
+        _logicMock.Setup(userLogic => userLogic.CreateUserAsync(user)).ReturnsAsync(userCreated);
         _mapperMock.Setup(mapper => mapper.Map<UserReadDto>(userCreated)).Returns(userReadDto);
 
         // Act
@@ -172,7 +172,7 @@ public class UsersControllerTests
         var exceptionMessage = "Invalid user create.";
 
         _mapperMock.Setup(mapper => mapper.Map<User>(userCreateDto)).Returns(It.IsAny<User>());
-        _logicMock.Setup(userLogic => userLogic.CreateUser(It.IsAny<User>())).Throws(new ArgumentException(exceptionMessage));
+        _logicMock.Setup(userLogic => userLogic.CreateUserAsync(It.IsAny<User>())).Throws(new ArgumentException(exceptionMessage));
 
         // Act
         var result = await _controller.CreateUserAsync(userCreateDto);
@@ -190,7 +190,7 @@ public class UsersControllerTests
         var exceptionMessage = "An error occurred.";
 
         _mapperMock.Setup(mapper => mapper.Map<User>(userCreateDto)).Returns(It.IsAny<User>());
-        _logicMock.Setup(userLogic => userLogic.CreateUser(It.IsAny<User>())).Throws(new Exception(exceptionMessage));
+        _logicMock.Setup(userLogic => userLogic.CreateUserAsync(It.IsAny<User>())).Throws(new Exception(exceptionMessage));
 
         // Act
         var result = await _controller.CreateUserAsync(userCreateDto);
@@ -211,7 +211,7 @@ public class UsersControllerTests
         var user = new User { Email = email, Name = "Test User" };
         var userReadDto = new UserReadDto { Email = email, Name = "Test User" };
 
-        _logicMock.Setup(ul => ul.GetUserByEmail(email)).ReturnsAsync(user);
+        _logicMock.Setup(ul => ul.GetUserByEmailAsync(email)).ReturnsAsync(user);
         _mapperMock.Setup(m => m.Map<UserReadDto>(user)).Returns(userReadDto);
 
         // Act
@@ -227,7 +227,7 @@ public class UsersControllerTests
     {
         // Arrange
         var email = "nonexistent@example.com";
-        _logicMock.Setup(ul => ul.GetUserByEmail(email)).ReturnsAsync((User)null);
+        _logicMock.Setup(ul => ul.GetUserByEmailAsync(email)).ReturnsAsync((User)null);
         // Act
         var result = await _controller.GetUserByEmailAsync(email);
         // Assert
@@ -241,7 +241,7 @@ public class UsersControllerTests
         var email = "test@example.com";
         var exceptionMessage = "An error occurred while fetching the user.";
 
-        _logicMock.Setup(ul => ul.GetUserByEmail(email)).ThrowsAsync(new Exception(exceptionMessage));
+        _logicMock.Setup(ul => ul.GetUserByEmailAsync(email)).ThrowsAsync(new Exception(exceptionMessage));
 
         // Act
         var result = await _controller.GetUserByEmailAsync(email);
