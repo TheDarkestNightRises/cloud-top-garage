@@ -234,6 +234,21 @@ public class UsersControllerTests
         Assert.IsType<NotFoundResult>(result.Result);
     }
 
-  
+    [Fact]
+    public async Task GetUserByEmailAsync_ReturnsStatusCode500_WhenExceptionIsThrown()
+    {
+        // Arrange
+        var email = "test@example.com";
+        var exceptionMessage = "An error occurred while fetching the user.";
+
+        _logicMock.Setup(ul => ul.GetUserByEmail(email)).ThrowsAsync(new Exception(exceptionMessage));
+
+        // Act
+        var result = await _controller.GetUserByEmailAsync(email);
+
+        // Assert
+        var objectResult = Assert.IsType<ObjectResult>(result.Result);
+        Assert.Equal(500, objectResult.StatusCode);
+    }
 }
 
