@@ -21,9 +21,4 @@ public class GarageReadDto
 
     public IEnumerable<CarReadDto> Cars { get; set; }
 
-
-    // public override string ToString()
-    // {
-    //     return $"{Id} vailable slots: {AvailableSlots}, User: {User}, Cars: {string.Join(",", Cars)}";
-    // }
 }

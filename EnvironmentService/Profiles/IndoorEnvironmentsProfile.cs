@@ -8,7 +8,7 @@ public class IndoorEnvironmentsProfile : Profile
 {
     public IndoorEnvironmentsProfile()
     {
-        CreateMap<IndoorEnvironment,IndoorEnvironmentReadDto>();
-        CreateMap<IndoorEnvironmentReadDto,IndoorEnvironment>();
+        CreateMap<IndoorEnvironment, IndoorEnvironmentReadDto>();
+        CreateMap<IndoorEnvironmentReadDto, IndoorEnvironment>();
     }
 }

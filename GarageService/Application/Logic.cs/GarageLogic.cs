@@ -1,9 +1,9 @@
-using GarageService.Application.LogicContracts;
-using GarageService.Models;
-using GarageService.Data;
-using MassTransit;
-using Contracts;
 using System.ComponentModel.DataAnnotations;
+using Contracts;
+using GarageService.Application.LogicContracts;
+using GarageService.Data;
+using GarageService.Models;
+using MassTransit;
 
 public class GarageLogic : IGarageLogic
 {

@@ -1,10 +1,10 @@
-using Xunit;
-using Moq;
-using GarageService.Data;
+using Contracts;
 using GarageService.Application.LogicContracts;
+using GarageService.Data;
 using GarageService.Models;
 using MassTransit;
-using Contracts;
+using Moq;
+using Xunit;
 
 public class GarageLogicTests
 {

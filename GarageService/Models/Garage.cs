@@ -1,5 +1,5 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace GarageService.Models;
 
 public class Garage
@@ -26,5 +26,23 @@ public class Garage
     {
         string carsString = Cars != null ? string.Join(",", Cars) : "No Cars";
         return $"{Id} vailable slots: {AvailableSlots}, User: {User}, Cars: {carsString}";
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        Garage otherGarage = (Garage)obj;
+        return Id == otherGarage.Id &&
+               Name == otherGarage.Name &&
+               Capacity == otherGarage.Capacity;
+    }
+
+    public override int GetHashCode()
+    {
+        throw new NotImplementedException();
     }
 }

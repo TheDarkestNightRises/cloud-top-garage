@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
+using GarageService.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using GarageService.Models;
 
 namespace GarageService.Data;
 public static class PrepDb
@@ -34,10 +34,10 @@ public static class PrepDb
         if (!context.Garages.Any())
         {
             var car1 = new Car { };
-            var car2 = new Car {  };
-            var car3 = new Car {  };
-            var car4 = new Car {  };
-            var car5 = new Car {  };
+            var car2 = new Car { };
+            var car3 = new Car { };
+            var car4 = new Car { };
+            var car5 = new Car { };
 
             var user1 = new User { };
             var user2 = new User { };
@@ -57,7 +57,7 @@ public static class PrepDb
             context.Users.AddRange(user1, user2);
             context.Locations.AddRange(location1, location2, location3);
             context.Garages.AddRange(new List<Garage> { garage1, garage2, garage3 });
-            
+
             context.SaveChanges();
         }
         else

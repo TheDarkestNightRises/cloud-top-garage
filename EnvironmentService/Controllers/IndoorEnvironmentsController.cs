@@ -1,15 +1,15 @@
 using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
 using EnvironmentService.Application.LogicContracts;
 using EnvironmentService.Dtos;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EnvironmentService.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class IndoorEnvironmentsController: ControllerBase
+public class IndoorEnvironmentsController : ControllerBase
 {
-   private readonly IMapper _mapper;
+    private readonly IMapper _mapper;
     private readonly IIndoorEnvironmentLogic _logic;
 
     public IndoorEnvironmentsController(IMapper mapper, IIndoorEnvironmentLogic logic)
@@ -18,7 +18,7 @@ public class IndoorEnvironmentsController: ControllerBase
         _logic = logic;
     }
 
-      [HttpGet]
+    [HttpGet]
     public async Task<ActionResult<IEnumerable<IndoorEnvironmentReadDto>>> GetAllIndoorEnvironmentsAsync()
     {
         try

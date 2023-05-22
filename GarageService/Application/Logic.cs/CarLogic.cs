@@ -1,7 +1,7 @@
 
 using GarageService.Application.LogicContracts;
-using GarageService.Models;
 using GarageService.Data;
+using GarageService.Models;
 
 public class CarLogic : ICarLogic
 {

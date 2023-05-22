@@ -1,11 +1,11 @@
-using Xunit;
-using Moq;
-using AutoMapper;
 using Application.LogicContracts;
+using AutoMapper;
 using Carservice.Controllers;
 using CarService.Dtos;
 using CarService.Models;
 using Microsoft.AspNetCore.Mvc;
+using Moq;
+using Xunit;
 
 namespace Tests;
 
