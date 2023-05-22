@@ -19,7 +19,7 @@ public class CarCreatedConsumer : IConsumer<CarCreated>
         {
             var CarId = context.Message.carId;
             var GarageId = context.Message.garageId;
-            await _carLogic.CreateCarAsync(CarId,GarageId);
+            await _carLogic.CreateCarAsync(CarId, GarageId);
         }
         catch (Exception e)
         {

@@ -1,5 +1,5 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace GarageService.Models;
 
 public class Garage
@@ -41,5 +41,8 @@ public class Garage
                Capacity == otherGarage.Capacity;
     }
 
-
+    public override int GetHashCode()
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -1,5 +1,5 @@
-using GarageService.Application.LogicContracts;
 using AutoMapper;
+using GarageService.Application.LogicContracts;
 using GarageService.Dtos;
 using GarageService.Models;
 using Microsoft.AspNetCore.Mvc;

@@ -1,8 +1,8 @@
-using Xunit;
-using Moq;
-using Microsoft.EntityFrameworkCore;
 using GarageService.Data;
 using GarageService.Models;
+using Microsoft.EntityFrameworkCore;
+using Moq;
+using Xunit;
 
 public class GarageRepositoryTests
 {
