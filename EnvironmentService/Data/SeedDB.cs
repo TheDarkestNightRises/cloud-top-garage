@@ -40,9 +40,24 @@ public static class PrepDb
                 new Garage { },
             };
 
+
             var indoorEnvironments = new List<IndoorEnvironment>
             {
-                new IndoorEnvironment { Name = "Environment 1", Garage = garages[0], MacAddress = 120,LoRaWANURL="wss://iotnet.cibicom.dk/app?token=vnoUBwAAABFpb3RuZXQuY2liaWNvbS5ka54Zx4fqYp5yzAQtnGzDDUw=" },
+                new IndoorEnvironment
+                {
+                    Name = "Environment 1",
+                    Garage = garages[0],
+                    IndoorEnvironmentSettings = new IndoorEnvironmentSettings
+                    {
+                        Co2Limit = 100,
+                        TemperatureLimit = 25,
+                        HumidityLimit = 80,
+                        LightLimit = 500,
+                        LightOn = true,
+                        MacAddress = 120,
+                        LoRaWANURL = "wss://iotnet.cibicom.dk/app?token=vnoUBwAAABFpb3RuZXQuY2liaWNvbS5ka54Zx4fqYp5yzAQtnGzDDUw="
+                    }
+                }
             };
 
             context.Garages.AddRange(garages);

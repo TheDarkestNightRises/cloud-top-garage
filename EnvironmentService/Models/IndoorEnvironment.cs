@@ -5,7 +5,5 @@ public class IndoorEnvironment
     public int Id { get; set; }
     public string Name { get; set; }
     public Garage Garage { get; set; }
-    public int MacAddress { get; set; }
-
-    public string LoRaWANURL { get; set; }
+    public IndoorEnvironmentSettings IndoorEnvironmentSettings { get; set; }
 }

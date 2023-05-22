@@ -11,13 +11,12 @@ public class IndoorEnvironmentLogic : IIndoorEnvironmentLogic
 {
     private readonly IIndoorEnvironmentRepository _indoorEnvironmentRepository;
     private readonly IStatRepository _statRepository;
-    private Dictionary<int, WebSocket> _webSocketClients;
+    private List<WebSocket> _webSocketClients = new List<WebSocket>();
 
     public IndoorEnvironmentLogic(IIndoorEnvironmentRepository indoorEnvironmentRepository, IStatRepository statRepository)
     {
         _indoorEnvironmentRepository = indoorEnvironmentRepository;
         _statRepository = statRepository;
-        _webSocketClients = new Dictionary<int, WebSocket>();
     }
 
     public async void InitializeWebSockets()
@@ -28,13 +27,11 @@ public class IndoorEnvironmentLogic : IIndoorEnvironmentLogic
         foreach (var environment in indoorEnvironments)
         {
             // Create a WebSocket client for each IndoorEnvironment
-            WebSocket client = new WebSocket(environment.LoRaWANURL);
+            WebSocket client = new WebSocket(environment.IndoorEnvironmentSettings.LoRaWANURL);
             client.OnMessage += async (sender, e) => await OnMessageFromIotAsync(e.RawData);
             client.SslConfiguration.EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12;
-            Console.WriteLine($"Connecting environment {environment.Id} to {environment.LoRaWANURL}");
+            Console.WriteLine($"Connecting environment {environment.Id} to {environment.IndoorEnvironmentSettings.LoRaWANURL}");
             client.Connect();
-
-            _webSocketClients.Add(environment.Id, client);
         }
     }
 
@@ -108,7 +105,46 @@ public class IndoorEnvironmentLogic : IIndoorEnvironmentLogic
         return dataValue;
     }
 
+    public async Task<IndoorEnvironment> UpdateSettingsAsync(int id, IndoorEnvironmentSettings newSettings)
+    {
+        var indoorEnvironment = await _indoorEnvironmentRepository.GetIndoorEnvironmentByIdAsync(id);
 
+        if (indoorEnvironment is null)
+        {
+            throw new ArgumentException($"Indoor environment with id: {id} not found");
+        }
+
+        var oldSettings = indoorEnvironment.IndoorEnvironmentSettings;
+        (oldSettings.Co2Limit,oldSettings.HumidityLimit,oldSettings.LightLimit,oldSettings.LightOn,oldSettings.TemperatureLimit)
+        = (newSettings.Co2Limit,newSettings.HumidityLimit,newSettings.LightLimit,newSettings.LightOn,newSettings.TemperatureLimit);
+        //Send data to IOT
+        var indoorEnvironmentUpdated = await _indoorEnvironmentRepository.UpdateIndoorEnvironment(indoorEnvironment);
+        await SendSettingsAsync(id,newSettings);
+        return indoorEnvironmentUpdated;
+    }
+
+    private async Task SendSettingsAsync(int id,IndoorEnvironmentSettings newSettings)
+    {
+        byte[] settingsByte = new byte[10]; 
+        settingsByte[0] = (byte)(newSettings.Co2Limit >> 8); 
+        settingsByte[1] = (byte)(newSettings.Co2Limit & 0xFF);
+        settingsByte[2] = (byte)(newSettings.TemperatureLimit >> 8); 
+        settingsByte[3] = (byte)(newSettings.TemperatureLimit & 0xFF);
+        settingsByte[4] = (byte)(newSettings.HumidityLimit >> 8);
+        settingsByte[5] = (byte)(newSettings.HumidityLimit & 0xFF);
+        settingsByte[6] = (byte)(newSettings.LightLimit >> 8);
+        settingsByte[7] = (byte)(newSettings.LightLimit & 0xFF);
+        WebSocket client = _webSocketClients[id];
+        if (client.ReadyState == WebSocketState.Open) 
+        {
+            Console.WriteLine($"-->Sending settings to the iot device {settingsByte}");
+            client.Send(settingsByte);
+        }
+        else
+        {
+            throw new ArgumentException("Iot device not open");
+        }
+    }
 }
 
 

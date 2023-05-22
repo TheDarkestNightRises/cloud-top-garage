@@ -14,11 +14,22 @@ public class IndoorEnvironmentRepository : IIndoorEnvironmentRepository
     }
     public async Task<IEnumerable<IndoorEnvironment>> GetAllIndoorEnvironmentsAsync()
     {
-        return await _context.IndoorEnvironments.Include(indoorEnvironment => indoorEnvironment.Garage).ToListAsync();
+        return await _context.IndoorEnvironments.Include(indoorEnvironment => indoorEnvironment.Garage).Include(indoorEnvironment => indoorEnvironment.IndoorEnvironmentSettings).ToListAsync();
     }
 
+    public async Task<IndoorEnvironment?> GetIndoorEnvironmentByIdAsync(int id)
+    {
+        return await _context.IndoorEnvironments.Include(indoorEnvironment => indoorEnvironment.Garage).Include(indoorEnvironment => indoorEnvironment.IndoorEnvironmentSettings).FirstOrDefaultAsync(i => i.Id == id);
+    }
     public async Task<IndoorEnvironment?> GetIndoorEnvironmentByMacAdress(int macAddress)
     {
-        return await _context.IndoorEnvironments.FirstOrDefaultAsync(i => i.MacAddress == macAddress);
+        return await _context.IndoorEnvironments.FirstOrDefaultAsync(i => i.IndoorEnvironmentSettings.MacAddress == macAddress);
+    }
+
+    public async Task<IndoorEnvironment> UpdateIndoorEnvironment(IndoorEnvironment indoorEnvironment)
+    {
+        _context.IndoorEnvironments.Update(indoorEnvironment);
+        await _context.SaveChangesAsync();
+        return indoorEnvironment;
     }
 }
