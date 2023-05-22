@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
+using EnvironmentService.Data;
+using EnvironmentService.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using EnvironmentService.Models;
-using EnvironmentService.Data;
 
 namespace EnvironmentService.Data;
 public static class PrepDb

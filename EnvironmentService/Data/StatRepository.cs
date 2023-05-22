@@ -31,7 +31,7 @@ public class StatRepository : IStatRepository
         {
             query = query.Where(s => s.IndoorEnvironment.Garage.Id == statQuery.GarageId);
         }
-        
+
         var stats = await query.ToListAsync();
         return stats;
     }
