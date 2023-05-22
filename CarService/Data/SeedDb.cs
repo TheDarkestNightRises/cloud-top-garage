@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
+using CarService.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using CarService.Models;
 
 namespace CarService.Data;
 public static class PrepDb

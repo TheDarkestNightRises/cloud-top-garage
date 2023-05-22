@@ -1,9 +1,9 @@
-using Application.LogicContracts;
-using CarService.Models;
-using CarService.Data;
-using MassTransit;
-using Contracts;
 using System.ComponentModel.DataAnnotations;
+using Application.LogicContracts;
+using CarService.Data;
+using CarService.Models;
+using Contracts;
+using MassTransit;
 
 public class CarLogic : ICarLogic
 {

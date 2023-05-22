@@ -1,8 +1,8 @@
-using Moq;
 using CarService.Data;
 using CarService.Models;
-using MassTransit;
 using Contracts;
+using MassTransit;
+using Moq;
 
 namespace CarService.Tests;
 public class CarLogicTests
