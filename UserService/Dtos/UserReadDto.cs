@@ -12,7 +12,7 @@ public class UserReadDto
     public string Email { get; set; }
     [Range(1, int.MaxValue, ErrorMessage = "The age must be bigger than 0.")]
     public int Age { get; set; }
-   
+
     public string Phone { get; set; }
 }
 

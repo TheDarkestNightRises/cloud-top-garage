@@ -1,11 +1,11 @@
-using Xunit;
-using Moq;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Moq;
 using UserService.Controllers;
+using UserService.Dtos;
 using UserService.Logic;
 using UserService.Models;
-using UserService.Dtos;
-using Microsoft.AspNetCore.Mvc;
+using Xunit;
 
 namespace UserService.Tests;
 
@@ -159,7 +159,7 @@ public class UsersControllerTests
         // Assert
         Console.WriteLine(result);
         var createdResult = Assert.IsType<CreatedResult>(result);
-        Assert.Equal($"/users/{userReadDto.Id}", "/users/1");
+        Assert.Equal("/users/1", $"/users/{userReadDto.Id}");
         Assert.Equal(userReadDto, createdResult.Value);
 
     }

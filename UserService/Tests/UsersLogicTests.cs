@@ -245,7 +245,7 @@ public class UserLogicTests
 
         _userRepositoryMock.Setup(repo => repo.GetUserByIdAsync(existingUser.Id)).ReturnsAsync(existingUser);
         _userRepositoryMock.Setup(repo => repo.UpdateUserAsync(updatedUser)).ReturnsAsync(updatedUser);
-        
+
 
 
         // Act
