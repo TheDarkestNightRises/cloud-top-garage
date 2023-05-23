@@ -60,8 +60,29 @@ public static class PrepDb
                 }
             };
 
+            var stats = new List<Stat>
+            {
+                new Stat
+                {
+                    IndoorEnvironment = indoorEnvironments[0],
+                    Temperature = 23.5f,
+                    Humidity = 75.2f,
+                    CO2 = 95.0f,
+                    Time = DateTime.Now
+                },
+                new Stat
+                {
+                    IndoorEnvironment = indoorEnvironments[0],
+                    Temperature = 24.1f,
+                    Humidity = 76.8f,
+                    CO2 = 105.3f,
+                    Time = DateTime.Now.AddMinutes(-30)
+                }
+            };
+
             context.Garages.AddRange(garages);
             context.IndoorEnvironments.AddRange(indoorEnvironments);
+            context.Stats.AddRange(stats);
             context.SaveChanges();
         }
         else
