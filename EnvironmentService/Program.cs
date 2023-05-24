@@ -49,6 +49,8 @@ builder.Services.AddScoped<IStatRepository, StatRepository>();
 builder.Services.AddScoped<IIndoorEnvironmentRepository, IndoorEnvironmentRepository>();
 builder.Services.AddScoped<IIndoorEnvironmentLogic, IndoorEnvironmentLogic>();
 builder.Services.AddScoped<IStatLogic, StatLogic>();
+builder.Services.AddScoped<IGarageLogic, GarageLogic>();
+builder.Services.AddScoped<IGarageRepository, GarageRepository>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();

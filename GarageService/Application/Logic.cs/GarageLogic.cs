@@ -29,6 +29,7 @@ public class GarageLogic : IGarageLogic
             throw new Exception($"Garage with id {id} not found");
         }
         // delete the garage
+        await _publishEndpoint.Publish(new GarageDeleted(garageToDelete.Id));
         await _garageRepository.DeleteGarageAsync(id);
     }
 
