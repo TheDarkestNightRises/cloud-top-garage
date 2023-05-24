@@ -1,3 +1,4 @@
+using MassTransit;
 using Moq;
 using UserService.Data;
 using UserService.Logic;
@@ -7,12 +8,13 @@ using Xunit;
 public class UserLogicTests
 {
     private readonly Mock<IUserRepository> _userRepositoryMock;
+    private readonly Mock<IPublishEndpoint> _publishEndPoint;
     private readonly UserLogic _userLogic;
 
     public UserLogicTests()
     {
         _userRepositoryMock = new Mock<IUserRepository>();
-        _userLogic = new UserLogic(_userRepositoryMock.Object);
+        _userLogic = new UserLogic(_userRepositoryMock.Object, _publishEndPoint.Object);
     }
 
     [Fact]
