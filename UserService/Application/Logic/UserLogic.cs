@@ -1,6 +1,8 @@
 namespace UserService.Logic;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Contracts;
+using MassTransit;
 using UserService.Data;
 using UserService.Dtos;
 using UserService.Models;
@@ -8,10 +10,12 @@ using UserService.Models;
 public class UserLogic : IUserLogic
 {
     private readonly IUserRepository _userRepository;
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public UserLogic(IUserRepository userRepository)
+    public UserLogic(IUserRepository userRepository, IPublishEndpoint publishEndpoint)
     {
         _userRepository = userRepository;
+        _publishEndpoint = publishEndpoint;
     }
 
     public async Task<User> CreateUserAsync(User user)
@@ -23,7 +27,12 @@ public class UserLogic : IUserLogic
         }
         user.Role = "User";
         Validator.ValidateObject(user, new ValidationContext(user), validateAllProperties: true);
-        return await _userRepository.CreateUserAsync(user);
+
+        User userCreated = await _userRepository.CreateUserAsync(user);
+
+        await _publishEndpoint.Publish(new UserCreated(userCreated.Id));
+
+        return userCreated;
     }
 
 
