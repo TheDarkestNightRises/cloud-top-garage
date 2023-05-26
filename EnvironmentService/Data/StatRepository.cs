@@ -35,4 +35,13 @@ public class StatRepository : IStatRepository
         var stats = await query.ToListAsync();
         return stats;
     }
+    public async Task<Stat?> GetLastestStatAsync(StatQuery statQuery)
+    {
+         var mostRecentStat = await _context.Stats
+                .Where(stat => stat.IndoorEnvironment.Garage.Id == statQuery.GarageId)
+                .OrderByDescending(stat => stat.Time)
+                .FirstOrDefaultAsync();
+
+            return mostRecentStat;
+    }
 }
