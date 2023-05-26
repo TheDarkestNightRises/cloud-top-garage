@@ -6,4 +6,5 @@ public interface IStatLogic
 {
     Task<IEnumerable<Stat>> GetAllStatsAsync(StatQuery statQuery);
     Task<IEnumerable<Stat>> GetAllStatsAsync();
+    Task<Stat?> GetLastestStatAsync(int garageId);
 }

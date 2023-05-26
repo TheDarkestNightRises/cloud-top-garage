@@ -46,4 +46,31 @@ public class StatsController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    [HttpGet("lastest/{garageId}")]
+    public async Task<ActionResult<IEnumerable<StatReadDto>>> GetLastestStatAsync([FromRoute] int garageId)
+    {
+        try
+        {
+
+            var stat = await _statLogic.GetLastestStatAsync(garageId);
+
+            // Return 404 if no garage was found
+            if (stat is null)
+            {
+                return NotFound();
+            }
+
+            // Convert from Model to Read DTO
+            var statMapped = _mapper.Map<StatReadDto>(stat);
+
+            //Return 200 retrieved
+            return Ok(statMapped);
+        }
+        catch (Exception e)
+        {
+            // Return 500 if the system failed to fetch the garages
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }
