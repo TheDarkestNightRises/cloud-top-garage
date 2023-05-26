@@ -35,10 +35,10 @@ public class StatRepository : IStatRepository
         var stats = await query.ToListAsync();
         return stats;
     }
-    public async Task<Stat?> GetLastestStatAsync(StatQuery statQuery)
+    public async Task<Stat?> GetLastestStatAsync(int garageId)
     {
          var mostRecentStat = await _context.Stats
-                .Where(stat => stat.IndoorEnvironment.Garage.Id == statQuery.GarageId)
+                .Where(stat => stat.IndoorEnvironment.Garage.Id == garageId)
                 .OrderByDescending(stat => stat.Time)
                 .FirstOrDefaultAsync();
 
