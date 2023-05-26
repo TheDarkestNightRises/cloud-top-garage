@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EnvironmentService.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230518091724_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20230526162347_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,11 +49,7 @@ namespace EnvironmentService.Migrations
                     b.Property<int>("GarageId")
                         .HasColumnType("int");
 
-                    b.Property<string>("LoRaWANURL")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("MacAddress")
+                    b.Property<int>("IndoorEnvironmentSettingsId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -64,7 +60,44 @@ namespace EnvironmentService.Migrations
 
                     b.HasIndex("GarageId");
 
+                    b.HasIndex("IndoorEnvironmentSettingsId");
+
                     b.ToTable("IndoorEnvironments");
+                });
+
+            modelBuilder.Entity("EnvironmentService.Models.IndoorEnvironmentSettings", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Co2Limit")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HumidityLimit")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LightLimit")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("LightOn")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LoRaWANURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MacAddress")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TemperatureLimit")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IndoorEnvironmentSettings");
                 });
 
             modelBuilder.Entity("EnvironmentService.Models.Stat", b =>
@@ -105,7 +138,15 @@ namespace EnvironmentService.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("EnvironmentService.Models.IndoorEnvironmentSettings", "IndoorEnvironmentSettings")
+                        .WithMany()
+                        .HasForeignKey("IndoorEnvironmentSettingsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Garage");
+
+                    b.Navigation("IndoorEnvironmentSettings");
                 });
 
             modelBuilder.Entity("EnvironmentService.Models.Stat", b =>
