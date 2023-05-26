@@ -2,6 +2,7 @@ using System.Text;
 using EnvironmentService.Application.LogicContracts;
 using EnvironmentService.Data;
 using EnvironmentService.Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WebSocketSharp;
 
@@ -135,42 +136,80 @@ public class IndoorEnvironmentLogic : IIndoorEnvironmentLogic
         = (newSettings.Co2Limit,newSettings.HumidityLimit,newSettings.LightLimit,newSettings.LightOn,newSettings.TemperatureLimit);
         //Send data to IOT
         var indoorEnvironmentUpdated = await _indoorEnvironmentRepository.UpdateIndoorEnvironment(indoorEnvironment);
-        newSettings.LoRaWANURL = oldSettings.LoRaWANURL;
-        SendSettingsAsync(id,newSettings);
+        SendSettingsAsync(oldSettings);
         return indoorEnvironmentUpdated;
     }
 
-    private void SendSettingsAsync(int id,IndoorEnvironmentSettings newSettings)
+    private void SendSettingsAsync(IndoorEnvironmentSettings newSettings)
     {
         byte[] settingsByte = ConvertSettingsToByteArray(newSettings);
         Console.WriteLine("WebSocket Clients in send:");
-        WebSocket client = new WebSocket(newSettings.LoRaWANURL);
+        SendData(newSettings, settingsByte);
+    }
+
+    private void SendData(IndoorEnvironmentSettings settings, byte[] bytedata)
+    {
+        WebSocket client = new WebSocket(settings.LoRaWANURL);
         client.SslConfiguration.EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12;
         client.Connect();
-        if (client.ReadyState == WebSocketState.Open) 
+        if (client.ReadyState == WebSocketState.Open)
         {
-            Console.WriteLine($"-->Sending settings to the iot device {settingsByte}");
-            client.Send(settingsByte);
+            Console.WriteLine($"-->Sending settings to the iot device {bytedata}");
+            DownLink data = new DownLink
+            {
+                cmd = "tx",
+                EUI = settings.Eui,
+                port = settings.Port,
+                data = ConvertByteArrayToString(bytedata)
+            };
+            string payload = JsonConvert.SerializeObject(data);
+            client.Send(payload);
             client.Close();
+            Console.WriteLine($"Sent payload to IoT: {payload} with data: {data}");
         }
         else
         {
             throw new ArgumentException("Iot device not open");
         }
     }
+
     private byte[] ConvertSettingsToByteArray(IndoorEnvironmentSettings settings)
     {
-        byte[] settingsByte = new byte[10]; 
+        byte[] settingsByte = new byte[10];
+
         settingsByte[0] = (byte)(settings.Co2Limit >> 8); 
         settingsByte[1] = (byte)(settings.Co2Limit & 0xFF);
-        settingsByte[2] = (byte)(settings.TemperatureLimit >> 8); 
-        settingsByte[3] = (byte)(settings.TemperatureLimit & 0xFF);
-        settingsByte[4] = (byte)(settings.HumidityLimit >> 8);
-        settingsByte[5] = (byte)(settings.HumidityLimit & 0xFF);
-        settingsByte[6] = (byte)(settings.LightLimit >> 8);
-        settingsByte[7] = (byte)(settings.LightLimit & 0xFF);
+
+        int tempLimitInt = MultiplyBy10AndConvertToInt(settings.TemperatureLimit);
+        settingsByte[2] = (byte)(tempLimitInt >> 8); 
+        settingsByte[3] = (byte)(tempLimitInt & 0xFF);
+
+        int humLimitInt = MultiplyBy10AndConvertToInt(settings.HumidityLimit);
+        settingsByte[4] = (byte)(humLimitInt >> 8);
+        settingsByte[5] = (byte)(humLimitInt & 0xFF);
+
+        int lightLimitInt = MultiplyBy10AndConvertToInt(settings.LightLimit);
+        settingsByte[6] = (byte)(lightLimitInt >> 8);
+        settingsByte[7] = (byte)(lightLimitInt & 0xFF);
+        
+        settingsByte[8] = (byte)(settings.LightOn ? 16 : 0);
+        settingsByte[9] = (byte)120;
         return settingsByte;
     }
+    private int MultiplyBy10AndConvertToInt(float number)
+    {
+        return (int)(number*10);
+    }
+    private string ConvertByteArrayToString(byte[] byteArray)
+    {
+        string result = "";
+
+        foreach (byte b in byteArray)
+        {
+            result +=b.ToString("X2"); 
+        }
+
+        return result;
+    }
+
 }
-
-

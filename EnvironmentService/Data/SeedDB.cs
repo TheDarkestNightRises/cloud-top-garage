@@ -55,7 +55,9 @@ public static class PrepDb
                         LightLimit = 500,
                         LightOn = true,
                         MacAddress = 120,
-                        LoRaWANURL = "wss://iotnet.cibicom.dk/app?token=vnoUBwAAABFpb3RuZXQuY2liaWNvbS5ka54Zx4fqYp5yzAQtnGzDDUw="
+                        LoRaWANURL = "wss://iotnet.cibicom.dk/app?token=vnoUBwAAABFpb3RuZXQuY2liaWNvbS5ka54Zx4fqYp5yzAQtnGzDDUw=",
+                        Port = 1,
+                        Eui = "0004A30B00251001"
                     }
                 }
             };
