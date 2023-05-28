@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using CarService.Models;
 
 namespace GarageService.Models;
 

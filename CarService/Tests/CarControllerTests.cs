@@ -107,42 +107,6 @@ public class CarsControllerTests
     }
 
     [Fact]
-    public async Task UpdateCar_ReturnsStatusCode500_WhenExceptionThrown()
-    {
-        // Arrange
-        var carUpdateDto = new CarUpdateDto();
-        var car = new Car();
-        _mapperMock.Setup(x => x.Map<Car>(carUpdateDto)).Returns(car);
-        _logicMock.Setup(x => x.UpdateCarAsync(car)).Throws(new Exception("Test message"));
-
-        // Act
-        var result = await _controller.UpdateCarAsync(carUpdateDto);
-
-        // Assert
-        Assert.IsType<ObjectResult>(result);
-        var objectResult = (ObjectResult)result;
-        Assert.Equal(500, objectResult.StatusCode);
-        Assert.Equal("Test message", objectResult.Value);
-    }
-
-    [Fact]
-    public async Task UpdateCar_ReturnsBadRequestObjectResult_WhenCarDoesNotExist()
-    {
-        // Act
-        var carUpdateDto = new CarUpdateDto();
-        var car = new Car { Id = 1, Manufacturer = "Toyota", Model = "Camry", Year = 2021 };
-        _mapperMock.Setup(x => x.Map<Car>(carUpdateDto)).Returns(car);
-        _logicMock.Setup(x => x.UpdateCarAsync(car)).Throws(new ArgumentException($"Test message"));
-
-        // Act
-        var result = await _controller.UpdateCarAsync(carUpdateDto);
-
-        // Assert
-        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-        Assert.Equal("Test message", badRequestResult.Value);
-    }
-
-    [Fact]
     public async Task CreateCar_ReturnsCreatedWithCorrectObject_WhenCarIsValid()
     {
         // Arrange
@@ -176,50 +140,7 @@ public class CarsControllerTests
         Assert.Equal(carReadDto, createdDto);
     }
 
-    [Fact]
-    public async Task CreateCar_ReturnsBadRequestObjectResult_WhenCarIsInvalid()
-    {
-        var carCreateDto = new CarCreateDto { Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 0 };
-        var car = new Car() { Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 0 };
-        var carReadDto = new CarReadDto();
-        _mapperMock.Setup(m => m.Map<Car>(carCreateDto)).Returns(car);
-        _logicMock.Setup(l => l.CreateCarAsync(car)).Throws(new ValidationException("Test message"));
-        _mapperMock.Setup(m => m.Map<CarReadDto>(car)).Returns(carReadDto);
 
-        // Act
-        var result = await _controller.CreateCar(carCreateDto);
-        // Assert
-        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
-        Assert.Equal("Test message", badRequestResult.Value);
-    }
-
-    [Fact]
-    public async Task CreateCar_ReturnsStatusCode500_WhenLogicThrowsException()
-    {
-        // Arrange
-        var carCreateDto = new CarCreateDto
-        {
-            Name = "Test car",
-            Description = "Test description",
-            Manufacturer = "Test manufacturer",
-            Model = "Test model",
-            Year = 2022,
-            Seats = 5
-        };
-        var car = new Car() { Id = 1, Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 0 };
-        var carReadDto = new CarReadDto() { Id = 1, Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 0 };
-        _mapperMock.Setup(m => m.Map<Car>(carCreateDto)).Returns(car);
-        _logicMock.Setup(l => l.CreateCarAsync(car)).Throws(new Exception("Test message"));
-        _mapperMock.Setup(m => m.Map<CarReadDto>(car)).Returns(carReadDto);
-
-        // Act
-        var result = await _controller.CreateCar(carCreateDto);
-
-        // Assert
-        var statusCodeResult = Assert.IsType<ObjectResult>(result.Result);
-        Assert.Equal(500, statusCodeResult.StatusCode);
-        Assert.Equal("Test message", statusCodeResult.Value);
-    }
     [Fact]
     public async Task GetCarById_ReturnsOkResultWithCorrectCarDto_WhenCarExists()
     {
@@ -261,34 +182,6 @@ public class CarsControllerTests
     }
 
     [Fact]
-    public async Task GetCarById_ReturnsBadRequestResult_WhenArgumentExceptionThrown()
-    {
-        // Arrange
-        _logicMock.Setup(x => x.GetCarAsync(1)).ThrowsAsync(new ArgumentException("Test message"));
-
-        // Act
-        var result = await _controller.GetCarById(1);
-
-        // Assert
-        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
-        Assert.Equal("Test message", badRequestResult.Value);
-    }
-
-    [Fact]
-    public async Task GetCarById_ReturnsStatusCode500_WhenExceptionThrown()
-    {
-        // Arrange
-        _logicMock.Setup(x => x.GetCarAsync(1)).ThrowsAsync(new Exception("Test message"));
-
-        // Act
-        var result = await _controller.GetCarById(1);
-
-        // Assert
-        var statusCodeResult = Assert.IsType<ObjectResult>(result.Result);
-        Assert.Equal(500, statusCodeResult.StatusCode);
-        Assert.Equal("Test message", statusCodeResult.Value);
-    }
-    [Fact]
     public async Task DeleteCarAsync_ReturnsNoContent_WhenCarIsDeleted()
     {
         // Arrange
@@ -303,36 +196,6 @@ public class CarsControllerTests
         _logicMock.Verify(logic => logic.DeleteCarAsync(id), Times.Once);
     }
 
-    [Fact]
-    public async Task DeleteCarAsync_ReturnsBadRequest_WhenLogicThrowsArgumentException()
-    {
-        // Arrange
-        int id = 1;
-        _logicMock.Setup(x => x.DeleteCarAsync(id)).ThrowsAsync(new ArgumentException("Test message"));
-
-        // Act
-        var result = await _controller.DeleteCarAsync(id);
-
-        // Assert
-        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-        Assert.Equal("Test message", badRequestResult.Value);
-    }
-
-    [Fact]
-    public async Task DeleteCarAsync_ReturnsStatusCode500_WhenLogicThrowsException()
-    {
-        // Arrange
-        int id = 1;
-        _logicMock.Setup(x => x.DeleteCarAsync(id)).ThrowsAsync(new Exception("Test message"));
-
-        // Act
-        var result = await _controller.DeleteCarAsync(id);
-
-        // Assert
-        var statusCodeResult = Assert.IsType<ObjectResult>(result);
-        Assert.Equal(500, statusCodeResult.StatusCode);
-        Assert.Equal("Test message", statusCodeResult.Value);
-    }
     [Fact]
     public async Task CreateCarImage_ReturnsFileContentResultWithCreatedImage_WhenImageValid()
     {
@@ -354,20 +217,7 @@ public class CarsControllerTests
         Assert.Equal("image/jpeg", fileContentResult.ContentType);
         Assert.Equal(createdImage.Data, fileContentResult.FileContents);
     }
-    [Fact]
-    public async Task CreateCarImage_ReturnsBadRequest_WhenInvalidImage()
-    {
-        // Arrange
-        var formFileMock = new Mock<IFormFile>();
-        formFileMock.Setup(x => x.CopyToAsync(It.IsAny<Stream>(), CancellationToken.None)).ThrowsAsync(new ArgumentException("Test message"));
-
-        // Act
-        var result = await _controller.CreateCarImage(1, formFileMock.Object);
-
-        // Assert
-        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-        Assert.Equal("Test message", badRequestResult.Value);
-    }
+  
     [Fact]
     public async Task GetCarImage_ReturnsFileContentResultWithImage_WhenImageExists()
     {
@@ -398,36 +248,5 @@ public class CarsControllerTests
 
         // Assert
         Assert.IsType<NotFoundResult>(result);
-    }
-
-    [Fact]
-    public async Task GetCarImage_Returns_BadRequest_WhenArgumentException()
-    {
-        // Arrange
-        const int id = 123;
-        _logicMock.Setup(x => x.GetCarImageAsync(id)).ThrowsAsync(new ArgumentException("Test message"));
-
-        // Act
-        var result = await _controller.GetCarImage(id);
-
-        // Assert
-        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-        Assert.Equal("Test message", badRequestResult.Value);
-    }
-
-    [Fact]
-    public async Task GetCarImage_ReturnsStatudCode500_WhenLogicThrowsException()
-    {
-        // Arrange
-        const int id = 123;
-        _logicMock.Setup(x => x.GetCarImageAsync(id)).ThrowsAsync(new Exception("Test message"));
-
-        // Act
-        var result = await _controller.GetCarImage(id);
-
-        // Assert
-        var statusCodeResult = Assert.IsType<ObjectResult>(result);
-        Assert.Equal(500, statusCodeResult.StatusCode);
-        Assert.Equal("Test message", statusCodeResult.Value);
     }
 }

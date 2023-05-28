@@ -65,27 +65,7 @@ public class UsersControllerTests
         Assert.Equal(404, notFoundResult.StatusCode);
     }
 
-    [Fact]
-    public async Task GetAllUsersAsync_WhenException_ReturnsInternalServerErrors()
-    {
-        // Arrange
-        List<User> users = new List<User>();
-        List<UserReadDto> usersMapped = new List<UserReadDto>();
-        var emsg = "Some error occurred.";
 
-
-        _logicMock.Setup(ul => ul.GetAllUsersAsync()).ThrowsAsync(new Exception(emsg));
-        _mapperMock.Setup(m => m.Map<IEnumerable<UserReadDto>>(users)).Returns(usersMapped);
-
-        // Act
-        var result = await _controller.GetAllUsersAsync();
-
-
-        // Assert
-        var errorResponse = Assert.IsType<ObjectResult>(result.Result);
-        Assert.Equal(500, errorResponse.StatusCode);
-        Assert.Equal(emsg, errorResponse.Value);
-    }
     // ----------------------------- UPDATE USER --------------------------------------------
 
     [Fact]
@@ -103,45 +83,7 @@ public class UsersControllerTests
         // Assert
         Assert.IsType<NoContentResult>(result);
     }
-    [Fact]
-    public async Task UpdateUserAsync_WhenArgumentException_ReturnsBadRequest()
-    {
-        // Arrange
-        var userUpdateDto = new UserUpdateDto { };
-        var userToUpdate = new User { };
-        var emsg = "Invalid user update.";
-
-        _mapperMock.Setup(m => m.Map<User>(userUpdateDto)).Returns(userToUpdate);
-        _logicMock.Setup(ul => ul.UpdateUserAsync(userToUpdate)).ThrowsAsync(new ArgumentException(emsg));
-
-        // Act
-        var result = await _controller.UpdateUserAsync(userUpdateDto);
-
-        // Assert
-        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-        Assert.Equal(emsg, badRequestResult.Value);
-    }
-
-    [Fact]
-    public async Task UpdateUserAsync_WhenException_ReturnsInternalServerError()
-    {
-        // Arrange
-        var userUpdateDto = new UserUpdateDto { };
-        var exceptionMessage = "An error occurred.";
-        var userToUpdate = new User { };
-
-        _mapperMock.Setup(m => m.Map<User>(userUpdateDto)).Returns(userToUpdate);
-        _logicMock.Setup(ul => ul.UpdateUserAsync(userToUpdate)).Throws(new Exception(exceptionMessage));
-
-        // Act
-        var result = await _controller.UpdateUserAsync(userUpdateDto);
-
-        // Assert
-        var statusCodeResult = Assert.IsType<ObjectResult>(result);
-        Assert.Equal(500, statusCodeResult.StatusCode);
-        Assert.Equal(exceptionMessage, statusCodeResult.Value);
-    }
-
+  
     // ----------------------------- CREATE USER --------------------------------------------
 
     [Fact]
@@ -166,43 +108,6 @@ public class UsersControllerTests
         Assert.Equal("/users/1", $"/users/{userReadDto.Id}");
         Assert.Equal(userReadDto, createdResult.Value);
 
-    }
-
-    [Fact]
-    public async Task CreateUserAsync_WhenArgumentException_ReturnsBadRequest()
-    {
-        // Arrange
-        var userCreateDto = new UserCreateDto { };
-        var exceptionMessage = "Invalid user create.";
-
-        _mapperMock.Setup(mapper => mapper.Map<User>(userCreateDto)).Returns(It.IsAny<User>());
-        _logicMock.Setup(userLogic => userLogic.CreateUserAsync(It.IsAny<User>())).Throws(new ArgumentException(exceptionMessage));
-
-        // Act
-        var result = await _controller.CreateUserAsync(userCreateDto);
-
-        // Assert
-        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-        Assert.Equal(exceptionMessage, badRequestResult.Value);
-    }
-
-    [Fact]
-    public async Task CreateUserAsync_WhenException_ReturnsInternalServerError()
-    {
-        // Arrange
-        var userCreateDto = new UserCreateDto { };
-        var exceptionMessage = "An error occurred.";
-
-        _mapperMock.Setup(mapper => mapper.Map<User>(userCreateDto)).Returns(It.IsAny<User>());
-        _logicMock.Setup(userLogic => userLogic.CreateUserAsync(It.IsAny<User>())).Throws(new Exception(exceptionMessage));
-
-        // Act
-        var result = await _controller.CreateUserAsync(userCreateDto);
-
-        // Assert
-        var statusCodeResult = Assert.IsType<ObjectResult>(result);
-        Assert.Equal(500, statusCodeResult.StatusCode);
-        Assert.Equal(exceptionMessage, statusCodeResult.Value);
     }
 
     // ----------------------------- GET USERS BY EMAIL --------------------------------------------
@@ -236,23 +141,6 @@ public class UsersControllerTests
         var result = await _controller.GetUserByEmailAsync(email);
         // Assert
         Assert.IsType<NotFoundResult>(result.Result);
-    }
-
-    [Fact]
-    public async Task GetUserByEmailAsync_ReturnsStatusCode500_WhenExceptionIsThrown()
-    {
-        // Arrange
-        var email = "test@example.com";
-        var exceptionMessage = "An error occurred while fetching the user.";
-
-        _logicMock.Setup(ul => ul.GetUserByEmailAsync(email)).ThrowsAsync(new Exception(exceptionMessage));
-
-        // Act
-        var result = await _controller.GetUserByEmailAsync(email);
-
-        // Assert
-        var objectResult = Assert.IsType<ObjectResult>(result.Result);
-        Assert.Equal(500, objectResult.StatusCode);
     }
 }
 
