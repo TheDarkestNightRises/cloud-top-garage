@@ -46,7 +46,7 @@ public class StatsController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-    [HttpGet("lastest/{garageId}")]
+    [HttpGet("{garageId}/lastest")]
     public async Task<ActionResult<IEnumerable<StatReadDto>>> GetLastestStatAsync([FromRoute] int garageId)
     {
         try

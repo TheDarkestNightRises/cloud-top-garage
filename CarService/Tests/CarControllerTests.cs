@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Application.LogicContracts;
 using AutoMapper;
 using Carservice.Controllers;
@@ -182,7 +183,7 @@ public class CarsControllerTests
         var car = new Car() { Name = "Test car", Description = "Test description", Manufacturer = "Test manufacturer", Model = "Test model", Year = 2022, Seats = 0 };
         var carReadDto = new CarReadDto();
         _mapperMock.Setup(m => m.Map<Car>(carCreateDto)).Returns(car);
-        _logicMock.Setup(l => l.CreateCarAsync(car)).Throws(new ArgumentException("Test message"));
+        _logicMock.Setup(l => l.CreateCarAsync(car)).Throws(new ValidationException("Test message"));
         _mapperMock.Setup(m => m.Map<CarReadDto>(car)).Returns(carReadDto);
 
         // Act

@@ -35,7 +35,7 @@ public class IndoorEnvironmentsController : ControllerBase
         }
     }
 
-    [HttpPatch,Route("IndoorEnvironments/{id}/settings")]
+    [HttpPatch("{id}/settings")]
     public async Task<IActionResult> UpdateSettingsAsync(int id, [FromBody] IndoorEnvironmentSettingsUpdateDto newSettings)
     {
         try

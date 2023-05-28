@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Application.LogicContracts;
 using AutoMapper;
 using CarService.Dtos;
@@ -25,8 +26,8 @@ public class CarsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<CarReadDto>>> GetAllCarsAsync([FromQuery] CarQueryDto carQueryDto)
     {
-        try
-        {
+        // try
+        // {
             var carQuery = _mapper.Map<CarQuery>(carQueryDto);
             var cars = await _logic.GetAllCarsAsync(carQuery);
 
@@ -39,12 +40,12 @@ public class CarsController : ControllerBase
 
 
             return Ok(carsMapped);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
-        }
+        // }
+        // catch (Exception e)
+        // {
+        //     Console.WriteLine(e);
+        //     return StatusCode(500, e.Message);
+        // }
     }
 
     [HttpPatch]
@@ -69,8 +70,8 @@ public class CarsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<CarReadDto>> CreateCar([FromBody] CarCreateDto carCreateDto)
     {
-        try
-        {
+        // try
+        // {
             // Convert from DTO to a Model
             Car car = _mapper.Map<Car>(carCreateDto);
 
@@ -82,18 +83,22 @@ public class CarsController : ControllerBase
 
             //Return 200 created 
             return Created($"/Cars/{created.Id}", createdDto);
-        }
-        catch (ArgumentException e)
-        {
-            // Return 400 if the client made a mistake and didnt follow the rules of creating a car
-            return BadRequest(e.Message);
-        }
-        catch (Exception e)
-        {
-            // Return 500 if the system failed to create a car
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
-        }
+        // }
+        // catch (ArgumentException e)
+        // {
+        //     // Return 400 if the client made a mistake and didnt follow the rules of creating a car
+        //     return BadRequest(e.Message);
+        // }
+        // catch(ValidationException e)
+        // {
+        //     return BadRequest(e.Message);
+        // }
+        // catch (Exception e)
+        // {
+        //     // Return 500 if the system failed to create a car
+        //     Console.WriteLine(e);
+        //     return StatusCode(500, e.Message);
+        // }
     }
 
     [HttpGet("{id}")]
