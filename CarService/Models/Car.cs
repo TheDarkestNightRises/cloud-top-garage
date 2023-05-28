@@ -25,11 +25,11 @@ public class Car
     public string Model { get; set; }
 
     [Required(ErrorMessage = "Year is required.")]
-    [Range(1800, 2200, ErrorMessage = "{0} must be between {1} and {2}.")]
+    [Range(1800, Int32.MaxValue, ErrorMessage = "{0} must be at least {1}.")]
     public int Year { get; set; }
 
     [Required(ErrorMessage = "Number of seats is required.")]
-    [Range(1, 100, ErrorMessage = "Number of seats must be between {1} and {2}.")]
+    [Range(1, 8, ErrorMessage = "Number of seats must be between {1} and {2}.")]
     public int Seats { get; set; }
 
     public Image Image { get; set; }

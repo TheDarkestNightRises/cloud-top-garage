@@ -21,8 +21,12 @@ public class CarLogic : ICarLogic
 
     public async Task<Car> CreateCarAsync(Car car)
     {
-        ValidateCar(car);
-        ValidateEngine(car.Engine);
+        Validator.ValidateObject(car, new ValidationContext(car), validateAllProperties: true);
+        Validator.ValidateObject(car.Engine, new ValidationContext(car.Engine), validateAllProperties: true);
+        if(car.Year > DateTime.Now.Year)
+        {
+            throw new ValidationException("Year cannot be bigger than current year");
+        }
         Garage? garage = await _garageRepository.GetGarageAsync(car.Garage.Id);
         if (garage is null)
         {
@@ -109,32 +113,6 @@ public class CarLogic : ICarLogic
         var created = await _carRepository.CreateCarImageAsync(carImage);
         await _carRepository.UpdateCarWithImageAsync(created, id);
         return created;
-    }
-    private void ValidateCar(Car car)
-    {
-        var validationContext = new ValidationContext(car);
-        var validationResults = new List<System.ComponentModel.DataAnnotations.ValidationResult>();
-
-        bool isValid = Validator.TryValidateObject(car, validationContext, validationResults, true);
-
-        if (!isValid)
-        {
-            var firstError = validationResults.First();
-            throw new ArgumentException(firstError.ErrorMessage);
-        }
-    }
-    private void ValidateEngine(Engine engine)
-    {
-        var validationContext = new ValidationContext(engine);
-        var validationResults = new List<System.ComponentModel.DataAnnotations.ValidationResult>();
-
-        bool isValid = Validator.TryValidateObject(engine, validationContext, validationResults, true);
-
-        if (!isValid)
-        {
-            var firstError = validationResults.First();
-            throw new ArgumentException(firstError.ErrorMessage);
-        }
     }
 
 }

@@ -14,6 +14,7 @@ public class UserLogicTests
     public UserLogicTests()
     {
         _userRepositoryMock = new Mock<IUserRepository>();
+        _publishEndPoint = new Mock<IPublishEndpoint>();
         _userLogic = new UserLogic(_userRepositoryMock.Object, _publishEndPoint.Object);
     }
 

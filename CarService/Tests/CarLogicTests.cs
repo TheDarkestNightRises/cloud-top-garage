@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using CarService.Data;
 using CarService.Models;
 using Contracts;
@@ -52,7 +53,7 @@ public class CarLogicTests
 
 
         // Act & Assert
-        ArgumentException ex = await Assert.ThrowsAsync<ArgumentException>(async () => await _carLogic.CreateCarAsync(car));
+        var ex = await Assert.ThrowsAsync<ValidationException>(async () => await _carLogic.CreateCarAsync(car));
         Assert.Equal("The Name field is required.", ex.Message);
     }
     [Fact]
@@ -63,7 +64,7 @@ public class CarLogicTests
 
 
         // Act & Assert
-        ArgumentException ex = await Assert.ThrowsAsync<ArgumentException>(async () => await _carLogic.CreateCarAsync(car));
+        var ex = await Assert.ThrowsAsync<ValidationException>(async () => await _carLogic.CreateCarAsync(car));
         Assert.Equal("The engine size must be between 0.1 and 10.", ex.Message);
     }
     [Fact]
@@ -74,7 +75,7 @@ public class CarLogicTests
 
 
         // Act & Assert
-        ArgumentException ex = await Assert.ThrowsAsync<ArgumentException>(async () => await _carLogic.CreateCarAsync(car));
+        var ex = await Assert.ThrowsAsync<ValidationException>(async () => await _carLogic.CreateCarAsync(car));
         Assert.Equal("Engine must be specified.", ex.Message);
     }
     [Fact]
@@ -86,7 +87,7 @@ public class CarLogicTests
         var car = new Car { Garage = new Garage { Id = garageId } };
 
         // Act & Assert
-        await Assert.ThrowsAsync<ArgumentException>(async () => await _carLogic.CreateCarAsync(car));
+        await Assert.ThrowsAsync<ValidationException>(async () => await _carLogic.CreateCarAsync(car));
     }
 
     [Fact]

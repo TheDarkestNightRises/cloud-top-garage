@@ -21,86 +21,46 @@ public class UsersController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UserReadDto>>> GetAllUsersAsync()
     {
-        try
+        var users = await _userLogic.GetAllUsersAsync();
+        if (users == null)
         {
-            var users = await _userLogic.GetAllUsersAsync();
-            if (users == null)
-            {
-                return NotFound();
-            }
-            var usersMapped = _mapper.Map<IEnumerable<UserReadDto>>(users);
-            return Ok(usersMapped);
+            return NotFound();
         }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
-        }
+        var usersMapped = _mapper.Map<IEnumerable<UserReadDto>>(users);
+        return Ok(usersMapped);
     }
 
     [HttpPatch]
     public async Task<ActionResult> UpdateUserAsync([FromBody] UserUpdateDto userUpdateDto)
     {
-        try
-        {
-            var userToUpdate = _mapper.Map<User>(userUpdateDto);
-            await _userLogic.UpdateUserAsync(userToUpdate);
-            return NoContent();
-        }
-        catch (ArgumentException e)
-        {
-            return BadRequest(e.Message);
-        }
-        catch (Exception e)
-        {
-            return StatusCode(500, e.Message);
-        }
+        var userToUpdate = _mapper.Map<User>(userUpdateDto);
+        await _userLogic.UpdateUserAsync(userToUpdate);
+        return NoContent();
     }
 
     [HttpPost]
     public async Task<ActionResult> CreateUserAsync([FromBody] UserCreateDto userCreateDto)
     {
-        try
-        {
-            var user = _mapper.Map<User>(userCreateDto);
-            var userCreated = await _userLogic.CreateUserAsync(user);
-            UserReadDto userReadDto = _mapper.Map<UserReadDto>(userCreated);
-            return Created($"/users/{userReadDto.Id}", userReadDto);
-        }
-        catch (ArgumentException e)
-        {
-            return BadRequest(e.Message);
-        }
-        catch (Exception e)
-        {
-            return StatusCode(500, e.Message);
-        }
+        var user = _mapper.Map<User>(userCreateDto);
+        var userCreated = await _userLogic.CreateUserAsync(user);
+        UserReadDto userReadDto = _mapper.Map<UserReadDto>(userCreated);
+        return Created($"/users/{userReadDto.Id}", userReadDto);
     }
 
     [HttpGet("{email}")]
     public async Task<ActionResult<UserReadDto>> GetUserByEmailAsync(string email)
     {
-        try
+        var user = await _userLogic.GetUserByEmailAsync(email);
+        if (user == null)
         {
-            // Delegate to the logic layer to get the user by email
-            var user = await _userLogic.GetUserByEmailAsync(email);
-            if (user == null)
-            {
-                // Return 404 if no user was found
-                return NotFound();
-            }
-            // Convert from Model to Read DTO
-            var userReadDto = _mapper.Map<UserReadDto>(user);
+            // Return 404 if no user was found
+            return NotFound();
+        }
+        // Convert from Model to Read DTO
+        var userReadDto = _mapper.Map<UserReadDto>(user);
 
-            //Return 200 retrieved
-            return Ok(userReadDto);
-        }
-        catch (Exception e)
-        {
-            // Return 500 if the system failed to fetch the user
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
-        }
+        //Return 200 retrieved
+        return Ok(userReadDto);
     }
 
 }

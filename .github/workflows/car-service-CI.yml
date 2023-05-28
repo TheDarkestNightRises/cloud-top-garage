@@ -51,7 +51,7 @@ jobs:
         with:
           dotnet-version: 6.0.x
       - name: Test
-        run: dotnet test --verbosity normal
+        run: dotnet test --no-build --verbosity normal
   
  
 

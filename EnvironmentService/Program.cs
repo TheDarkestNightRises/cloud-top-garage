@@ -1,6 +1,7 @@
 using System.Reflection;
 using EnvironmentService.Application.Logic;
 using EnvironmentService.Application.LogicContracts;
+using EnvironmentService.Controllers;
 using EnvironmentService.Data;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -24,8 +25,13 @@ builder.Services.AddMassTransit(x =>
         cfg.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter("EnvironmentService", false));
     });
 });
+
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<GlobalExceptionFilterAttribute>();
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

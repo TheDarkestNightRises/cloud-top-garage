@@ -31,16 +31,10 @@ public class AuthController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> Login([FromBody] UserAuthDto userAuthDto)
     {
-        try
-        {
-            User user = await _userLogic.LoginUserAsync(userAuthDto.Email, userAuthDto.Password);
-            string token = GenerateJtw(user);
-            return Ok(token);
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
+
+        User user = await _userLogic.LoginUserAsync(userAuthDto.Email, userAuthDto.Password);
+        string token = GenerateJtw(user);
+        return Ok(token);
     }
 
     private string GenerateJtw(User user)
