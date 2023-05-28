@@ -1,5 +1,6 @@
 using System.Reflection;
 using GarageService.Application.LogicContracts;
+using GarageService.Controllers;
 using GarageService.Data;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +23,10 @@ builder.Services.AddMassTransit(x =>
     });
 });
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<GlobalExceptionFilterAttribute>();
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

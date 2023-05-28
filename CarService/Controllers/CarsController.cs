@@ -28,176 +28,92 @@ public class CarsController : ControllerBase
     {
         // try
         // {
-            var carQuery = _mapper.Map<CarQuery>(carQueryDto);
-            var cars = await _logic.GetAllCarsAsync(carQuery);
+        var carQuery = _mapper.Map<CarQuery>(carQueryDto);
+        var cars = await _logic.GetAllCarsAsync(carQuery);
 
-            if (cars == null || cars.Count() == 0)
-            {
-                return NotFound();
-            }
+        if (cars == null || cars.Count() == 0)
+        {
+            return NotFound();
+        }
 
-            var carsMapped = _mapper.Map<IEnumerable<CarReadDto>>(cars);
+        var carsMapped = _mapper.Map<IEnumerable<CarReadDto>>(cars);
 
 
-            return Ok(carsMapped);
-        // }
-        // catch (Exception e)
-        // {
-        //     Console.WriteLine(e);
-        //     return StatusCode(500, e.Message);
-        // }
+        return Ok(carsMapped);
     }
 
     [HttpPatch]
     public async Task<ActionResult> UpdateCarAsync([FromBody] CarUpdateDto carUpdateDto)
     {
-        try
-        {
-            var carToUpdate = _mapper.Map<Car>(carUpdateDto);
-            await _logic.UpdateCarAsync(carToUpdate);
-            return NoContent();
-        }
-        catch (ArgumentException e)
-        {
-            return BadRequest(e.Message);
-        }
-        catch (Exception e)
-        {
-            return StatusCode(500, e.Message);
-        }
+        var carToUpdate = _mapper.Map<Car>(carUpdateDto);
+        await _logic.UpdateCarAsync(carToUpdate);
+        return NoContent();
     }
 
     [HttpPost]
     public async Task<ActionResult<CarReadDto>> CreateCar([FromBody] CarCreateDto carCreateDto)
     {
-        // try
-        // {
-            // Convert from DTO to a Model
-            Car car = _mapper.Map<Car>(carCreateDto);
+        // Convert from DTO to a Model
+        Car car = _mapper.Map<Car>(carCreateDto);
 
-            // Delegate to the logic layer to create a car 
-            Car created = await _logic.CreateCarAsync(car);
+        // Delegate to the logic layer to create a car 
+        Car created = await _logic.CreateCarAsync(car);
 
-            // Map the created result into a ReadDto 
-            CarReadDto createdDto = _mapper.Map<CarReadDto>(created);
+        // Map the created result into a ReadDto 
+        CarReadDto createdDto = _mapper.Map<CarReadDto>(created);
 
-            //Return 200 created 
-            return Created($"/Cars/{created.Id}", createdDto);
-        // }
-        // catch (ArgumentException e)
-        // {
-        //     // Return 400 if the client made a mistake and didnt follow the rules of creating a car
-        //     return BadRequest(e.Message);
-        // }
-        // catch(ValidationException e)
-        // {
-        //     return BadRequest(e.Message);
-        // }
-        // catch (Exception e)
-        // {
-        //     // Return 500 if the system failed to create a car
-        //     Console.WriteLine(e);
-        //     return StatusCode(500, e.Message);
-        // }
+        //Return 200 created 
+        return Created($"/Cars/{created.Id}", createdDto);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<CarReadDto>> GetCarById(int id)
     {
-        try
+        Car? car = await _logic.GetCarAsync(id);
+        if (car == null)
         {
-            Car? car = await _logic.GetCarAsync(id);
-            if (car == null)
-            {
-                return NotFound();
-            }
-            CarReadDto carReadDto = _mapper.Map<CarReadDto>(car);
-            return Ok(carReadDto);
+            return NotFound();
         }
-        catch (ArgumentException e)
-        {
-            return BadRequest(e.Message);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
-        }
+        CarReadDto carReadDto = _mapper.Map<CarReadDto>(car);
+        return Ok(carReadDto);
     }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteCarAsync(int id)
     {
-        try
-        {
-            await _logic.DeleteCarAsync(id);
-            return NoContent();
-        }
-        catch (ArgumentException e)
-        {
-            return BadRequest(e.Message);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
-        }
+        await _logic.DeleteCarAsync(id);
+        return NoContent();
     }
 
 
     [HttpGet, Route("/Cars/{id}/image")]
     public async Task<IActionResult> GetCarImage(int id)
     {
-        try
+        var carImage = await _logic.GetCarImageAsync(id);
+        if (carImage is not null)
         {
-            var carImage = await _logic.GetCarImageAsync(id);
-            if (carImage is not null)
-            {
-                return File(carImage.Data, "image/jpeg");
-            }
-            return NotFound();
+            return File(carImage.Data, "image/jpeg");
         }
-        catch (ArgumentException e)
-        {
-            return BadRequest(e.Message);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
-        }
+        return NotFound();
     }
 
     [HttpPost, Route("/Cars/{id}/image")]
     public async Task<IActionResult> CreateCarImage([FromRoute] int id, IFormFile image)
     {
-        try
+        // Convert the image to a byte array
+        byte[]? imageData = null;
+        using (var ms = new MemoryStream())
         {
-            // Convert the image to a byte array
-            byte[]? imageData = null;
-            using (var ms = new MemoryStream())
-            {
-                await image.CopyToAsync(ms);
-                imageData = ms.ToArray();
-            }
-            //Create Image model
-            Image carImage = new Image
-            {
-                Data = imageData
-            };
-            var created = await _logic.CreateCarImage(carImage, id);
-            return File(created.Data, "image/jpeg");
+            await image.CopyToAsync(ms);
+            imageData = ms.ToArray();
         }
-        catch (ArgumentException e)
+        //Create Image model
+        Image carImage = new Image
         {
-            return BadRequest(e.Message);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-            return StatusCode(500, e.Message);
-        }
+            Data = imageData
+        };
+        var created = await _logic.CreateCarImage(carImage, id);
+        return File(created.Data, "image/jpeg");
     }
 
 

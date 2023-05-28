@@ -1,5 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Moq;
 using UserService.Controllers;
 using UserService.Dtos;
@@ -21,6 +23,8 @@ public class UsersControllerTests
         _logicMock = new Mock<IUserLogic>();
         _controller = new UsersController(_logicMock.Object, _mapperMock.Object);
     }
+
+
     // ----------------------------- GET ALL USERS --------------------------------------------
     [Fact]
     public async Task GetAllUsersAsync_WhenUsersExists_ReturnsOkResult()
