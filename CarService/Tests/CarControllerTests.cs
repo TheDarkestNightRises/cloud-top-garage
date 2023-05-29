@@ -217,7 +217,7 @@ public class CarsControllerTests
         Assert.Equal("image/jpeg", fileContentResult.ContentType);
         Assert.Equal(createdImage.Data, fileContentResult.FileContents);
     }
-  
+
     [Fact]
     public async Task GetCarImage_ReturnsFileContentResultWithImage_WhenImageExists()
     {

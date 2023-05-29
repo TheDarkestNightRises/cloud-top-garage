@@ -29,15 +29,15 @@ public class CarRepository : ICarRepository
     public async Task<IEnumerable<Car>> GetAllCarsAsync()
     {
         return await _context.Cars.Include(c => c.Garage)
-                                    .Include(c => c.Engine)
-                                    .ToListAsync();
+                                  .Include(c => c.Engine)
+                                  .ToListAsync();
     }
 
     public async Task<Car?> GetCarAsync(int id)
     {
         var car = await _context.Cars.Include(c => c.Garage)
-                                        .Include(c => c.Engine)
-                                        .FirstOrDefaultAsync(c => c.Id == id);
+                                     .Include(c => c.Engine)
+                                     .FirstOrDefaultAsync(c => c.Id == id);
         return car;
     }
 
@@ -50,9 +50,10 @@ public class CarRepository : ICarRepository
 
     public async Task<IEnumerable<Car>> GetAllCarsAsync(CarQuery carQuery)
     {
-        var query = _context.Cars.Include(c => c.Garage)
-                                .Include(c => c.Engine)
-                                .AsQueryable();
+        var query = _context.Cars
+            .Include(c => c.Garage)
+            .Include(c => c.Engine)
+            .AsQueryable();
 
         if (!(carQuery.GarageId is null))
         {

@@ -13,7 +13,7 @@ public class GarageLogic : IGarageLogic
         _garageRepository = garageRepository;
     }
 
-    public async Task<Garage> CreateGarageAsync(int garageId) 
+    public async Task<Garage> CreateGarageAsync(int garageId)
     {
         var garageFound = await _garageRepository.GetGarageByIdAsync(garageId);
         if (garageFound is not null)
@@ -26,7 +26,7 @@ public class GarageLogic : IGarageLogic
         };
         return await _garageRepository.CreateGarageAsync(garage);
     }
-    
+
     public async Task DeleteGarageAsync(int garageId)
     {
         var garageFound = await _garageRepository.GetGarageByIdAsync(garageId);

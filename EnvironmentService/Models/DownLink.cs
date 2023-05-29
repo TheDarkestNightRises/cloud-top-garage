@@ -1,5 +1,5 @@
 namespace EnvironmentService.Models;
- 
+
 public class DownLink
 {
     public string cmd { get; set; }

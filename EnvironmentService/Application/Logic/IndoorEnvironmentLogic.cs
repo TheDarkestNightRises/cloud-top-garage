@@ -18,14 +18,14 @@ public class IndoorEnvironmentLogic : IIndoorEnvironmentLogic
     {
         _indoorEnvironmentRepository = indoorEnvironmentRepository;
         _statRepository = statRepository;
-         _webSocketClients = new Dictionary<int, WebSocket>();
+        _webSocketClients = new Dictionary<int, WebSocket>();
     }
 
     public async void InitializeWebSockets()
     {
         Console.WriteLine("Initializing WebSockets...");
         IEnumerable<IndoorEnvironment> indoorEnvironments = await _indoorEnvironmentRepository.GetAllIndoorEnvironmentsAsync();
-       
+
         foreach (var environment in indoorEnvironments)
         {
             // Create a WebSocket client for each IndoorEnvironment
@@ -43,23 +43,21 @@ public class IndoorEnvironmentLogic : IIndoorEnvironmentLogic
         }
     }
 
-
-
     private async Task OnMessageFromIotAsync(byte[] data)
     {
         Console.WriteLine($"Message received from IoT: {data}");
-        try 
+        try
         {
             var convertedData = ConvertDataIntoString(data);
             var stat = await TranslateDataAsync(convertedData);
             await _statRepository.AddStatAsync(stat);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             Console.WriteLine(e.Message);
             Console.WriteLine(e.StackTrace);
         }
-        
+
     }
 
     public async Task<IEnumerable<IndoorEnvironment>> GetAllIndoorEnvironmentsAsync()
@@ -132,8 +130,8 @@ public class IndoorEnvironmentLogic : IIndoorEnvironmentLogic
         }
 
         var oldSettings = indoorEnvironment.IndoorEnvironmentSettings;
-        (oldSettings.Co2Limit,oldSettings.HumidityLimit,oldSettings.LightLimit,oldSettings.LightOn,oldSettings.TemperatureLimit)
-        = (newSettings.Co2Limit,newSettings.HumidityLimit,newSettings.LightLimit,newSettings.LightOn,newSettings.TemperatureLimit);
+        (oldSettings.Co2Limit, oldSettings.HumidityLimit, oldSettings.LightLimit, oldSettings.LightOn, oldSettings.TemperatureLimit)
+        = (newSettings.Co2Limit, newSettings.HumidityLimit, newSettings.LightLimit, newSettings.LightOn, newSettings.TemperatureLimit);
         //Send data to IOT
         var indoorEnvironmentUpdated = await _indoorEnvironmentRepository.UpdateIndoorEnvironment(indoorEnvironment);
         SendSettingsAsync(oldSettings);
@@ -177,11 +175,11 @@ public class IndoorEnvironmentLogic : IIndoorEnvironmentLogic
     {
         byte[] settingsByte = new byte[10];
 
-        settingsByte[0] = (byte)(settings.Co2Limit >> 8); 
+        settingsByte[0] = (byte)(settings.Co2Limit >> 8);
         settingsByte[1] = (byte)(settings.Co2Limit & 0xFF);
 
         int tempLimitInt = MultiplyBy10AndConvertToInt(settings.TemperatureLimit);
-        settingsByte[2] = (byte)(tempLimitInt >> 8); 
+        settingsByte[2] = (byte)(tempLimitInt >> 8);
         settingsByte[3] = (byte)(tempLimitInt & 0xFF);
 
         int humLimitInt = MultiplyBy10AndConvertToInt(settings.HumidityLimit);
@@ -191,22 +189,24 @@ public class IndoorEnvironmentLogic : IIndoorEnvironmentLogic
         int lightLimitInt = MultiplyBy10AndConvertToInt(settings.LightLimit);
         settingsByte[6] = (byte)(lightLimitInt >> 8);
         settingsByte[7] = (byte)(lightLimitInt & 0xFF);
-        
+
         settingsByte[8] = (byte)(settings.LightOn ? 16 : 0);
         settingsByte[9] = (byte)120;
         return settingsByte;
     }
+
     private int MultiplyBy10AndConvertToInt(float number)
     {
-        return (int)(number*10);
+        return (int)(number * 10);
     }
+    
     private string ConvertByteArrayToString(byte[] byteArray)
     {
         string result = "";
 
         foreach (byte b in byteArray)
         {
-            result +=b.ToString("X2"); 
+            result += b.ToString("X2");
         }
 
         return result;

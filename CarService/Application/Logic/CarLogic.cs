@@ -21,12 +21,8 @@ public class CarLogic : ICarLogic
 
     public async Task<Car> CreateCarAsync(Car car)
     {
-        Validator.ValidateObject(car, new ValidationContext(car), validateAllProperties: true);
-        Validator.ValidateObject(car.Engine, new ValidationContext(car.Engine), validateAllProperties: true);
-        if(car.Year > DateTime.Now.Year)
-        {
-            throw new ValidationException("Year cannot be bigger than current year");
-        }
+        ValidateCar(car);
+        ValidateEngine(car.Engine);
         Garage? garage = await _garageRepository.GetGarageAsync(car.Garage.Id);
         if (garage is null)
         {
@@ -37,7 +33,6 @@ public class CarLogic : ICarLogic
         Car carCreated = await _carRepository.CreateCarAsync(car);
         await _publishEndpoint.Publish(new CarCreated(carCreated.Id, garage.Id));
         return carCreated;
-
     }
 
     public async Task<IEnumerable<Car>> GetAllCarsAsync()
@@ -115,4 +110,16 @@ public class CarLogic : ICarLogic
         return created;
     }
 
+    private void ValidateEngine(Engine engine) 
+    {
+        Validator.ValidateObject(engine, new ValidationContext(engine), validateAllProperties: true);
+    }
+
+    private void ValidateCar(Car car) {
+        if (car.Year > DateTime.Now.Year)
+        {
+            throw new ValidationException("Year cannot be bigger than current year");
+        }
+        Validator.ValidateObject(car, new ValidationContext(car), validateAllProperties: true);
+    }
 }

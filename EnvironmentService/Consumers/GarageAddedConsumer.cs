@@ -21,8 +21,8 @@ public class GarageAddedConsumer : IConsumer<GarageCreated>
             var garageId = context.Message.garageId;
             Console.WriteLine($"--> GarageAddedConsumer: {garageId}");
             await _garageLogic.CreateGarageAsync(garageId);
-        } 
-        catch (Exception e) 
+        }
+        catch (Exception e)
         {
             Console.WriteLine($"--> GarageAddedConsumer: {e.Message}");
         }

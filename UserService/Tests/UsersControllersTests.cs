@@ -83,7 +83,7 @@ public class UsersControllerTests
         // Assert
         Assert.IsType<NoContentResult>(result);
     }
-  
+
     // ----------------------------- CREATE USER --------------------------------------------
 
     [Fact]

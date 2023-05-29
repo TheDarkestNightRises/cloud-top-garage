@@ -6,5 +6,4 @@ public interface IGarageLogic
 {
     Task<Garage> CreateGarageAsync(int garageId);
     Task DeleteGarageAsync(int garageId);
-
 }

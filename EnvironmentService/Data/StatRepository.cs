@@ -37,11 +37,11 @@ public class StatRepository : IStatRepository
     }
     public async Task<Stat?> GetLastestStatAsync(int garageId)
     {
-         var mostRecentStat = await _context.Stats
-                .Where(stat => stat.IndoorEnvironment.Garage.Id == garageId)
-                .OrderByDescending(stat => stat.Time)
-                .FirstOrDefaultAsync();
+        var mostRecentStat = await _context.Stats
+               .Where(stat => stat.IndoorEnvironment.Garage.Id == garageId)
+               .OrderByDescending(stat => stat.Time)
+               .FirstOrDefaultAsync();
 
-            return mostRecentStat;
+        return mostRecentStat;
     }
 }
