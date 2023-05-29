@@ -82,17 +82,6 @@ public class GarageLogic : IGarageLogic
     }
     private void ValidateGarage(Garage garage)
     {
-        // Setup validation environment
-        var validationContext = new ValidationContext(garage);
-        // Setup results environment
-        var validationResults = new List<System.ComponentModel.DataAnnotations.ValidationResult>();
-        // Checks if the validation of the garage object matches the expected results
-        bool isValid = Validator.TryValidateObject(garage, validationContext, validationResults, true);
-        // If the object is not valid throw the first given exception
-        if (!isValid)
-        {
-            var firstError = validationResults.First();
-            throw new ArgumentException(firstError.ErrorMessage);
-        }
+        Validator.ValidateObject(garage, new ValidationContext(garage), validateAllProperties: true);
     }
 }

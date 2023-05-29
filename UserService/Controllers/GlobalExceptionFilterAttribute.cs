@@ -21,7 +21,7 @@ public class GlobalExceptionFilterAttribute : ExceptionFilterAttribute
             context.Result = new BadRequestObjectResult(exception.Message);
             return;
         }
-        
+
         // Handle other exceptions
         context.Result = new ObjectResult(exception.Message)
         {

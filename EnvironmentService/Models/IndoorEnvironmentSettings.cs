@@ -1,6 +1,6 @@
 namespace EnvironmentService.Models;
 
-public class IndoorEnvironmentSettings 
+public class IndoorEnvironmentSettings
 {
     public int Id { get; set; }
     public int Co2Limit { get; set; }

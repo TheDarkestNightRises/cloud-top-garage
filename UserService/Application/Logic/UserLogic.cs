@@ -26,15 +26,12 @@ public class UserLogic : IUserLogic
             throw new ArgumentException("Email already exists!");
         }
         user.Role = "User";
-        Validator.ValidateObject(user, new ValidationContext(user), validateAllProperties: true);
+        ValidateUser(user);
 
         User userCreated = await _userRepository.CreateUserAsync(user);
-
         await _publishEndpoint.Publish(new UserCreated(userCreated.Id));
-
         return userCreated;
     }
-
 
     public async Task<IEnumerable<User>> GetAllUsersAsync()
     {
@@ -44,17 +41,17 @@ public class UserLogic : IUserLogic
     public async Task<User> LoginUserAsync(string email, string password)
     {
         User? userFound = await _userRepository.GetUserByEmail(email);
-
         if (userFound == null)
         {
             throw new ArgumentException("Email doesn't exist!");
         }
+
         if (!userFound.Password.Equals(password))
         {
             throw new ArgumentException("Wrong password!");
         }
+        
         return userFound;
-
     }
 
     public async Task<User> UpdateUserAsync(User userToUpdate)
@@ -78,6 +75,11 @@ public class UserLogic : IUserLogic
     public async Task<User?> GetUserByEmailAsync(string email)
     {
         return await _userRepository.GetUserByEmail(email);
+    }
+
+    private void ValidateUser(User user)
+    {
+        Validator.ValidateObject(user, new ValidationContext(user), validateAllProperties: true);
     }
 
 }

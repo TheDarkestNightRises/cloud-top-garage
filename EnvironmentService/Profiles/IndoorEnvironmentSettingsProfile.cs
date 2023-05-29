@@ -10,7 +10,7 @@ public class IndoorEnvironmentsSettingsProfile : Profile
     {
         CreateMap<IndoorEnvironmentSettings, IndoorEnvironmentSettingsReadDto>();
         CreateMap<IndoorEnvironmentSettingsReadDto, IndoorEnvironmentSettings>();
-        CreateMap<IndoorEnvironmentSettingsUpdateDto,IndoorEnvironmentSettings>();
+        CreateMap<IndoorEnvironmentSettingsUpdateDto, IndoorEnvironmentSettings>();
 
     }
 }

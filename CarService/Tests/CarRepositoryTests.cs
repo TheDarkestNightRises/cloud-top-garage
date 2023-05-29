@@ -1,11 +1,11 @@
-using CarService.Data;
-using CarService.Models;
-using Microsoft.EntityFrameworkCore;
-using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CarService.Data;
+using CarService.Models;
+using Microsoft.EntityFrameworkCore;
+using Moq;
 using Xunit;
 
 namespace CarService.Tests;
@@ -28,7 +28,7 @@ public class CarRepositoryTests : IDisposable
         using (var context = new AppDbContext(_options))
         {
             var repository = new CarRepository(context);
-            var car = new Car{Name = "Car 1", Description="Test description", Manufacturer="Test Manufacturer", Model="Test Model", Year=2000, Seats=5};
+            var car = new Car { Name = "Car 1", Description = "Test description", Manufacturer = "Test Manufacturer", Model = "Test Model", Year = 2000, Seats = 5 };
 
             // Act
             var result = await repository.CreateCarAsync(car);
@@ -46,7 +46,7 @@ public class CarRepositoryTests : IDisposable
         var carId = 1;
         using (var context = new AppDbContext(_options))
         {
-            var car = new Car { Id = carId, Name = "Car 1", Description="Test description", Manufacturer="Test Manufacturer", Model="Test Model", Year=2000, Seats=5 };
+            var car = new Car { Id = carId, Name = "Car 1", Description = "Test description", Manufacturer = "Test Manufacturer", Model = "Test Model", Year = 2000, Seats = 5 };
             context.Cars.Add(car);
             context.SaveChanges();
         }
@@ -69,8 +69,8 @@ public class CarRepositoryTests : IDisposable
         // Arrange
         using (var context = new AppDbContext(_options))
         {
-            var garage = new Garage{Id = 1};
-            var engine = new Engine{FuelType="Test fuel", Size = 1.0};
+            var garage = new Garage { Id = 1 };
+            var engine = new Engine { FuelType = "Test fuel", Size = 1.0 };
             var cars = new List<Car>
             {
                 new Car { Name = "Car 1", Description="Test description", Manufacturer="Test Manufacturer", Model="Test Model", Year=2000, Seats=5, Garage = garage, Engine = engine },
@@ -106,8 +106,8 @@ public class CarRepositoryTests : IDisposable
         using (var context = new AppDbContext(_options))
         {
             var garage = new Garage();
-            var engine = new Engine{ FuelType = "Test fuel"};
-            var car = new Car { Id = carId,Name = "Car 1", Description="Test description", Manufacturer="Test Manufacturer", Model="Test Model", Year=2000, Seats=5, Garage = garage, Engine = engine };
+            var engine = new Engine { FuelType = "Test fuel" };
+            var car = new Car { Id = carId, Name = "Car 1", Description = "Test description", Manufacturer = "Test Manufacturer", Model = "Test Model", Year = 2000, Seats = 5, Garage = garage, Engine = engine };
             context.Add(car);
             context.SaveChanges();
         }
@@ -134,12 +134,12 @@ public class CarRepositoryTests : IDisposable
         using (var context = new AppDbContext(_options))
         {
             var repository = new CarRepository(context);
-            var car = new Car{Name = "Car 1", Description="Test description", Manufacturer="Test Manufacturer", Model="Test Model", Year=2000, Seats=5};
+            var car = new Car { Name = "Car 1", Description = "Test description", Manufacturer = "Test Manufacturer", Model = "Test Model", Year = 2000, Seats = 5 };
             context.Add(car);
             context.SaveChanges();
 
             car.Name = "Updated Car";
-            
+
             // Act
             var result = await repository.UpdateCarAsync(car);
 
@@ -157,7 +157,7 @@ public class CarRepositoryTests : IDisposable
         {
             var garage1 = new Garage { Id = 1 };
             var garage2 = new Garage { Id = 2 };
-            var engine = new Engine{FuelType = "Test fuel"};
+            var engine = new Engine { FuelType = "Test fuel" };
             var cars = new List<Car>
             {
                 new Car { Name = "Car 1", Description="Test description", Manufacturer="Test Manufacturer", Model="Test Model", Year=2000, Seats=5, Garage = garage1, Engine = engine },
@@ -193,11 +193,11 @@ public class CarRepositoryTests : IDisposable
         var carId = 1;
         using (var context = new AppDbContext(_options))
         {
-            var image = new Image{ Data = new byte[]{1,2, 3}};
-            var engine = new Engine{FuelType = "Test fuel"};
-            var garage = new Garage{};
-            var car = new Car { Id = carId, Name = "Car 1", Description="Test description", Manufacturer="Test Manufacturer", Model="Test Model", Year=2000, Seats=5, Image = image, Engine = engine, Garage = garage };
-            
+            var image = new Image { Data = new byte[] { 1, 2, 3 } };
+            var engine = new Engine { FuelType = "Test fuel" };
+            var garage = new Garage { };
+            var car = new Car { Id = carId, Name = "Car 1", Description = "Test description", Manufacturer = "Test Manufacturer", Model = "Test Model", Year = 2000, Seats = 5, Image = image, Engine = engine, Garage = garage };
+
             await context.AddAsync(car);
             //await context.AddAsync(image);
             await context.SaveChangesAsync();
@@ -223,7 +223,7 @@ public class CarRepositoryTests : IDisposable
         using (var context = new AppDbContext(_options))
         {
             var repository = new CarRepository(context);
-            var carImage = new Image{Data = new byte[]{1, 2}};
+            var carImage = new Image { Data = new byte[] { 1, 2 } };
 
             // Act
             var result = await repository.CreateCarImageAsync(carImage);
@@ -241,7 +241,7 @@ public class CarRepositoryTests : IDisposable
         var carId = 1;
         using (var context = new AppDbContext(_options))
         {
-            var car = new Car { Id = carId, Name = "Car 1", Description="Test description", Manufacturer="Test Manufacturer", Model="Test Model", Year=2000, Seats=5 };
+            var car = new Car { Id = carId, Name = "Car 1", Description = "Test description", Manufacturer = "Test Manufacturer", Model = "Test Model", Year = 2000, Seats = 5 };
             context.Cars.Add(car);
             context.SaveChanges();
         }
@@ -249,7 +249,7 @@ public class CarRepositoryTests : IDisposable
         using (var context = new AppDbContext(_options))
         {
             var repository = new CarRepository(context);
-            var carImage = new Image{Data = new byte[]{1,2 }};
+            var carImage = new Image { Data = new byte[] { 1, 2 } };
 
             // Act
             await repository.UpdateCarWithImageAsync(carImage, carId);

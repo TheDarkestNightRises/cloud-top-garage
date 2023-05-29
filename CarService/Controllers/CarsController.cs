@@ -26,8 +26,6 @@ public class CarsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<CarReadDto>>> GetAllCarsAsync([FromQuery] CarQueryDto carQueryDto)
     {
-        // try
-        // {
         var carQuery = _mapper.Map<CarQuery>(carQueryDto);
         var cars = await _logic.GetAllCarsAsync(carQuery);
 
@@ -37,7 +35,6 @@ public class CarsController : ControllerBase
         }
 
         var carsMapped = _mapper.Map<IEnumerable<CarReadDto>>(cars);
-
 
         return Ok(carsMapped);
     }

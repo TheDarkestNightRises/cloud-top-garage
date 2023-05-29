@@ -43,7 +43,7 @@ public class WebSocketClient
 
     private void OnMessage(object sender, MessageEventArgs e)
     {
-       
+
     }
 
     private void OnClose(object sender, CloseEventArgs e)
