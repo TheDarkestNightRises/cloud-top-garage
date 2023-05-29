@@ -26,7 +26,7 @@ public class StatLogic : IStatLogic
         }
         return await _statRepository.GetAllStatsAsync(statQuery);
     }
-    
+
     public async Task<Stat?> GetLastestStatAsync(int garageId)
     {
         Stat? stat = await _statRepository.GetLastestStatAsync(garageId);
