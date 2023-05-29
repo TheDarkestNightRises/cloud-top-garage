@@ -199,7 +199,7 @@ public class IndoorEnvironmentLogic : IIndoorEnvironmentLogic
     {
         return (int)(number * 10);
     }
-    
+
     private string ConvertByteArrayToString(byte[] byteArray)
     {
         string result = "";

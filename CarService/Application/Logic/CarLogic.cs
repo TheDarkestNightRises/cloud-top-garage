@@ -110,12 +110,13 @@ public class CarLogic : ICarLogic
         return created;
     }
 
-    private void ValidateEngine(Engine engine) 
+    private void ValidateEngine(Engine engine)
     {
         Validator.ValidateObject(engine, new ValidationContext(engine), validateAllProperties: true);
     }
 
-    private void ValidateCar(Car car) {
+    private void ValidateCar(Car car)
+    {
         if (car.Year > DateTime.Now.Year)
         {
             throw new ValidationException("Year cannot be bigger than current year");

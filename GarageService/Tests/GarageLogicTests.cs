@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Contracts;
 using GarageService.Application.LogicContracts;
 using GarageService.Data;
@@ -143,6 +144,6 @@ public class GarageLogicTests
         var garage = new Garage { Id = 1, Name = garageName, User = new User { Id = userId }, Capacity = -5 };
 
         // Act and Assert
-        await Assert.ThrowsAsync<ArgumentException>(() => _logic.CreateGarageAsync(garage));
+        await Assert.ThrowsAsync<ValidationException>(() => _logic.CreateGarageAsync(garage));
     }
 }

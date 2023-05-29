@@ -50,7 +50,7 @@ public class UserLogic : IUserLogic
         {
             throw new ArgumentException("Wrong password!");
         }
-        
+
         return userFound;
     }
 
