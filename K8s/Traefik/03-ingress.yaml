@@ -22,6 +22,13 @@ spec:
               name: users-clusterip-srv
               port:
                 number: 80
+        - path: /Auth
+          pathType: Prefix
+          backend:
+            service:
+              name: users-clusterip-srv
+              port:
+                number: 80
         - path: /IndoorEnvironments
           pathType: Prefix
           backend:
