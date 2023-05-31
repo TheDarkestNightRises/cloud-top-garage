@@ -59,6 +59,7 @@ builder.Services.AddScoped<IGarageRepository, GarageRepository>();
 builder.Services.AddScoped<IGarageLogic, GarageLogic>();
 builder.Services.AddScoped<ICarLogic, CarLogic>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
@@ -67,7 +68,6 @@ app.UseCors(x => x
     .AllowAnyHeader()
     .SetIsOriginAllowed(origin => true) // allow any origin
     .AllowCredentials());
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -80,5 +80,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/healthz");
 PrepDb.PrepPopulation(app, app.Environment.IsProduction());
 app.Run();

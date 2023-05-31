@@ -66,7 +66,7 @@ app.UseCors(x => x
     .AllowAnyHeader()
     .SetIsOriginAllowed(origin => true) // allow any origin
     .AllowCredentials());
-
+builder.Services.AddHealthChecks();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -80,6 +80,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/healthz");
 PrepDb.PrepPopulation(app, app.Environment.IsProduction());
 // Build the service provider
 var serviceProvider = builder.Services.BuildServiceProvider();

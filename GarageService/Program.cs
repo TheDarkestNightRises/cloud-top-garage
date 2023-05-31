@@ -54,6 +54,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IGarageLogic, GarageLogic>();
 builder.Services.AddScoped<ICarLogic, CarLogic>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
 app.UseCors(x => x
@@ -74,5 +76,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/healthz");
 PrepDb.PrepPopulation(app, app.Environment.IsProduction());
 app.Run();

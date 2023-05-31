@@ -75,6 +75,7 @@ else
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserLogic, UserLogic>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
@@ -98,5 +99,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/healthz");
 PrepDb.PrepPopulation(app, app.Environment.IsProduction());
 app.Run();
