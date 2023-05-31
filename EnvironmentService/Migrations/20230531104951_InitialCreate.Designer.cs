@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EnvironmentService.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230526162347_Initial")]
-    partial class Initial
+    [Migration("20230531104951_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,11 +76,15 @@ namespace EnvironmentService.Migrations
                     b.Property<int>("Co2Limit")
                         .HasColumnType("int");
 
-                    b.Property<int>("HumidityLimit")
-                        .HasColumnType("int");
+                    b.Property<string>("Eui")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("LightLimit")
-                        .HasColumnType("int");
+                    b.Property<float>("HumidityLimit")
+                        .HasColumnType("real");
+
+                    b.Property<float>("LightLimit")
+                        .HasColumnType("real");
 
                     b.Property<bool>("LightOn")
                         .HasColumnType("bit");
@@ -92,8 +96,11 @@ namespace EnvironmentService.Migrations
                     b.Property<int>("MacAddress")
                         .HasColumnType("int");
 
-                    b.Property<int>("TemperatureLimit")
+                    b.Property<int>("Port")
                         .HasColumnType("int");
+
+                    b.Property<float>("TemperatureLimit")
+                        .HasColumnType("real");
 
                     b.HasKey("Id");
 

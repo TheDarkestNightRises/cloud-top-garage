@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EnvironmentService.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,12 +30,14 @@ namespace EnvironmentService.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Co2Limit = table.Column<int>(type: "int", nullable: false),
-                    TemperatureLimit = table.Column<int>(type: "int", nullable: false),
-                    HumidityLimit = table.Column<int>(type: "int", nullable: false),
-                    LightLimit = table.Column<int>(type: "int", nullable: false),
+                    TemperatureLimit = table.Column<float>(type: "real", nullable: false),
+                    HumidityLimit = table.Column<float>(type: "real", nullable: false),
+                    LightLimit = table.Column<float>(type: "real", nullable: false),
                     LightOn = table.Column<bool>(type: "bit", nullable: false),
                     MacAddress = table.Column<int>(type: "int", nullable: false),
-                    LoRaWANURL = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    LoRaWANURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Port = table.Column<int>(type: "int", nullable: false),
+                    Eui = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
