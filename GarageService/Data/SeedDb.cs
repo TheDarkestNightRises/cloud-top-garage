@@ -54,7 +54,6 @@ public static class PrepDb
 
             // Adding the garage and car instances to the database context
             context.Cars.AddRange(new List<Car> { car1, car2, car3, car4, car5 });
-            context.Users.AddRange(user1, user2);
             context.Locations.AddRange(location1, location2, location3);
             context.Garages.AddRange(new List<Garage> { garage1, garage2, garage3 });
 
